@@ -1,7 +1,7 @@
 package com.ironman.forum.conf;
 
 import com.ironman.forum.entity.User;
-import com.ironman.forum.util.CloudContants;
+import com.ironman.forum.util.IronContants;
 import com.ironman.forum.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,12 +40,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
 		logger.info("当前访问url:" + requestUri);
 		HttpSession session = httpServletRequest.getSession();
-		User user = (User) session.getAttribute(CloudContants.SESSION_USER_KEY);
-		if(user != null){
-			logger.info(user.toString());
-			List<String> userRoles = (List<String>) session.getAttribute(CloudContants.SESSION_ROLE_KEY);
-			if(userRoles == null){
-				logger.error(user.getId() + "权限为空");
+        User user = (User) session.getAttribute(IronContants.SESSION_USER_KEY);
+        if (user != null) {
+            logger.info(user.toString());
+            List<String> userRoles = (List<String>) session.getAttribute(IronContants.SESSION_ROLE_KEY);
+            if (userRoles == null) {
+                logger.error(user.getId() + "权限为空");
 				return false;
 			}
 			logger.info("用户权限: " + Util.toJson(userRoles));
