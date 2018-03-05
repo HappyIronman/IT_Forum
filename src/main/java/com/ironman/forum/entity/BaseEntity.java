@@ -1,5 +1,8 @@
 package com.ironman.forum.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
 /**
@@ -7,6 +10,8 @@ import java.util.Date;
  * @Description:
  * @Date: Created in 16:15 2017/12/31 0031
  **/
+@Getter
+@Setter
 public class BaseEntity {
 	protected long id;
 	protected Date createTime;
