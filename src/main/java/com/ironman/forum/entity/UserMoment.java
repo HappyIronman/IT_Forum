@@ -13,4 +13,17 @@ public class UserMoment extends BaseEntity {
     private int type;
     private boolean isPrivate;
     private boolean deleted;
+
+    public enum Type {
+        ORIGINAL(0), SHARE(1);
+        private int type;
+
+        Type(int type) {
+            this.type = type;
+        }
+
+        public int getType() {
+            return type;
+        }
+    }
 }

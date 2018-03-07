@@ -19,6 +19,8 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
 	<!--配置拦截器, 多个拦截器,顺序执行 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -27,7 +29,8 @@
 			<bean class="com.ironman.forum.conf.LoginInterceptor">
 				<property name="publicUrl">
 					<set>
-						<value>/main</value>
+						<value>/data/moment</value>
+						<value>/data/mine/moment</value>
 					</set>
 				</property>
 				<property name="urlMap">

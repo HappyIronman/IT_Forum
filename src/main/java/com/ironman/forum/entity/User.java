@@ -20,4 +20,7 @@ public class User extends BaseEntity{
     private String profile;
     private int followerNum;
     private int followingNum;
+    private int momentNum;
+    private int blogNum;
+    private int questionNum;
 }

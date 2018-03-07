@@ -1,27 +1,28 @@
 <template>
   <div class="uk-container">
-    <headNav></headNav>
-    <advertise></advertise>
     <div uk-grid>
-      <div class="uk-width-2-3">
+      <div class="uk-width-1-5">
         <left-home></left-home>
       </div>
-      <div class="uk-width-1-3">
-
+      <div class="uk-width-3-5">
+        <middle-home></middle-home>
+      </div>
+      <div class="uk-width-1-5 uk-padding-small">
+        <right-home></right-home>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import headNav from '../components/Head.vue'
-  import advertise from '../components/Advertise.vue'
   import leftHome from '../components/LeftHome.vue'
+  import middleHome from '../components/MiddleHome.vue'
+  import rightHome from '../components/RightHome.vue'
 
   export default {
     components: {
       leftHome,
-      headNav,
-      advertise
+      middleHome,
+      rightHome
     },
     name: 'Homepage'
   }

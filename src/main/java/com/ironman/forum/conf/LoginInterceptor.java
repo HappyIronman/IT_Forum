@@ -1,7 +1,7 @@
 package com.ironman.forum.conf;
 
 import com.ironman.forum.entity.User;
-import com.ironman.forum.util.IronContants;
+import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.Util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +33,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
+        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpServletResponse.setHeader("Access-Control-Allow-Headers",
+                "Origin, X-Requested-With, Content-Type, Accept");
+
+
+
         String requestUri = httpServletRequest.getRequestURI();
         if (publicUrl.contains(requestUri)) {
             logger.info("访问公开url:" + requestUri);
@@ -41,10 +49,10 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         logger.info("当前访问url:" + requestUri);
         HttpSession session = httpServletRequest.getSession();
-        User user = (User) session.getAttribute(IronContants.SESSION_USER_KEY);
+        User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
         if (user != null) {
             logger.info(user.toString());
-            List<String> userRoles = (List<String>) session.getAttribute(IronContants.SESSION_ROLE_KEY);
+            List<String> userRoles = (List<String>) session.getAttribute(IronConstant.SESSION_ROLE_KEY);
             if (userRoles == null) {
                 logger.error(user.getId() + "权限为空");
                 return false;

@@ -12,6 +12,7 @@ public class Moment extends BaseEntity {
     private int likeNum;
     private int dislikeNum;
     private int commentNum;
+    private int shareNum;
     private int viewNum;
     private boolean isPrivate;
     private boolean deleted;
