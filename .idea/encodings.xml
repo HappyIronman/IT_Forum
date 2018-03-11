@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/components/BlogItem.vue" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/components/FriendCircle.vue" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/components/MomentItem.vue" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/components/MomentShareModal.vue" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/components/MyBlog.vue" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/router/index.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/store/modules/blog.js" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/vue/src/store/mutation-types.js" charset="UTF-8" />
+    <file url="PROJECT" charset="GBK" />
+  </component>
+</project>

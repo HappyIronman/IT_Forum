@@ -3,5 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ironman.forum.dao.TimeLineDAO">
+    <insert id="save" parameterType="com.ironman.forum.entity.TimeLine">
+        INSERT INTO time_line(user_id, event_id, type, is_self, is_new, create_time)
+        VALUES
+        (#{userId}, #{eventId}, #{type}, #{isSelf}, #{isNew}, #{createTime})
+    </insert>
+
+    <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.TimeLine">
+        SELECT * FROM time_line where user_id = #{userId} AND deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 
 </mapper>

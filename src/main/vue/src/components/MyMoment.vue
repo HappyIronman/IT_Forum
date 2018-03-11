@@ -4,55 +4,18 @@
       <span class="uk-label uk-label-success">我的动态</span>
     </div>
     <div v-for="myMoment in myMomentList">
-      <div class="uk-card uk-card-default uk-margin-left uk-margin-right uk-margin-top">
-        <div class="uk-card-header uk-padding-remove">
-          <div class="uk-grid-small uk-flex-middle uk-margin-remove" uk-grid>
-            <div>
-              <img class="uk-border-circle" width="40" height="40" src="../assets/logo.png">
-            </div>
-            <div class="uk-width-expand">
-              <h5 class="uk-card-title uk-margin-remove-bottom">{{myMoment.username}}</h5>
-              <p class="uk-text-meta uk-margin-remove-top">
-                {{myMoment.createTime | formatDate('yyyy-MM-dd hh:mm')}}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="uk-card-body">
-          <p>{{myMoment.content}}</p>
-        </div>
-        <div class="uk-card-footer uk-padding-remove uk-text-right">
-          <button class="uk-button uk-button-text uk-margin-small-right">
-            <span>喜欢</span>
-            <span>({{myMoment.likeNum}})</span>
-          </button>
-          <button class="uk-button uk-button-text uk-margin-small-right">
-            <span>不喜欢</span>
-            <span>({{myMoment.dislikeNum}})</span>
-          </button>
-          <button class="uk-button uk-button-text uk-margin-small-right">
-            <span>评论</span>
-            <span>({{myMoment.commentNum}})</span>
-          </button>
-          <button class="uk-button uk-button-text uk-margin-small-right">
-            <span>转发</span>
-            <span>({{myMoment.shareNum}})</span>
-          </button>
-          <button class="uk-button uk-button-text uk-margin-right">
-            <span>浏览</span>
-            <span>({{myMoment.viewNum}})</span>
-          </button>
-        </div>
-      </div>
+      <moment-item v-bind:moment="myMoment"></moment-item>
     </div>
   </div>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {mapActions} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
+  import MomentItem from "./MomentItem";
+
 
   export default {
+    components: {MomentItem},
     name: 'MyMoment',
     data() {
       return {}

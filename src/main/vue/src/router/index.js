@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
+import friendCircle from '../components/FriendCircle'
 import momentHome from '../components/MomentHome.vue'
 import blogHome from '../components/BlogHome.vue'
 import myMoment from '../components/MyMoment.vue'
+import myBlog from '../components/myBlog.vue'
 
 Vue.use(Router)
 
@@ -15,6 +17,11 @@ export default new Router({
       name: 'homepage',
       component: homepage,
       children: [
+        {
+          path: '/friend_circle',
+          name: 'friendCircle',
+          component: friendCircle
+        },
         {
           path: '/moment',
           name: 'momentHome',
@@ -29,6 +36,11 @@ export default new Router({
           path: '/my_moment',
           name: 'myMoment',
           component: myMoment
+        },
+        {
+          path: '/my_blog',
+          name: 'myBlog',
+          component: myBlog
         }
       ]
     },

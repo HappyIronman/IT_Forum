@@ -3,5 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ironman.forum.dao.BlogDAO">
+    <insert id="save" parameterType="com.ironman.forum.entity.Blog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO blog(unique_id, user_id, title, content, is_private, is_share, create_time)
+        VALUES
+        (#{uniqueId}, #{userId}, #{title}, #{content}, #{isPrivate}, #{isShare}, #{createTime})
+    </insert>
 
+    <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Blog">
+        SELECT * FROM blog WHERE id = #{id} AND deleted = FALSE
+    </select>
+
+
+    <select id="getByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Blog">
+        SELECT * FROM blog WHERE unique_id = #{unqueId} AND deleted = FALSE
+    </select>
+
+    <select id="getAllLimitByUserId" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Blog">
+        SELECT * FROM blog where user_id = #{userId} and deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 </mapper>

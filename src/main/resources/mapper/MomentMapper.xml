@@ -5,14 +5,25 @@
 <mapper namespace="com.ironman.forum.dao.MomentDAO">
     <insert id="save" parameterType="com.ironman.forum.entity.Moment"
             useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO moment(unique_id, content, user_id, like_num, dislike_num, comment_num, 
-        view_num, is_private, deleted, create_time)
+        INSERT INTO moment(unique_id, content, user_id, like_num, dislike_num, comment_num,
+        view_num, is_private, is_share, deleted, create_time)
         VALUES 
         (#{uniqueId}, #{content}, #{userId}, #{likeNum}, #{dislikeNum}, #{commentNum}, #{viewNum},
-         #{isPrivate}, #{deleted}, #{createTime})
+        #{isPrivate}, #{isShare}, #{deleted}, #{createTime})
     </insert>
 
     <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Moment">
         SELECT * FROM moment WHERE id = #{id} AND deleted = FALSE
+    </select>
+
+    <select id="getByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Moment">
+        SELECT * FROM moment WHERE unique_id = #{unqueId} AND deleted = FALSE
+    </select>
+
+    <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.Moment">
+        SELECT * FROM moment where user_id = ${userId} AND deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
     </select>
 </mapper>

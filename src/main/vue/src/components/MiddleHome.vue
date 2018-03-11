@@ -3,7 +3,9 @@
     <nav class="uk-navbar-container" uk-navbar>
       <div class="uk-navbar-left">
         <ul class="uk-navbar-nav">
-          <li class="uk-active"><a href="">关注</a></li>
+          <li class="uk-active">
+            <router-link to="/friend_circle">朋友圈</router-link>
+          </li>
           <li>
             <router-link to="/moment">动态</router-link>
           </li>
@@ -33,7 +35,6 @@
               </select>
               <span class="uk-link">
                 <span uk-icon="icon: unlock"></span>
-                <span></span>
               </span>
             </div>
           </div>
@@ -55,8 +56,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {mapActions} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: 'MiddleHome',
@@ -64,7 +64,8 @@
       return {
         moment: {
           content: '',
-          isPrivate: 0
+          isPrivate: false,
+          isShare: false
         }
       }
     },

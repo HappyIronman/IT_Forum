@@ -26,10 +26,10 @@ public class MomentController {
     @RequestMapping(value = "/moment", method = RequestMethod.POST)
     public IronResponseEntity publishMoment(@RequestBody @Valid MomentPublishForm form, BindingResult result) {
         if (result.hasErrors()) {
-            return Util.processResult(result);
+            return IronUtil.processResult(result);
         }
         try {
-            momentService.PublishMoment(form);
+            momentService.publishMoment(form);
             return new IronResponseEntity(ResponseStatus.SUCCESS);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);
@@ -40,7 +40,7 @@ public class MomentController {
     @RequestMapping(value = "/mine/moment", method = RequestMethod.GET)
     public IronResponseEntity getMyMoments(@Valid PageRequest pageRequest, BindingResult result) {
         if (result.hasErrors()) {
-            return Util.processResult(result);
+            return IronUtil.processResult(result);
         }
         try {
             List<MomentVO> momentVOList = momentService.pageMyMoments(pageRequest);

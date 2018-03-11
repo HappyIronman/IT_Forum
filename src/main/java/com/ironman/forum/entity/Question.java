@@ -12,4 +12,5 @@ public class Question extends BaseEntity {
     private int answerNum;
     private int viewNum;
     private boolean closed;
+    private boolean isShare;
 }

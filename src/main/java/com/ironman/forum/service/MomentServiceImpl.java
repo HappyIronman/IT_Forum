@@ -1,21 +1,17 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.dao.MomentDAO;
+import com.ironman.forum.dao.ShareDAO;
 import com.ironman.forum.dao.UserDAO;
-import com.ironman.forum.dao.UserMomentDAO;
-import com.ironman.forum.entity.Moment;
-import com.ironman.forum.entity.User;
-import com.ironman.forum.entity.UserMoment;
+import com.ironman.forum.entity.*;
 import com.ironman.forum.form.MomentPublishForm;
-import com.ironman.forum.util.GlobalException;
-import com.ironman.forum.util.PageRequest;
-import com.ironman.forum.util.Util;
+import com.ironman.forum.util.*;
 import com.ironman.forum.vo.MomentVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,83 +25,118 @@ public class MomentServiceImpl implements MomentService {
     private MomentDAO momentDAO;
 
     @Autowired
-    private UserMomentDAO userMomentDAO;
+    private ShareDAO shareDAO;
 
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private CommonService commonService;
+
     @Override
     @Transactional
-    public void PublishMoment(MomentPublishForm form) throws GlobalException {
+    public void publishMoment(MomentPublishForm form) throws GlobalException {
         //校验逻辑...
         Long userId = 123L;
         Date date = new Date();
         Moment moment = new Moment();
         moment.setUserId(userId);
-        moment.setUniqueId(Util.generateUniqueId());
+        moment.setUniqueId(IronUtil.generateUniqueId());
         moment.setContent(form.getContent());
         moment.setDeleted(false);
         moment.setPrivate(form.getIsPrivate());
+        moment.setShare(form.getIsShare());
         moment.setCreateTime(date);
 
         momentDAO.save(moment);
 
-        UserMoment userMoment = new UserMoment();
-        userMoment.setUserId(userId);
-        userMoment.setMomentId(moment.getId());
-        userMoment.setPrivate(form.getIsPrivate());
-        userMoment.setDeleted(false);
-        userMoment.setType(UserMoment.Type.ORIGINAL.getType());
-        userMoment.setCreateTime(date);
+        if (form.getIsShare()) {
+            String originUniqueId = form.getOriginId();
+            if (StringUtils.isEmpty(originUniqueId)) {
+                throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
+            }
+            Moment originMoment = momentDAO.getByUniqueId(originUniqueId);
+            if (originMoment == null || originMoment.isPrivate()) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+            Share share = new Share();
+            share.setArticleId(moment.getId());
+            share.setOriginId(originMoment.getId());
+            share.setType(ArticleType.MOMENT.getId());
+            share.setDeleted(false);
+            share.setCreateTime(date);
+            shareDAO.save(share);
+            commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_MOMENT,
+                    originMoment.getId(), IronConstant.MOMENT_PROPERTY_SHARE_NUM, true);
+        }
 
-        userMomentDAO.save(userMoment);
+        commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_USER,
+                userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
-        this.ansyChangeMomentNum(userId, true);
+        TimeLine timeLine = new TimeLine();
+        timeLine.setUserId(userId);
+        timeLine.setEventId(moment.getId());
+        timeLine.setType(ArticleType.MOMENT.getId());
+        timeLine.setNew(true);
+        timeLine.setSelf(true);
+        timeLine.setCreateTime(date);
+        commonService.ansyAddTimeLine(timeLine);
     }
 
 
     @Override
     public List<MomentVO> pageMyMoments(PageRequest pageRequest) throws GlobalException {
         Long userId = 123L;
-        User user = userDAO.getMomentInfoById(userId);
-        List<UserMoment> userMomentList = userMomentDAO.getAllLimitByUserId(userId, pageRequest);
+        User user = userDAO.getArticleBaseInfoById(userId);
+        List<Moment> momentList = momentDAO.getAllLimitByUserId(userId, pageRequest);
         List<MomentVO> momentVOList = new ArrayList<>();
-        if (userMomentList != null) {
-            for (UserMoment userMoment : userMomentList) {
-                Moment moment = momentDAO.getById(userMoment.getMomentId());
-                MomentVO momentVO = new MomentVO();
-                momentVO.setUsername(user.getUsername());
-                momentVO.setProfile(user.getProfile());
-                momentVO.setPrivate(userMoment.isPrivate());
-                momentVO.setType(userMoment.getType());
-                momentVO.setReason(userMoment.getReason());
-                momentVO.setCreateTime(userMoment.getCreateTime());
-                if (moment.getUserId() != userId && moment.isPrivate()) {
-                    momentVO.setExist(false);
-                } else {
-                    momentVO.setExist(true);
-                    momentVO.setUniqueId(moment.getUniqueId());
-                    momentVO.setContent(moment.getContent());
-                    momentVO.setLikeNum(moment.getLikeNum());
-                    momentVO.setDislikeNum(moment.getDislikeNum());
-                    momentVO.setCommentNum(moment.getCommentNum());
-                    momentVO.setShareNum(moment.getShareNum());
-                    momentVO.setViewNum(moment.getViewNum());
-                }
+        if (momentList != null) {
+            for (Moment moment : momentList) {
+                MomentVO momentVO = this.assembleMomentVO(moment, user);
                 momentVOList.add(momentVO);
             }
         }
         return momentVOList;
     }
 
-    /**
-     * 异步更改用户发表moment的数量
-     *
-     * @param userId
-     * @param isIncrement 是否为增加
-     */
-    @Async
-    public void ansyChangeMomentNum(long userId, boolean isIncrement) {
-        userDAO.changeMomentNum(userId, isIncrement);
+    @Override
+    public MomentVO assembleMomentVO(Moment moment, User user) throws GlobalException {
+        MomentVO momentVO = BeanUtils.copy(moment, MomentVO.class);
+        if (momentVO.getContent().length() > IronConstant.MOMENT_MAX_LENGTH) {
+            momentVO.setAbstract(true);
+        } else {
+            momentVO.setAbstract(false);
+        }
+        momentVO.setUsername(user.getUsername());
+        momentVO.setProfile(user.getProfile());
+        if (moment.isShare()) {
+            this.assembleMomentShareInfo(momentVO, moment);
+        }
+        return momentVO;
+    }
+
+    @Override
+    public MomentVO assembleMomentVO(Moment moment) throws GlobalException {
+        User user = userDAO.getArticleBaseInfoById(moment.getUserId());
+        return this.assembleMomentVO(moment, user);
+    }
+
+    private void assembleMomentShareInfo(MomentVO momentVO, Moment moment) throws GlobalException {
+        Share share = shareDAO.getByArticleIdAndType(moment.getId(), ArticleType.MOMENT.getId());
+        if (share == null) {
+            log.error(moment.getId() + " 分享信息为空");
+            throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
+        }
+        Moment originMoment = momentDAO.getById(share.getOriginId());
+        if (originMoment.isPrivate()) {
+            momentVO.setExist(false);
+        } else {
+            momentVO.setExist(true);
+            User originUser = userDAO.getArticleBaseInfoById(originMoment.getUserId());
+            momentVO.setOriginUsername(originUser.getUsername());
+            momentVO.setOriginUserId(originUser.getUniqueId());
+            momentVO.setOriginContent(originMoment.getContent());
+            momentVO.setOriginCreateTime(originMoment.getCreateTime());
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.ironman.forum.conf;
 
 import com.ironman.forum.entity.User;
 import com.ironman.forum.util.IronConstant;
-import com.ironman.forum.util.Util;
+import com.ironman.forum.util.IronUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,10 @@ public class LoginInterceptor implements HandlerInterceptor {
                 "Origin, X-Requested-With, Content-Type, Accept");
 
 
+        //测试环境直接放行
+        if (true) {
+            return true;
+        }
 
         String requestUri = httpServletRequest.getRequestURI();
         if (publicUrl.contains(requestUri)) {
@@ -57,14 +61,14 @@ public class LoginInterceptor implements HandlerInterceptor {
                 logger.error(user.getId() + "权限为空");
                 return false;
             }
-            logger.info("用户权限: " + Util.toJson(userRoles));
+            logger.info("用户权限: " + IronUtil.toJson(userRoles));
             Set<String> permittedRoles = this.urlMap.get(requestUri);
             //默认为用户权限
             if (permittedRoles == null) {
                 permittedRoles = new HashSet<>();
                 permittedRoles.add("ROLE_USER");
             }
-            logger.info("所需权限: " + Util.toJson(permittedRoles));
+            logger.info("所需权限: " + IronUtil.toJson(permittedRoles));
             for (String role : userRoles) {
                 if (permittedRoles.contains(role)) {
                     LoginContext.saveLoginInfo(user);

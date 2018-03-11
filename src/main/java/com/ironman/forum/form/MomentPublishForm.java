@@ -13,4 +13,8 @@ public class MomentPublishForm {
     private String content;
     @NotNull(message = "权限不能为空")
     private Boolean isPrivate;
+    @NotNull(message = "类型不能为空")
+    private Boolean isShare;
+    //原动态uniqueId
+    private String originId;
 }

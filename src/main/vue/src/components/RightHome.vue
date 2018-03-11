@@ -54,7 +54,7 @@
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的博客</span>
-          <span class="uk-text-bold">6</span>
+          <router-link to="/my_blog" class="uk-text-bold">14</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的提问</span>
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
   import {mapActions} from 'vuex'
 
   export default {

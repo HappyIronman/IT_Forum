@@ -15,5 +15,6 @@ public class Blog extends BaseEntity {
     private int commentNum;
     private int viewNum;
     private boolean isPrivate;
+    private boolean isShare;
     private boolean deleted;
 }

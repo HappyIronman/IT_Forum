@@ -19,9 +19,9 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 
-	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
-	<!--配置拦截器, 多个拦截器,顺序执行 -->
+    <!--配置拦截器, 多个拦截器,顺序执行 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
@@ -29,8 +29,8 @@
 			<bean class="com.ironman.forum.conf.LoginInterceptor">
 				<property name="publicUrl">
 					<set>
-						<value>/data/moment</value>
-						<value>/data/mine/moment</value>
+                        <value>/data/moment</value>
+                        <value>/data/mine/moment</value>
 					</set>
 				</property>
 				<property name="urlMap">
