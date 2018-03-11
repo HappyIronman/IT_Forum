@@ -7,84 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3c44a060-4832-4b63-a6bc-6ec56ff3b332" name="Default" comment="&quot;change constant class name&quot;">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/tala111.xml" />
       <change beforePath="" afterPath="$PROJECT_DIR$/log/schedule.log" />
       <change beforePath="" afterPath="$PROJECT_DIR$/log/schedule1.log" />
       <change beforePath="" afterPath="$PROJECT_DIR$/log/schedule2.log" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/controller/BlogController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/controller/TimeLineController.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/CommonDAO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/ShareDAO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/ArticleType.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Share.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/form/BlogPublishForm.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/BlogService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/BlogServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/CommonService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/CommonServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/ShareService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/ShareServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/TimeLineService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/TimeLineServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/AbstractContent.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/BeanUtils.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/vo/BlogVO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/vo/TimeLineVO.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mapper/Base.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mapper/CommomMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/mapper/ShareMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/vue/src/components/BlogItem.vue" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/vue/src/components/FriendCircle.vue" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/vue/src/components/MomentItem.vue" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/vue/src/components/MomentShareModal.vue" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/vue/src/components/MyBlog.vue" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/conf/LoginInterceptor.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/conf/LoginInterceptor.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/controller/MomentController.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/controller/MomentController.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/BlogDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/BlogDAO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/MomentDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/MomentDAO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/TimeLineDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/TimeLineDAO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/UserBlogDAO.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/UserDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/UserDAO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/dao/UserMomentDAO.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Blog.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Blog.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Moment.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Moment.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Question.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/Question.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/TimeLine.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/TimeLine.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/UserBlog.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/entity/UserMoment.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/form/MomentPublishForm.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/form/MomentPublishForm.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/MomentService.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/MomentService.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/MomentServiceImpl.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/service/MomentServiceImpl.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/IronConstant.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/IronConstant.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/ResponseStatus.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/ResponseStatus.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/Util.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/util/IronUtil.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ironman/forum/vo/MomentVO.java" afterPath="$PROJECT_DIR$/src/main/java/com/ironman/forum/vo/MomentVO.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/db.properties" afterPath="$PROJECT_DIR$/src/main/resources/db.properties" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j.properties" afterPath="$PROJECT_DIR$/src/main/resources/log4j.properties" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/BlogMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/BlogMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/MomentMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/MomentMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/TimeLineMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/TimeLineMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/UserBlogMapper.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/UserMapper.xml" afterPath="$PROJECT_DIR$/src/main/resources/mapper/UserMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/UserMomentMapper.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/components/MiddleHome.vue" afterPath="$PROJECT_DIR$/src/main/vue/src/components/MiddleHome.vue" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/components/MyMoment.vue" afterPath="$PROJECT_DIR$/src/main/vue/src/components/MyMoment.vue" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/components/RightHome.vue" afterPath="$PROJECT_DIR$/src/main/vue/src/components/RightHome.vue" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/pages/WriteBlogPage.vue" afterPath="$PROJECT_DIR$/src/main/vue/src/pages/WriteBlogPage.vue" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/router/index.js" afterPath="$PROJECT_DIR$/src/main/vue/src/router/index.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/store/modules/blog.js" afterPath="$PROJECT_DIR$/src/main/vue/src/store/modules/blog.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/store/modules/moment.js" afterPath="$PROJECT_DIR$/src/main/vue/src/store/modules/moment.js" />
-      <change beforePath="$PROJECT_DIR$/src/main/vue/src/store/mutation-types.js" afterPath="$PROJECT_DIR$/src/main/vue/src/store/mutation-types.js" />
       <change beforePath="$PROJECT_DIR$/target/classes/applicationContext.xml" afterPath="$PROJECT_DIR$/target/classes/applicationContext.xml" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/LoginContext.class" afterPath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/LoginContext.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/LoginInterceptor.class" afterPath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/LoginInterceptor.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/RegexHashMap.class" afterPath="$PROJECT_DIR$/target/classes/com/ironman/forum/conf/RegexHashMap.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/dao/UserDAO.class" afterPath="$PROJECT_DIR$/target/classes/com/ironman/forum/dao/UserDAO.class" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/service/UserServiceImpl.class" afterPath="$PROJECT_DIR$/target/classes/com/ironman/forum/service/UserServiceImpl.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ironman/forum/util/Util.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/target/classes/db.properties" afterPath="$PROJECT_DIR$/target/classes/db.properties" />
       <change beforePath="$PROJECT_DIR$/target/classes/dispatcher-servlet.xml" afterPath="$PROJECT_DIR$/target/classes/dispatcher-servlet.xml" />
       <change beforePath="$PROJECT_DIR$/target/classes/log4j.properties" afterPath="$PROJECT_DIR$/target/classes/log4j.properties" />
@@ -96,7 +28,6 @@
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/conf/RegexHashMap.class" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/conf/RegexHashMap.class" />
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/dao/UserDAO.class" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/dao/UserDAO.class" />
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/service/UserServiceImpl.class" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/service/UserServiceImpl.class" />
-      <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/com/ironman/forum/util/Util.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/db.properties" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/db.properties" />
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/dispatcher-servlet.xml" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/dispatcher-servlet.xml" />
       <change beforePath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/log4j.properties" afterPath="$PROJECT_DIR$/target/test-spring/WEB-INF/classes/log4j.properties" />
@@ -139,7 +70,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/vue/src/components/BlogItem.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="333">
-              <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+              <caret line="29" column="14" lean-forward="false" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -181,6 +112,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -757,7 +689,7 @@
       <workItem from="1520671421276" duration="4953000" />
       <workItem from="1520682653045" duration="12832000" />
       <workItem from="1520741080545" duration="7446000" />
-      <workItem from="1520750703877" duration="18067000" />
+      <workItem from="1520750703877" duration="18216000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;change constant class name&quot;">
       <created>1520067022747</created>
@@ -773,11 +705,18 @@
       <option name="project" value="LOCAL" />
       <updated>1520224348609</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add more functions">
+      <created>1520770836258</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1520770836259</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="143889000" />
+    <option name="totallyTimeSpent" value="144038000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -867,7 +806,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <MESSAGE value="&quot;change constant class name&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;change constant class name&quot;" />
+    <MESSAGE value="add more functions" />
+    <option name="LAST_COMMIT_MESSAGE" value="add more functions" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1111,10 +1051,10 @@
         <state relative-caret-position="390">
           <caret line="26" column="18" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="26" selection-end-column="18" />
           <folding>
-            <marker date="1520755540000" expanded="true" signature="341:664" ph="INSERT INTO moment... " />
-            <marker date="1520755540000" expanded="true" signature="790:847" ph="SELECT * FRO... moment" />
-            <marker date="1520755540000" expanded="true" signature="981:1050" ph="SELECT * FRO... moment" />
-            <marker date="1520755540000" expanded="true" signature="1157:1223" ph="SELECT * FRO... moment" />
+            <marker date="1520770754000" expanded="true" signature="341:662" ph="INSERT INTO moment... " />
+            <marker date="1520770754000" expanded="true" signature="788:845" ph="SELECT * FRO... moment" />
+            <marker date="1520770754000" expanded="true" signature="979:1048" ph="SELECT * FRO... moment" />
+            <marker date="1520770754000" expanded="true" signature="1155:1221" ph="SELECT * FRO... moment" />
           </folding>
         </state>
       </provider>
@@ -1131,9 +1071,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="457">
           <caret line="81" column="9" lean-forward="true" selection-start-line="81" selection-start-column="9" selection-end-line="81" selection-end-column="9" />
-          <folding>
-            <element signature="e#1957#1986#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1191,9 +1129,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="73">
           <caret line="7" column="62" lean-forward="false" selection-start-line="7" selection-start-column="62" selection-end-line="7" selection-end-column="62" />
-          <folding>
-            <element signature="e#363#392#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1239,9 +1175,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="456">
           <caret line="48" column="3" lean-forward="true" selection-start-line="46" selection-start-column="2" selection-end-line="48" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1249,9 +1183,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="25" column="39" lean-forward="false" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#49#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1324,7 +1256,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/vue/src/components/BlogItem.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="333">
-          <caret line="29" column="14" lean-forward="true" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+          <caret line="29" column="14" lean-forward="false" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
           <folding />
         </state>
       </provider>
