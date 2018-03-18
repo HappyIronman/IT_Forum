@@ -1,12 +1,14 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.dao.BlogDAO;
+import com.ironman.forum.dao.LikeLogDAO;
 import com.ironman.forum.dao.ShareDAO;
 import com.ironman.forum.dao.UserDAO;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.form.BlogPublishForm;
 import com.ironman.forum.util.*;
-import com.ironman.forum.vo.BlogVO;
+import com.ironman.forum.vo.BlogAbsVO;
+import com.ironman.forum.vo.BlogDetailVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +32,10 @@ public class BlogServiceImpl implements BlogService {
     private ShareDAO shareDAO;
 
     @Autowired
-    private CommonService commonService;
+    private LikeLogDAO likeLogDAO;
+
+    @Autowired
+    private AnsyCommonService ansyCommonService;
 
 
     @Override
@@ -61,7 +66,7 @@ public class BlogServiceImpl implements BlogService {
             if (StringUtils.isEmpty(originUniqueId)) {
                 throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
             }
-            Blog originBlog = blogDAO.getByUniqueId(originUniqueId);
+            Blog originBlog = blogDAO.getBaseInfoByUniqueId(originUniqueId);
             if (originBlog == null || originBlog.isPrivate()) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
@@ -73,80 +78,119 @@ public class BlogServiceImpl implements BlogService {
             share.setCreateTime(createTime);
             shareDAO.save(share);
 
-            commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_BLOG,
-                    originBlog.getId(), IronConstant.BLOG_PROPERTY_SHARE_NUM, true);
+            ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_BLOG,
+                    originBlog.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_USER,
+        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
 
         TimeLine timeLine = new TimeLine();
         timeLine.setUserId(userId);
-        timeLine.setEventId(blog.getId());
+        timeLine.setArticleId(blog.getId());
         timeLine.setSelf(true);
         timeLine.setNew(true);
         timeLine.setType(ArticleType.BLOG.getId());
         timeLine.setCreateTime(new Date());
-        commonService.ansyAddTimeLine(timeLine);
+        ansyCommonService.ansyAddTimeLine(timeLine);
 
         return uniqueId;
     }
 
     @Override
-    public List<BlogVO> pageMyBlogs(PageRequest pageRequest) throws GlobalException {
+    public List<BlogAbsVO> pageMyBlogs(PageRequest pageRequest) throws GlobalException {
         Long userId = 123L;
         List<Blog> blogList = blogDAO.getAllLimitByUserId(userId, pageRequest);
-        List<BlogVO> blogVOList = new ArrayList<>();
+        List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
         if (blogList != null && blogList.size() != 0) {
             for (Blog blog : blogList) {
-                BlogVO blogVO = new BlogVO();
-                blogVO.setUniqueId(blog.getUniqueId());
-                blogVO.setTitle(blog.getTitle());
+                BlogAbsVO blogAbsVO = new BlogAbsVO();
+                blogAbsVO.setUniqueId(blog.getUniqueId());
+                blogAbsVO.setTitle(blog.getTitle());
                 blog.setCommentNum(blog.getCommentNum());
-                blogVO.setViewNum(blog.getViewNum());
-                blogVO.setCreateTime(blog.getCreateTime());
-                blogVO.setPrivate(blog.isPrivate());
-                blogVOList.add(blogVO);
+                blogAbsVO.setViewNum(blog.getViewNum());
+                blogAbsVO.setCreateTime(blog.getCreateTime());
+                blogAbsVO.setPrivate(blog.isPrivate());
+                blogAbsVOList.add(blogAbsVO);
             }
         }
-        return blogVOList;
+        return blogAbsVOList;
     }
 
     @Override
-    public BlogVO assembleBlogVO(Blog blog, User user) throws GlobalException {
-        BlogVO blogVO = BeanUtils.copy(blog, BlogVO.class);
-        AbstractContent absContent = IronUtil.getAbstractContent(blogVO.getContent(), IronConstant.BLOG_MAX_LENGTH);
-        blogVO.setAbstract(absContent.isAbstract());
-        blogVO.setContent(absContent.getContent());
-        blogVO.setUsername(user.getUsername());
-        blogVO.setProfile(user.getProfile());
-        if (blog.isShare()) {
-            this.assembleBlogShareInfo(blogVO, blog);
+    public BlogAbsVO assembleBlogAbsVO(Blog blog, User user) throws GlobalException {
+        BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
+        AbstractContent absContent = IronUtil.getAbstractContent(blogAbsVO.getContent(), IronConstant.BLOG_MAX_LENGTH);
+        blogAbsVO.setAbstract(absContent.isAbstract());
+        blogAbsVO.setContent(absContent.getContent());
+        blogAbsVO.setUsername(user.getUsername());
+        blogAbsVO.setProfile(user.getProfile());
+        Long userId = 123L;
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), ArticleType.BLOG.getId());
+        if (likeLog != null) {
+            blogAbsVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
+        } else {
+            blogAbsVO.setLikeCondition(IronConstant.LIKE_CONDITION_DEFAULT);
         }
-        return blogVO;
+        if (blog.isShare()) {
+            this.assembleBlogAbsShareInfo(blogAbsVO, blog);
+        }
+        return blogAbsVO;
     }
 
     @Override
-    public BlogVO assembleBlogVO(Blog blog) throws GlobalException {
+    public BlogAbsVO assembleBlogAbsVO(Blog blog) throws GlobalException {
         User user = userDAO.getArticleBaseInfoById(blog.getUserId());
-        return this.assembleBlogVO(blog, user);
+        return this.assembleBlogAbsVO(blog, user);
     }
 
-    private void assembleBlogShareInfo(BlogVO blogVO, Blog blog) throws GlobalException {
+    @Override
+    public BlogDetailVO getBlogDetail(String uniqueId) throws GlobalException {
+        Blog blog = blogDAO.getByUniqueId(uniqueId);
+        Long userId = 123L;
+        if (blog == null) {
+            throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+        }
+        if (blog.isPrivate() && blog.getUserId() != userId) {
+            throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+        }
+        BlogDetailVO blogDetailVO = BeanUtils.copy(blog, BlogDetailVO.class);
+        if (blog.isShare()) {
+            Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleType.BLOG.getId());
+            if (share == null) {
+                log.error(blog.getId() + " 分享信息为空");
+                throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
+            }
+            Blog originBlog = blogDAO.getById(share.getOriginId());
+            if (originBlog.isPrivate()) {
+                blogDetailVO.setExist(false);
+            } else {
+                blogDetailVO.setExist(true);
+                User originUser = userDAO.getArticleBaseInfoById(originBlog.getUserId());
+                blogDetailVO.setOriginUsername(originUser.getUsername());
+                blogDetailVO.setOriginUserId(originUser.getUniqueId());
+                blogDetailVO.setOriginTitle(originBlog.getTitle());
+                blogDetailVO.setContent(originBlog.getContent());
+            }
+        }
+        return blogDetailVO;
+    }
+
+    private void assembleBlogAbsShareInfo(BlogAbsVO blogAbsVO, Blog blog) throws GlobalException {
         Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleType.BLOG.getId());
         if (share == null) {
             log.error(blog.getId() + " 分享信息为空");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
         }
-        Blog originBlog = blogDAO.getById(share.getOriginId());
+        Blog originBlog = blogDAO.getBaseInfoById(share.getOriginId());
         if (originBlog.isPrivate()) {
-            blogVO.setExist(false);
+            blogAbsVO.setExist(false);
         } else {
-            blogVO.setExist(true);
+            blogAbsVO.setExist(true);
             User originUser = userDAO.getArticleBaseInfoById(originBlog.getUserId());
-            blogVO.setOriginUsername(originUser.getUsername());
-            blogVO.setOriginUserId(originUser.getUniqueId());
-            blogVO.setOriginTitle(originBlog.getTitle());
+            blogAbsVO.setOriginUsername(originUser.getUsername());
+            blogAbsVO.setOriginUserId(originUser.getUniqueId());
+            blogAbsVO.setOriginTitle(originBlog.getTitle());
         }
     }
 }

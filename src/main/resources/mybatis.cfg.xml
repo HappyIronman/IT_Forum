@@ -7,5 +7,8 @@
 	<settings>
 		<!--开启驼峰命名-->
 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!--打印语句-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
 	</settings>
 </configuration>

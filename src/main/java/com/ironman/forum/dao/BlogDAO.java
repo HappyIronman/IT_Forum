@@ -11,7 +11,11 @@ public interface BlogDAO {
 
     List<Blog> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
 
-    Blog getById(long originId);
+    Blog getById(long id);
+
+    Blog getBaseInfoById(long id);
+
+    Blog getBaseInfoByUniqueId(String uniqueId);
 
     Blog getByUniqueId(String uniqueId);
 }

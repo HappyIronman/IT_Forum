@@ -33,20 +33,25 @@
         </div>
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
-        <button class="uk-button uk-button-text uk-margin-small-right">
-          <span>喜欢</span>
+        <button class="uk-button uk-button-text uk-margin-small-right"
+                v-bind:style="likeBtnStyle" v-on:click="likeMoment(moment, true)"
+                v-bind:disabled="moment.likeCondition===3">
+          <span v-show="moment.likeCondition!==2">赞</span>
+          <span v-show="moment.likeCondition===2">已赞</span>
           <span>({{moment.likeNum}})</span>
         </button>
-        <button class="uk-button uk-button-text uk-margin-small-right">
-          <span>不喜欢</span>
+        <button class="uk-button uk-button-text uk-margin-small-right"
+                v-bind:style="dislikeBtnStyle" v-on:click="likeMoment(moment, false)"
+                v-bind:disabled="moment.likeCondition===2">
+          <span v-show="moment.likeCondition!==3">踩</span>
+          <span v-show="moment.likeCondition===3">已踩</span>
           <span>({{moment.dislikeNum}})</span>
         </button>
         <button class="uk-button uk-button-text uk-margin-small-right">
           <span>评论</span>
           <span>({{moment.commentNum}})</span>
         </button>
-        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="onclickShareMoment"
-                uk-toggle>
+        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="onclickShareMoment">
           <span>转发</span>
           <span>({{moment.shareNum}})</span>
         </button>
@@ -74,10 +79,47 @@
     data() {
       return {}
     },
+    computed: {
+      //赞或者踩的状态，1-->未赞或踩过， 2--->已赞，3--->已踩
+      likeBtnStyle: function () {
+        return {color: this.moment.likeCondition === 2 ? 'blue' : 'black'}
+      },
+      dislikeBtnStyle: function () {
+        return {color: this.moment.likeCondition === 3 ? 'blue' : 'black'}
+      }
+    },
     methods: {
-      ...mapActions([]),
+      ...mapActions([
+        'likeArticleAction',
+        'cancelLikeArticleAction'
+      ]),
       onclickShareMoment: function () {
         UIkit.modal('#m' + this.moment.uniqueId).show();
+      },
+      likeMoment: function (moment, isLike) {
+        var params = {
+          targetId: moment.uniqueId,
+          type: 1,
+          like: isLike
+        }
+        if (moment.likeCondition !== 1) {
+          this.cancelLikeArticleAction(params)
+          moment.likeCondition = 1
+          if (isLike) {
+            moment.likeNum -= 1
+          } else {
+            moment.dislikeNum -= 1
+          }
+        } else {
+          this.likeArticleAction(params)
+          if (isLike) {
+            moment.likeCondition = 2
+            moment.likeNum += 1
+          } else {
+            moment.likeCondition = 3
+            moment.dislikeNum += 1
+          }
+        }
       }
     }
   }

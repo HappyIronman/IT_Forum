@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ironman.forum.dao.AboutMeDAO">
+    <insert id="save" parameterType="com.ironman.forum.entity.AboutMe" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO about_me(user_id, log_id, type, is_new, deleted, create_time)
+        VALUES (#{userId}, #{logId}, #{type}, #{isNew}, #{deleted}, #{createTime})
+    </insert>
+
+    <update id="deleteByLogIdAndType">
+        UPDATE about_me SET deleted = TRUE WHERE log_id = #{logId} AND type = #{type} AND deleted = FALSE
+    </update>
+</mapper>

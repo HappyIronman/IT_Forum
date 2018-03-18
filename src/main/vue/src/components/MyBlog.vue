@@ -5,7 +5,7 @@
     </div>
     <ul class="uk-list uk-list-divider">
       <li v-for="blog in myBlogList">
-        <span>{{blog.title}}</span>
+        <router-link v-bind:to="'/my_blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
         <span class="uk-align-right uk-text-small uk-text-muted uk-margin-remove">
           （{{blog.commentNum}}／{{blog.viewNum}}）
         </span>

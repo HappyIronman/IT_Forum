@@ -3,7 +3,9 @@ import types from '../mutation-types'
 
 const state = {
   //我的博客列表
-  myBlogList: []
+  myBlogList: [],
+  //博客详情
+  blogDetail: {}
 }
 
 const actions = {
@@ -17,6 +19,9 @@ const actions = {
   fetchMyBlogListAction({commit}, payload) {
     requestApi('get', 'mine/blog', payload, (res) => commit(types.FETCH_MY_BLOG_LIST, res))
   },
+  fetchBlogDetailAction({commit}, uniqueId) {
+    requestApi('get', '/blog/' + uniqueId, null, (res) => commit(types.FETCH_BLOG_DETAIL, res))
+  },
 }
 
 const mutations = {
@@ -24,6 +29,9 @@ const mutations = {
   },
   [types.FETCH_MY_BLOG_LIST](state, data) {
     state.myBlogList = state.myBlogList.concat(data.responseVO)
+  },
+  [types.FETCH_BLOG_DETAIL](state, data) {
+    state.blogDetail = data.responseVO
   }
 }
 

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 public class TimeLine extends BaseEntity {
     private long userId;
-    private long eventId;
+    private long articleId;
     private int type;
     private boolean isSelf;
     private boolean isNew;

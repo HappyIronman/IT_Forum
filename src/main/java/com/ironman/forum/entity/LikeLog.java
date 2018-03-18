@@ -5,14 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LikeLog extends BaseEntity {
-    private long userId;
-    private long targetId;
-    //0--->为评论
-    //1--->为moment
-    //2--->为blog
-    //3--->为question
-    private int type;
+public class LikeLog extends BaseLog {
+
     private boolean isLike;
-    private boolean disabled;
 }

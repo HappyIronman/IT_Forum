@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.dao.LikeLogDAO;
 import com.ironman.forum.dao.MomentDAO;
 import com.ironman.forum.dao.ShareDAO;
 import com.ironman.forum.dao.UserDAO;
@@ -31,7 +32,10 @@ public class MomentServiceImpl implements MomentService {
     private UserDAO userDAO;
 
     @Autowired
-    private CommonService commonService;
+    private LikeLogDAO likeLogDAO;
+
+    @Autowired
+    private AnsyCommonService ansyCommonService;
 
     @Override
     @Transactional
@@ -55,7 +59,7 @@ public class MomentServiceImpl implements MomentService {
             if (StringUtils.isEmpty(originUniqueId)) {
                 throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
             }
-            Moment originMoment = momentDAO.getByUniqueId(originUniqueId);
+            Moment originMoment = momentDAO.getBaseInfoByUniqueId(originUniqueId);
             if (originMoment == null || originMoment.isPrivate()) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
@@ -66,21 +70,22 @@ public class MomentServiceImpl implements MomentService {
             share.setDeleted(false);
             share.setCreateTime(date);
             shareDAO.save(share);
-            commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_MOMENT,
-                    originMoment.getId(), IronConstant.MOMENT_PROPERTY_SHARE_NUM, true);
+
+            ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_MOMENT,
+                    originMoment.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        commonService.ansyChangeEntityPropertyNum(IronConstant.TABLE_USER,
+        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
         TimeLine timeLine = new TimeLine();
         timeLine.setUserId(userId);
-        timeLine.setEventId(moment.getId());
+        timeLine.setArticleId(moment.getId());
         timeLine.setType(ArticleType.MOMENT.getId());
         timeLine.setNew(true);
         timeLine.setSelf(true);
         timeLine.setCreateTime(date);
-        commonService.ansyAddTimeLine(timeLine);
+        ansyCommonService.ansyAddTimeLine(timeLine);
     }
 
 
@@ -100,6 +105,12 @@ public class MomentServiceImpl implements MomentService {
     }
 
     @Override
+    public MomentVO assembleMomentVO(Moment moment) throws GlobalException {
+        User user = userDAO.getArticleBaseInfoById(moment.getUserId());
+        return this.assembleMomentVO(moment, user);
+    }
+
+    @Override
     public MomentVO assembleMomentVO(Moment moment, User user) throws GlobalException {
         MomentVO momentVO = BeanUtils.copy(moment, MomentVO.class);
         if (momentVO.getContent().length() > IronConstant.MOMENT_MAX_LENGTH) {
@@ -109,16 +120,17 @@ public class MomentServiceImpl implements MomentService {
         }
         momentVO.setUsername(user.getUsername());
         momentVO.setProfile(user.getProfile());
+        Long userId = 123L;
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, moment.getId(), ArticleType.MOMENT.getId());
+        if (likeLog != null) {
+            momentVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
+        } else {
+            momentVO.setLikeCondition(IronConstant.LIKE_CONDITION_DEFAULT);
+        }
         if (moment.isShare()) {
             this.assembleMomentShareInfo(momentVO, moment);
         }
         return momentVO;
-    }
-
-    @Override
-    public MomentVO assembleMomentVO(Moment moment) throws GlobalException {
-        User user = userDAO.getArticleBaseInfoById(moment.getUserId());
-        return this.assembleMomentVO(moment, user);
     }
 
     private void assembleMomentShareInfo(MomentVO momentVO, Moment moment) throws GlobalException {

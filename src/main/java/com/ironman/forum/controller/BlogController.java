@@ -3,14 +3,13 @@ package com.ironman.forum.controller;
 import com.ironman.forum.form.BlogPublishForm;
 import com.ironman.forum.service.BlogService;
 import com.ironman.forum.util.*;
-import com.ironman.forum.vo.BlogVO;
+import com.ironman.forum.util.ResponseStatus;
+import com.ironman.forum.vo.BlogAbsVO;
+import com.ironman.forum.vo.BlogDetailVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,8 +42,20 @@ public class BlogController {
             return IronUtil.processResult(result);
         }
         try {
-            List<BlogVO> blogVOList = blogService.pageMyBlogs(pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, blogVOList);
+            List<BlogAbsVO> blogAbsVOList = blogService.pageMyBlogs(pageRequest);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, blogAbsVOList);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
+
+    @RequestMapping(value = "/blog/{uniqueId}", method = RequestMethod.GET)
+    public IronResponseEntity getBlogDetail(@PathVariable("uniqueId") String uniqueId) {
+
+        try {
+            BlogDetailVO blogDetailVO = blogService.getBlogDetail(uniqueId);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, blogDetailVO);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);
             return new IronResponseEntity(e.getResponseStatus());

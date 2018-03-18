@@ -44,12 +44,18 @@
         </div>
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
-        <button class="uk-button uk-button-text uk-margin-small-right">
-          <span>喜欢</span>
+        <button class="uk-button uk-button-text uk-margin-small-right"
+                v-bind:style="likeBtnStyle" v-on:click="likeBlog(blog, true)"
+                v-bind:disabled="blog.likeCondition===3">
+          <span v-show="blog.likeCondition!==2">赞</span>
+          <span v-show="blog.likeCondition===2">已赞</span>
           <span>({{blog.likeNum}})</span>
         </button>
-        <button class="uk-button uk-button-text uk-margin-small-right">
-          <span>不喜欢</span>
+        <button class="uk-button uk-button-text uk-margin-small-right"
+                v-bind:style="dislikeBtnStyle" v-on:click="likeBlog(blog, false)"
+                v-bind:disabled="blog.likeCondition===2">
+          <span v-show="blog.likeCondition!==3">踩</span>
+          <span v-show="blog.likeCondition===3">已踩</span>
           <span>({{blog.dislikeNum}})</span>
         </button>
         <button class="uk-button uk-button-text uk-margin-small-right">
@@ -70,6 +76,7 @@
 </template>
 
 <script>
+  import {mapActions} from 'vuex'
 
   export default {
     name: 'blogItem',
@@ -77,7 +84,46 @@
     data() {
       return {}
     },
-    methods: {}
+    computed: {
+      //赞或者踩的状态，1-->未赞或踩过， 2--->已赞，3--->已踩
+      likeBtnStyle: function () {
+        return {color: this.blog.likeCondition === 2 ? 'blue' : 'black'}
+      },
+      dislikeBtnStyle: function () {
+        return {color: this.blog.likeCondition === 3 ? 'blue' : 'black'}
+      }
+    },
+    methods: {
+      ...mapActions([
+        'likeArticleAction',
+        'cancelLikeArticleAction'
+      ]),
+      likeBlog: function (blog, isLike) {
+        var params = {
+          targetId: blog.uniqueId,
+          type: 2,
+          like: isLike
+        }
+        if (blog.likeCondition !== 1) {
+          this.cancelLikeArticleAction(params)
+          blog.likeCondition = 1
+          if (isLike) {
+            blog.likeNum -= 1
+          } else {
+            blog.dislikeNum -= 1
+          }
+        } else {
+          this.likeArticleAction(params)
+          if (isLike) {
+            blog.likeCondition = 2
+            blog.likeNum += 1
+          } else {
+            blog.likeCondition = 3
+            blog.dislikeNum += 1
+          }
+        }
+      }
+    }
   }
 </script>
 

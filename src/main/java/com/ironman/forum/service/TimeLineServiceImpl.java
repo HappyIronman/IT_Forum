@@ -9,7 +9,7 @@ import com.ironman.forum.entity.Moment;
 import com.ironman.forum.entity.TimeLine;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.PageRequest;
-import com.ironman.forum.vo.BlogVO;
+import com.ironman.forum.vo.BlogAbsVO;
 import com.ironman.forum.vo.MomentVO;
 import com.ironman.forum.vo.TimeLineVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +45,16 @@ public class TimeLineServiceImpl implements TimeLineService {
         for (TimeLine timeLine : timeLineList) {
             TimeLineVO timeLineVO = new TimeLineVO();
             int type = timeLine.getType();
-            long eventId = timeLine.getEventId();
+            long articleId = timeLine.getArticleId();
             timeLineVO.setType(type);
             if (type == ArticleType.MOMENT.getId()) {
-                Moment moment = momentDAO.getById(eventId);
+                Moment moment = momentDAO.getById(articleId);
                 MomentVO momentVO = momentService.assembleMomentVO(moment);
                 timeLineVO.setEntity(momentVO);
             } else if (type == ArticleType.BLOG.getId()) {
-                Blog blog = blogDAO.getById(eventId);
-                BlogVO blogVO = blogService.assembleBlogVO(blog);
-                timeLineVO.setEntity(blogVO);
+                Blog blog = blogDAO.getById(articleId);
+                BlogAbsVO blogAbsVO = blogService.assembleBlogAbsVO(blog);
+                timeLineVO.setEntity(blogAbsVO);
             } else if (type == ArticleType.QUESTION.getId()) {
                 //todo
             } else if (type == ArticleType.COMMENT.getId()) {

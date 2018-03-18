@@ -231,7 +231,7 @@ DROP TABLE IF EXISTS `time_line`;
 CREATE TABLE `time_line` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
-  `event_id` bigint(20) NOT NULL,
+  `article_id` bigint(20) NOT NULL,
   `type` tinyint(4) NOT NULL,
   `is_self` tinyint(4) NOT NULL DEFAULT '0',
   `is_new` tinyint(4) NOT NULL DEFAULT '1',

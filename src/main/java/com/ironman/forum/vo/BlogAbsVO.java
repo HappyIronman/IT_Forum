@@ -5,35 +5,39 @@ import lombok.Setter;
 
 import java.util.Date;
 
+/**
+ * ²©¿Í¼òÂÔĞÅÏ¢£¨ÓÃÀ´Õ¹Ê¾ÔÚÊ±¼äÖáµÈ´¦£©
+ */
 @Getter
 @Setter
-public class MomentVO {
+public class BlogAbsVO {
     private String uniqueId;
     private String userId;
     private String username;
     private String profile;
+    private String title;
     private String content;
     private int likeNum;
     private int dislikeNum;
-    //èµæˆ–è€…è¸©çš„çŠ¶æ€ï¼Œ1-->æœªèµæˆ–è¸©è¿‡ï¼Œ 2--->å·²èµï¼Œ3--->å·²è¸©
+    //ÔŞ»òÕß²ÈµÄ×´Ì¬£¬1-->Î´ÔŞ»ò²È¹ı£¬ 2--->ÒÑÔŞ£¬3--->ÒÑ²È
     private int likeCondition;
     private int commentNum;
     private int shareNum;
     private int viewNum;
     private boolean isAbstract;
     private Date createTime;
-    //æ˜¯å¦ä¸ºç§æœ‰
+    //ÊÇ·ñÎªË½ÓĞ
     private boolean isPrivate;
-    //æ˜¯å¦ä¸ºè½¬è½½
+    //ÊÇ·ñÎª×ªÔØ
     private boolean isShare;
-    //è‹¥ä¸ºè½¬è½½,æ˜¯å¦åŸåŠ¨æ€å­˜åœ¨
+    //ÈôÎª×ªÔØ,ÊÇ·ñÔ­¶¯Ì¬´æÔÚ
     private boolean isExist = true;
-    //è‹¥ä¸ºè½¬è½½ï¼ŒåŸåŠ¨æ€ä½œè€…æ˜µç§°
+    //ÈôÎª×ªÔØ£¬Ô­¶¯Ì¬×÷ÕßêÇ³Æ
     private String originUsername;
-    //è‹¥ä¸ºè½¬è½½ï¼ŒåŸåŠ¨æ€ä½œè€…uniqueId
+    //ÈôÎª×ªÔØ£¬Ô­¶¯Ì¬×÷ÕßuniqueId
     private String originUserId;
-    //è‹¥ä¸ºè½¬è½½ï¼ŒåŸåŠ¨æ€å†…å®¹
-    private String originContent;
-    //è‹¥ä¸ºè½¬è½½ï¼ŒåŸåŠ¨æ€å‘å¸ƒæ—¶é—´
+    //ÈôÎª×ªÔØ£¬Ô­¶¯Ì¬ÌâÄ¿
+    private String originTitle;
+    //ÈôÎª×ªÔØ£¬Ô­¶¯Ì¬·¢²¼Ê±¼ä
     private Date originCreateTime;
 }

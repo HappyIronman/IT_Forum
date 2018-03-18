@@ -7,6 +7,7 @@ import momentHome from '../components/MomentHome.vue'
 import blogHome from '../components/BlogHome.vue'
 import myMoment from '../components/MyMoment.vue'
 import myBlog from '../components/myBlog.vue'
+import blogDetail from '../components/BlogDetail.vue'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ export default new Router({
           path: '/my_blog',
           name: 'myBlog',
           component: myBlog
+        },
+        {
+          path: '/my_blog/:uniqueId',
+          name: 'blogDetail',
+          component: blogDetail
         }
       ]
     },

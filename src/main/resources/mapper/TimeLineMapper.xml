@@ -4,9 +4,9 @@
 
 <mapper namespace="com.ironman.forum.dao.TimeLineDAO">
     <insert id="save" parameterType="com.ironman.forum.entity.TimeLine">
-        INSERT INTO time_line(user_id, event_id, type, is_self, is_new, create_time)
+        INSERT INTO time_line(user_id, article_id, type, is_self, is_new, create_time)
         VALUES
-        (#{userId}, #{eventId}, #{type}, #{isSelf}, #{isNew}, #{createTime})
+        (#{userId}, #{articleId}, #{type}, #{isSelf}, #{isNew}, #{createTime})
     </insert>
 
     <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.TimeLine">

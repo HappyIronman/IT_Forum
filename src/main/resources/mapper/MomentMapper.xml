@@ -12,9 +12,20 @@
         #{isPrivate}, #{isShare}, #{deleted}, #{createTime})
     </insert>
 
+    <select id="getBaseInfoById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Moment">
+        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, deleted, create_time
+        FROM moment WHERE id = #{id} AND deleted = FALSE
+    </select>
+
+    <select id="getBaseInfoByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Moment">
+        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, deleted, create_time
+        FROM moment WHERE unique_id = #{unqueId} AND deleted = FALSE
+    </select>
+
     <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Moment">
         SELECT * FROM moment WHERE id = #{id} AND deleted = FALSE
     </select>
+
 
     <select id="getByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Moment">
         SELECT * FROM moment WHERE unique_id = #{unqueId} AND deleted = FALSE

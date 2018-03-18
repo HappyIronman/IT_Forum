@@ -13,7 +13,11 @@ public interface MomentDAO {
 
     Moment getById(Long id);
 
-    List<Moment> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
+    Moment getByUniqueId(String uniqueId);
 
-    Moment getByUniqueId(String unqueId);
+    Moment getBaseInfoById(Long id);
+
+    Moment getBaseInfoByUniqueId(String unqueId);
+
+    List<Moment> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
 }
