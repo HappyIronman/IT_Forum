@@ -1,15 +1,13 @@
 package com.ironman.forum.service;
 
-import com.ironman.forum.dao.LikeLogDAO;
-import com.ironman.forum.dao.MomentDAO;
-import com.ironman.forum.dao.ShareDAO;
-import com.ironman.forum.dao.UserDAO;
+import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.form.MomentPublishForm;
 import com.ironman.forum.util.*;
 import com.ironman.forum.vo.MomentVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,11 +33,18 @@ public class MomentServiceImpl implements MomentService {
     private LikeLogDAO likeLogDAO;
 
     @Autowired
+    private ImageDAO imageDAO;
+
+    @Autowired
     private AnsyCommonService ansyCommonService;
+
+    @Value("#{prop.host}")
+    private String host;
 
     @Override
     @Transactional
     public void publishMoment(MomentPublishForm form) throws GlobalException {
+        log.info(IronUtil.toJson(form));
         //校验逻辑...
         Long userId = 123L;
         Date date = new Date();
@@ -50,9 +55,26 @@ public class MomentServiceImpl implements MomentService {
         moment.setDeleted(false);
         moment.setPrivate(form.getIsPrivate());
         moment.setShare(form.getIsShare());
+        moment.setContainPic(form.getIsContainPic());
         moment.setCreateTime(date);
 
         momentDAO.save(moment);
+
+        if (form.getIsContainPic()) {
+            List<String> picNameList = form.getPicNameList();
+            if (picNameList != null && picNameList.size() != 0) {
+                for (String name : picNameList) {
+                    Image image = new Image();
+                    image.setName(name);
+                    image.setUserId(userId);
+                    image.setArticleId(moment.getId());
+                    image.setType(ArticleType.MOMENT.getId());
+                    image.setDeleted(false);
+                    image.setCreateTime(new Date());
+                    imageDAO.save(image);
+                }
+            }
+        }
 
         if (form.getIsShare()) {
             String originUniqueId = form.getOriginId();
@@ -130,7 +152,22 @@ public class MomentServiceImpl implements MomentService {
         if (moment.isShare()) {
             this.assembleMomentShareInfo(momentVO, moment);
         }
+        if (moment.isContainPic()) {
+            this.assembleMomentPicInfo(momentVO, moment);
+        }
         return momentVO;
+    }
+
+    private void assembleMomentPicInfo(MomentVO momentVO, Moment moment) throws GlobalException {
+        List<Image> imageList = imageDAO.getAllByArticleIdAndType(moment.getId(), ArticleType.MOMENT.getId());
+        if (imageList != null && imageList.size() != 0) {
+            List<String> picUrlList = new ArrayList<>(imageList.size());
+            for (Image image : imageList) {
+                String picUrl = IronUtil.concatImageUrl(this.host, image.getName());
+                picUrlList.add(picUrl);
+            }
+            momentVO.setPicUrlList(picUrlList);
+        }
     }
 
     private void assembleMomentShareInfo(MomentVO momentVO, Moment moment) throws GlobalException {

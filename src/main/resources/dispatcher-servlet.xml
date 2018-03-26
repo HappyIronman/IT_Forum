@@ -21,6 +21,8 @@
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
+    <mvc:resources location="/images/" mapping="/img/**"/>
+
     <!--配置拦截器, 多个拦截器,顺序执行 -->
 	<mvc:interceptors>
 		<mvc:interceptor>

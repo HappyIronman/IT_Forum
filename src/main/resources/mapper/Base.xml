@@ -4,6 +4,6 @@
 <mapper namespace="com.ironman.baseSql">
     <sql id="page">
       ORDER BY ${pageRequest.orderBy} DESC
-       LIMIT ${pageRequest.page * pageRequest.size} , ${(pageRequest.page +1) * pageRequest.size}
+        LIMIT ${pageRequest.page * pageRequest.size} , ${pageRequest.size}
     </sql>
 </mapper>

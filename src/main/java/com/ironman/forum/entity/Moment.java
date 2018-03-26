@@ -16,5 +16,6 @@ public class Moment extends BaseEntity {
     private int viewNum;
     private boolean isPrivate;
     private boolean isShare;
+    private boolean isContainPic;
     private boolean deleted;
 }

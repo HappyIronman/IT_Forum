@@ -1,13 +1,14 @@
 <template>
-  <div class="uk-margin-top">
-    <img src="../../static/img/backLeft2.jpg" class="uk-margin-small-bottom" style="width: 100%; min-height: 400px"/>
-    <img src="../../static/img/backLeft.jpg" style="width: 100%; min-height: 400px"/>
+  <div>
+    <button class="uk-button-primary">
+      加载更多...
+    </button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'LeftHome',
+    name: 'PageUtil',
     data() {
       return {
         msg: 'Welcome to Ironman\'s world haha !'

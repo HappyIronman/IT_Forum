@@ -30,14 +30,14 @@ public class BlogAbsVO {
     private boolean isPrivate;
     //是否为转载
     private boolean isShare;
-    //若为转载,是否原动态存在
+    //若为转载,是否原博客存在
     private boolean isExist = true;
-    //若为转载，原动态作者昵称
+    //若为转载，原博客作者昵称
     private String originUsername;
-    //若为转载，原动态作者uniqueId
+    //若为转载，原博客作者uniqueId
     private String originUserId;
-    //若为转载，原动态题目
+    //若为转载，原博客题目
     private String originTitle;
-    //若为转载，原动态发布时间
+    //若为转载，原博客发布时间
     private Date originCreateTime;
 }

@@ -25,7 +25,7 @@ public class BlogDetailVO {
     //是否为私有
     private boolean isPrivate;
     //是否为转载
-    private boolean isShare;
+    private boolean isShare = false;
     //若为转载,是否原博客存在
     private boolean isExist = true;
     //若为转载，原博客作者昵称

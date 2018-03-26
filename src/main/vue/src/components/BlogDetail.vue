@@ -1,10 +1,10 @@
 <template>
   <div class="uk-container">
     <p>{{blogDetail.title}}</p>
-    <hr>
     <div>
       <div v-html="blogDetail.content"></div>
-      <div v-show="blogDetail.isShare">
+      <hr class="uk-divider-icon uk-margin-small">
+      <div v-show="blogDetail.share">
         <p>{{blogDetail.originTitle}}</p>
         <div v-html="blogDetail.originContent"></div>
       </div>

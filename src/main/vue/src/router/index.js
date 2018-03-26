@@ -2,11 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
+import shareBlogPage from '../pages/ShareBlogPage.vue'
+import aboutmePage from '../pages/AboutmePage'
 import friendCircle from '../components/FriendCircle'
 import momentHome from '../components/MomentHome.vue'
 import blogHome from '../components/BlogHome.vue'
 import myMoment from '../components/MyMoment.vue'
-import myBlog from '../components/myBlog.vue'
+import myBlog from '../components/MyBlog.vue'
 import blogDetail from '../components/BlogDetail.vue'
 
 Vue.use(Router)
@@ -54,6 +56,18 @@ export default new Router({
       path: '/write_blog',
       name: 'writeBlogPage',
       component: writeBlogPage,
+      children: []
+    },
+    {
+      path: '/share_blog/:uniqueId',
+      name: 'shareBlogPage',
+      component: shareBlogPage,
+      children: []
+    },
+    {
+      path: '/aboutme',
+      name: 'aboutmePage',
+      component: aboutmePage,
       children: []
     }
   ]

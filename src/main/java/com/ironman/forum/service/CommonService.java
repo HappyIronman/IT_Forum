@@ -1,7 +1,11 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.util.GlobalException;
+import com.ironman.forum.vo.ImageVO;
 import com.ironman.forum.vo.LikeArticleFormBean;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 公有方法放在此处
@@ -36,4 +40,5 @@ public interface CommonService {
      */
     Long getArticleIdByUniqueIdAndType(String uniqueId, int type) throws GlobalException;
 
+    List<ImageVO> saveImages(MultipartFile[] images) throws GlobalException;
 }

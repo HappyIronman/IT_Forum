@@ -22,6 +22,11 @@
       </div>
       <div class="uk-card-body uk-padding-small">
         <p v-if="!moment.share">{{moment.content}}</p>
+        <div v-if="moment.containPic" class="uk-grid" uk-lightbox="animation: fade">
+          <a v-for="url in moment.picUrlList" v-bind:href="url" class="uk-width-1-3" style="height: 200px">
+            <img v-bind:src="url" style="height: 100%;width: 100%"/>
+          </a>
+        </div>
         <div v-if="moment.share">
           <p class="uk-margin-remove">{{moment.content}}</p>
           <hr class="uk-divider-icon uk-margin-small">

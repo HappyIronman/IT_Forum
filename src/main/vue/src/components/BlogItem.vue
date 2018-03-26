@@ -35,12 +35,15 @@
             <span v-if="blog.abstract">......</span>
           </div>
           <hr class="uk-divider-icon uk-margin-small">
-          <p class="uk-margin-small uk-text-bold">原博文:</p>
-          <p class="uk-margin-small" v-html="blog.originContent"></p>
-          <span v-if="blog.abstract">......</span>
-          <p class="uk-margin-remove uk-text-small  uk-text-muted uk-text-right">
+          <div class="uk-margin-small uk-flex">
+            <p class="uk-margin-remove-bottom"><span class="uk-text-bold">原博客:</span>
+              &nbsp;&nbsp;&nbsp;
+              {{blog.originTitle}}
+            </p>
+            <p class="uk-margin-remove uk-text-small  uk-text-muted uk-text-right uk-width-expand">
             发表于{{blog.originCreateTime | formatDate('yyyy-MM-dd hh:mm')}}
-          </p>
+            </p>
+          </div>
         </div>
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
@@ -62,10 +65,10 @@
           <span>评论</span>
           <span>({{blog.commentNum}})</span>
         </button>
-        <button class="uk-button uk-button-text uk-margin-small-right">
+        <router-link class="uk-button uk-button-text uk-margin-small-right" v-bind:to="'/share_blog/' + blog.uniqueId">
           <span>转发</span>
           <span>({{blog.shareNum}})</span>
-        </button>
+        </router-link>
         <button class="uk-button uk-button-text uk-margin-right">
           <span>浏览</span>
           <span>({{blog.viewNum}})</span>

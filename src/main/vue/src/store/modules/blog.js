@@ -17,20 +17,20 @@ const actions = {
     })
   },
   fetchMyBlogListAction({commit}, payload) {
-    requestApi('get', 'mine/blog', payload, (res) => commit(types.FETCH_MY_BLOG_LIST, res))
+    requestApi('get', 'mine/blog', payload, (res) => commit(types.MY_BLOG_LIST, res))
   },
   fetchBlogDetailAction({commit}, uniqueId) {
-    requestApi('get', '/blog/' + uniqueId, null, (res) => commit(types.FETCH_BLOG_DETAIL, res))
+    requestApi('get', '/blog/' + uniqueId, null, (res) => commit(types.BLOG_DETAIL, res))
   },
 }
 
 const mutations = {
   [types.DEFAULT](state) {
   },
-  [types.FETCH_MY_BLOG_LIST](state, data) {
+  [types.MY_BLOG_LIST](state, data) {
     state.myBlogList = state.myBlogList.concat(data.responseVO)
   },
-  [types.FETCH_BLOG_DETAIL](state, data) {
+  [types.BLOG_DETAIL](state, data) {
     state.blogDetail = data.responseVO
   }
 }

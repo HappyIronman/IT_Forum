@@ -155,7 +155,10 @@ public class BlogServiceImpl implements BlogService {
             throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
         }
         BlogDetailVO blogDetailVO = BeanUtils.copy(blog, BlogDetailVO.class);
+        User author = userDAO.getArticleBaseInfoById(blog.getUserId());
+        blogDetailVO.setUsername(author.getUsername());
         if (blog.isShare()) {
+            blogDetailVO.setShare(true);
             Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleType.BLOG.getId());
             if (share == null) {
                 log.error(blog.getId() + " 分享信息为空");
@@ -170,7 +173,7 @@ public class BlogServiceImpl implements BlogService {
                 blogDetailVO.setOriginUsername(originUser.getUsername());
                 blogDetailVO.setOriginUserId(originUser.getUniqueId());
                 blogDetailVO.setOriginTitle(originBlog.getTitle());
-                blogDetailVO.setContent(originBlog.getContent());
+                blogDetailVO.setOriginContent(originBlog.getContent());
             }
         }
         return blogDetailVO;

@@ -3,12 +3,29 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task.xsd">
 
-	<context:component-scan base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util"/>
-	<import resource="classpath:db-config.xml"/>
-	<!-- 数据源文件 -->
-	<context:property-placeholder location="classpath:config.properties"/>
+    <context:component-scan base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util"/>
+    <!--<context:property-placeholder location="classpath:config.properties"/>-->
+
+    <!-- 第二种方式是使用注解的方式注入，主要用在java代码中使用注解注入properties文件中相应的value值 -->
+    <bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:config.properties</value>
+            </array>
+        </property>
+    </bean>
+
+    <!-- 数据源文件 -->
+    <import resource="classpath:db-config.xml"/>
+
+    <context:annotation-config/>
 
     <task:annotation-driven executor="annotationExecutor"/>
     <!-- 支持 @Async 注解 -->

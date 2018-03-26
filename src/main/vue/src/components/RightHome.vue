@@ -6,9 +6,9 @@
           <img class="uk-border-circle" width="160" height="160" src="../assets/logo.png">
         </div>
         <div class="uk-padding-small uk-text-center">
-          <h3 class="uk-card-title uk-margin-remove-bottom">Happy Ironman</h3>
+          <h3 class="uk-card-title uk-margin-remove-bottom">{{userInfo.username}}</h3>
           <p class="uk-text-meta uk-margin-remove-top">
-            a lonely child
+            {{userInfo.intro}}
           </p>
         </div>
 
@@ -42,27 +42,27 @@
 
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的粉丝</span>
-          <span class="uk-text-bold">12</span>
+          <span class="uk-text-bold">{{userInfo.followerNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">关注的人</span>
-          <span class="uk-text-bold">134</span>
+          <span class="uk-text-bold">{{userInfo.followingNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的动态</span>
-          <router-link to="/my_moment" class="uk-text-bold">14</router-link>
+          <router-link to="/my_moment" class="uk-text-bold">{{userInfo.momentNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的博客</span>
-          <router-link to="/my_blog" class="uk-text-bold">14</router-link>
+          <router-link to="/my_blog" class="uk-text-bold">{{userInfo.blogNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的提问</span>
-          <span class="uk-text-bold">1</span>
+          <router-link to="/my_question" class="uk-text-bold">{{userInfo.questionNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">学校</span>
-          <span class="uk-text-bold">大连理工大学</span>
+          <span class="uk-text-bold">{{userInfo.school}}</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: 'RightHome',
@@ -80,11 +80,18 @@
         msg: 'Welcome to Ironman\'s world haha !'
       }
     },
+    computed: {
+      ...mapState({
+        userInfo: state => state.user.userInfo
+      })
+    },
     created: function () {
+      this.fetchMineInfoAction()
     },
     methods: {
       ...mapActions([
         'isShowPublishMomentCompAction', // 将 `this.increment()` 映射为 `this.$store.dispatch('increment')`
+        'fetchMineInfoAction'
       ])
     }
   }

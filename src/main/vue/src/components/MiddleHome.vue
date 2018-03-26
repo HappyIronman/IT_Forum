@@ -1,32 +1,41 @@
-<template>
+<template xmlns:uk-icon="http://www.w3.org/1999/xhtml">
   <div class="uk-container">
-    <nav class="uk-navbar-container" uk-navbar>
-      <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav">
-          <li class="uk-active">
-            <router-link to="/friend_circle">朋友圈</router-link>
-          </li>
-          <li>
-            <router-link to="/moment">动态</router-link>
-          </li>
-          <li>
-            <router-link to="/blog">博客</router-link>
-          </li>
-          <li>
-            <router-link to="/question">提问</router-link>
-          </li>
-          <li>
-            <router-link to="/aboutme">关于我</router-link>
-          </li>
-        </ul>
+    <div class=" uk-margin-top uk-flex">
+      <ul uk-tab class=" uk-margin-remove uk-width-2-3">
+        <li class="uk-active">
+          <router-link to="/friend_circle">朋友圈</router-link>
+        </li>
+        <li>
+          <router-link to="/moment">今日推荐</router-link>
+        </li>
+        <!--<li>-->
+        <!--<router-link to="/blog">博客</router-link>-->
+        <!--</li>-->
+        <!--<li>-->
+        <!--<router-link to="/question">提问</router-link>-->
+      </ul>
+      <div class="uk-width-expand uk-text-right uk-text-bottom uk-margin-right">
+        <router-link class="uk-button uk-button-link uk-text-bold" to="/aboutme">
+          <span uk-icon="triangle-right"></span>
+          <span>关于我</span>
+          <span uk-icon="triangle-left"></span>
+        </router-link>
       </div>
-    </nav>
+    </div>
+
     <div v-show="isShowPublishMoment">
-      <div class="uk-margin-small-top uk-margin-small-bottom">
+      <div class="uk-margin-small-top uk-margin-small-bottom uk-margin-small-left">
         <textarea v-model="moment.content"
-                  class="uk-textarea" rows="5" placeholder="说点想说的..."></textarea>
+                  class="uk-textarea" rows="6" placeholder="说点想说的..."></textarea>
         <div uk-grid class="uk-margin-remove">
-          <button uk-icon="image" class="uk-card uk-button-small uk-padding-remove"></button>
+
+          <img class="uk-padding-remove" v-for="path in picPathList" v-bind:src="path"
+               style="height: 40px;width: 40px"/>
+
+          <div class="js-upload" uk-form-custom>
+            <input type="file" multiple>
+            <button uk-icon="image" class="uk-card uk-button-small uk-padding-remove"></button>
+          </div>
           <div class="uk-card">
             <div uk-form-custom="target: > * > span:last-child">
               <select v-model="moment.isPrivate">
@@ -38,7 +47,7 @@
               </span>
             </div>
           </div>
-          <div class="uk-card uk-width-expand uk-text-right">
+          <div class="uk-card uk-width-expand uk-text-right" style="margin-top: 4px">
             <button class="uk-button uk-button-default uk-button-small"
                     v-on:click="isShowPublishMomentCompAction(false)">隐藏
             </button>
@@ -65,8 +74,11 @@
         moment: {
           content: '',
           isPrivate: false,
-          isShare: false
-        }
+          isShare: false,
+          isContainPic: false,
+          picNameList: []
+        },
+        picPathList: []
       }
     },
     computed: {
@@ -87,6 +99,50 @@
           }
         })
       }
+    },
+    mounted: function () {
+      const self = this;
+      UIkit.upload('.js-upload', {
+        name: 'pics',
+        url: 'http://localhost:8081/data/upload/pic',
+        allow: '*.(jpg|jpeg|png)',
+        multiple: true,
+
+        beforeSend: function () {
+          console.log('beforeSend', arguments);
+        },
+        beforeAll: function () {
+          console.log('beforeAll', arguments);
+        },
+        load: function () {
+          console.log('load', arguments);
+        },
+        error: function () {
+          console.log('error', arguments);
+        },
+        complete: function () {
+          console.log('complete', arguments);
+        },
+
+        loadStart: function (e) {
+          console.log('loadStart', arguments);
+        },
+
+        loadEnd: function (e) {
+          console.log('loadEnd', arguments);
+        },
+
+        completeAll: function () {
+          self.moment.isContainPic = true
+          var picList = JSON.parse(arguments[0].response)
+          for (var i = 0; i < picList.length; i++) {
+            self.picPathList.push(picList[i].url)
+            self.moment.picNameList.push(picList[i].name)
+          }
+          alert('Upload Completed');
+        }
+
+      });
     }
   }
 </script>

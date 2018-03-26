@@ -7,4 +7,8 @@
     <select id="getArticleBaseInfoById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.User">
         select unique_id, username, profile from user where id = #{id}
     </select>
+
+    <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.User">
+        select * from user where id = #{id}
+    </select>
 </mapper>

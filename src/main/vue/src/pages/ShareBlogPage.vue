@@ -1,16 +1,33 @@
 <template>
   <div>
-    <advertise></advertise>
+    <div class="uk-text-center">
+      <span class="uk-label uk-label-success">转发博客</span>
+    </div>
     <div class="uk-width-3-4 uk-align-center uk-padding-small uk-margin-small-top uk-border-rounded"
          style="border:2px solid darkgrey">
       <div>
         <input class="uk-input uk-width-2-3 uk-align-center" type="text" placeholder="在此输入标题" v-model="blog.title">
       </div>
-      <div id="editor-bar" style=" border: 1px solid #ccc;">
-      </div>
-      <!--<div style="padding: 5px 0; color: #ccc">中间隔离带</div>-->
-      <div id="editor" style="border: 1px solid #ccc; min-height: 800px"> <!--可使用 min-height 实现编辑区域自动增加高度-->
-        <p>请输入内容</p>
+      <div>
+        <div id="editor-bar" style=" border: 1px solid #ccc;">
+        </div>
+        <!--<div style="padding: 5px 0; color: #ccc">中间隔离带</div>-->
+        <div id="editor" style="border: 1px solid #ccc; min-height: 400px"> <!--可使用 min-height 实现编辑区域自动增加高度-->
+          <p>请输入分享理由</p>
+        </div>
+        <div id="origin_blog_content" class="uk-margin-small-top">
+          <hr class="uk-divider-icon uk-margin-small">
+          <p class="uk-text-success uk-text-bold">原博文</p>
+          <p class="uk-text-lead">{{blogDetail.title}}</p>
+          <div>
+            <p class="uk-text-muted" v-html="blogDetail.content">
+            </p>
+          </div>
+          <p class="uk-text-muted uk-text-small uk-text-right">
+            原作者: {{blogDetail.username}} <br/> 创建于 {{blogDetail.createTime | formatDate('yyyy-MM-dd hh:mm')}}
+          </p>
+          <hr class="uk-hr uk-margin-small">
+        </div>
       </div>
       <div class="uk-grid uk-width-1-1 uk-margin-remove-left uk-margin-small-top">
         <div class="uk-card uk-padding-remove">
@@ -41,31 +58,32 @@
 <script>
   import WangEditor from '../../static/js/wangEditor'
   import {mapActions, mapState} from 'vuex'
-  import advertise from '../components/Advertise.vue'
 
   export default {
-    name: 'WriteBlogPage',
-    components: {
-      advertise
-    },
+    name: 'ShareBlogPage',
     data() {
       return {
         blog: {
           title: '',
           content: '',
           isPrivate: false,
-          isShare: false
+          isShare: true,
+          originId: this.$route.params.uniqueId
         }
       }
     },
     computed: {
       ...mapState({
-        // isShowPublishMoment: state => state.moment.isShowPublishMoment
+        blogDetail: state => state.blog.blogDetail
       })
+    },
+    created: function () {
+      this.fetchBlogDetailAction(this.$route.params.uniqueId)
     },
     methods: {
       ...mapActions([
-        'publishBlogAction'
+        'publishBlogAction',
+        'fetchBlogDetailAction'
       ]),
       publishBlog: function () {
         this.publishBlogAction(this.blog).then(uniqueId => {

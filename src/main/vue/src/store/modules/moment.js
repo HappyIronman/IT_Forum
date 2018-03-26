@@ -5,7 +5,7 @@ const state = {
   circleList: [], //首页朋友圈列表
   momentList: [],//首页推荐动态列表
   myMomentList: [],//我的动态列表
-  isShowPublishMoment: false //是否显示发表动态组件
+  isShowPublishMoment: false, //是否显示发表动态组件
 }
 
 const actions = {
@@ -26,25 +26,28 @@ const actions = {
   },
   //获取我的动态朋友圈列表
   fetchMyCircleListAction({commit}, payload) {
-    requestApi('get', 'mine/circle', payload, (res) => commit(types.FETCH_MY_CIRCLE_LIST, res))
+    return requestApi('get', 'mine/circle', payload, (res) => {
+      commit(types.MY_CIRCLE_LIST, res)
+      return (res.responseVO != null && res.responseVO.length !== 0)
+    })
   },
   //获取我的动态列表
   fetchMyMomentListAction({commit}, payload) {
-    requestApi('get', 'mine/moment', payload, (res) => commit(types.FETCH_MY_MOMENT_LIST, res))
+    requestApi('get', 'mine/moment', payload, (res) => commit(types.MY_MOMENT_LIST, res))
   }
 }
 
 const mutations = {
   [types.RECOMMEND_MOMENTS](state, data) {
-    state.momentList = data
+    state.momentList = data.responseVO
   },
   [types.DISPLAY_PUBLISH_MOMENT_COMP](state, isShow) {
     state.isShowPublishMoment = isShow
   },
-  [types.FETCH_MY_CIRCLE_LIST](state, data) {
+  [types.MY_CIRCLE_LIST](state, data) {
     state.circleList = state.circleList.concat(data.responseVO)
   },
-  [types.FETCH_MY_MOMENT_LIST](state, data) {
+  [types.MY_MOMENT_LIST](state, data) {
     state.myMomentList = state.myMomentList.concat(data.responseVO)
   }
 }

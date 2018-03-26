@@ -6,19 +6,21 @@
     <insert id="save" parameterType="com.ironman.forum.entity.Moment"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO moment(unique_id, content, user_id, like_num, dislike_num, comment_num,
-        view_num, is_private, is_share, deleted, create_time)
+        view_num, is_private, is_share, is_contain_pic, deleted, create_time)
         VALUES 
         (#{uniqueId}, #{content}, #{userId}, #{likeNum}, #{dislikeNum}, #{commentNum}, #{viewNum},
-        #{isPrivate}, #{isShare}, #{deleted}, #{createTime})
+        #{isPrivate}, #{isShare}, #{isContainPic}, #{deleted}, #{createTime})
     </insert>
 
     <select id="getBaseInfoById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Moment">
-        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, deleted, create_time
+        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, is_contain_pic,
+        deleted, create_time
         FROM moment WHERE id = #{id} AND deleted = FALSE
     </select>
 
     <select id="getBaseInfoByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Moment">
-        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, deleted, create_time
+        SELECT id,unique_id,user_id, like_num, dislike_num, comment_num, view_num, is_private, is_share, is_contain_pic,
+        deleted, create_time
         FROM moment WHERE unique_id = #{unqueId} AND deleted = FALSE
     </select>
 

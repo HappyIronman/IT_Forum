@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum ResponseStatus {
     SUCCESS(1000, HttpStatus.OK, "成功"),
     PARAM_ERROR(2001, HttpStatus.BAD_REQUEST, "参数错误"),
+    USER_NOT_EXIST(1001, HttpStatus.INTERNAL_SERVER_ERROR, "用户不存在"),
     MOMENT_NOT_EXIST(3001, HttpStatus.BAD_REQUEST, "动态不存在"),
     BLOG_NOT_EXIST(4001, HttpStatus.BAD_REQUEST, "动态不存在"),
     DUPLICATE_LIKE_LOG(7001, HttpStatus.BAD_REQUEST, "不能重复赞或者踩"),

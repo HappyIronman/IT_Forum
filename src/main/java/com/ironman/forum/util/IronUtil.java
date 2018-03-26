@@ -46,4 +46,17 @@ public class IronUtil {
         }
         return abstractContent;
     }
+
+    public static String concatImageUrl(String host, String imgName) throws GlobalException {
+        String picUrl;
+        if (StringUtils.isEmpty(host)) {
+            throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "hostÎª¿Õ");
+        }
+        if (host.endsWith("/")) {
+            picUrl = host + "img/" + imgName;
+        } else {
+            picUrl = host + "/img/" + imgName;
+        }
+        return picUrl;
+    }
 }

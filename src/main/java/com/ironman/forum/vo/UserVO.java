@@ -1,17 +1,16 @@
-package com.ironman.forum.entity;
+package com.ironman.forum.vo;
 
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * Created by dell on 1/23/2017.
- */
+import java.util.Date;
+
 @Getter
 @Setter
-public class User extends BaseEntity{
-	private String uniqueId;
-	private String username;
-	private String password;
+public class UserVO {
+    private String uniqueId;
+    private String username;
+    private String password;
     //0--> unknown, 1-->male, 2->female
     private int sex;
     private String phone;
@@ -24,4 +23,5 @@ public class User extends BaseEntity{
     private int blogNum;
     private int questionNum;
     private String school;
+    private Date createTime;
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +25,8 @@ public class MomentVO {
     private Date createTime;
     //是否为私有
     private boolean isPrivate;
+    //是否带有图片
+    private boolean isContainPic;
     //是否为转载
     private boolean isShare;
     //若为转载,是否原动态存在
@@ -36,4 +39,6 @@ public class MomentVO {
     private String originContent;
     //若为转载，原动态发布时间
     private Date originCreateTime;
+    //若带有图片,图片url集合
+    private List<String> picUrlList;
 }
