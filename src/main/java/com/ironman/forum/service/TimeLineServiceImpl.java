@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
 import com.ironman.forum.dao.MomentDAO;
 import com.ironman.forum.dao.TimeLineDAO;
@@ -36,7 +37,7 @@ public class TimeLineServiceImpl implements TimeLineService {
 
     @Override
     public List<TimeLineVO> pageMyFriendCircle(PageRequest pageRequest) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         List<TimeLine> timeLineList = timeLineDAO.getAllLimitByUserId(userId, pageRequest);
         List<TimeLineVO> timeLineVOList = new ArrayList<>();
         if (timeLineList == null || timeLineList.size() == 0) {

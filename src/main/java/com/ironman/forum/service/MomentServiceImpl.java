@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.form.MomentPublishForm;
@@ -46,7 +47,7 @@ public class MomentServiceImpl implements MomentService {
     public void publishMoment(MomentPublishForm form) throws GlobalException {
         log.info(IronUtil.toJson(form));
         //校验逻辑...
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         Date date = new Date();
         Moment moment = new Moment();
         moment.setUserId(userId);
@@ -113,7 +114,7 @@ public class MomentServiceImpl implements MomentService {
 
     @Override
     public List<MomentVO> pageMyMoments(PageRequest pageRequest) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         User user = userDAO.getArticleBaseInfoById(userId);
         List<Moment> momentList = momentDAO.getAllLimitByUserId(userId, pageRequest);
         List<MomentVO> momentVOList = new ArrayList<>();
@@ -142,7 +143,7 @@ public class MomentServiceImpl implements MomentService {
         }
         momentVO.setUsername(user.getUsername());
         momentVO.setProfile(user.getProfile());
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, moment.getId(), ArticleType.MOMENT.getId());
         if (likeLog != null) {
             momentVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);

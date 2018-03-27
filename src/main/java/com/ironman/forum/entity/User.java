@@ -18,10 +18,11 @@ public class User extends BaseEntity{
     private String email;
     private String intro;
     private String profile;
+    private String school;
     private int followerNum;
     private int followingNum;
     private int momentNum;
     private int blogNum;
     private int questionNum;
-    private String school;
+    private boolean disabled;
 }

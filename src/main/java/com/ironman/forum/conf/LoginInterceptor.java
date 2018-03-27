@@ -33,17 +33,18 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
         httpServletResponse.setHeader("Access-Control-Allow-Headers",
                 "Origin, X-Requested-With, Content-Type, Accept");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
 
 
         //测试环境直接放行
-        if (true) {
-            return true;
-        }
+//        if (true) {
+//            return true;
+//        }
 
         String requestUri = httpServletRequest.getRequestURI();
         if (publicUrl.contains(requestUri)) {
@@ -53,6 +54,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         logger.info("当前访问url:" + requestUri);
         HttpSession session = httpServletRequest.getSession();
+        logger.info(IronUtil.toJson(session));
         User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
         if (user != null) {
             logger.info(user.toString());
@@ -81,7 +83,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         } else {
             logger.error("session中用户信息为空");
-            httpServletResponse.sendRedirect("/main_page");
+            httpServletResponse.sendRedirect("/xxx");
             return false;
         }
     }

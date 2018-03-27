@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
 import com.ironman.forum.dao.LikeLogDAO;
 import com.ironman.forum.dao.MomentDAO;
@@ -53,7 +54,7 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public void likeArticle(LikeArticleFormBean formBean) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         int type = formBean.getType();
         Long targetId = this.getArticleIdByUniqueIdAndType(formBean.getTargetId(), type);
         boolean isLike = formBean.isLike();
@@ -85,7 +86,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     @Transactional
     public void cancelLikeArticle(LikeArticleFormBean formBean) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         int type = formBean.getType();
         Long targetId = this.getArticleIdByUniqueIdAndType(formBean.getTargetId(), type);
         boolean isLike = formBean.isLike();

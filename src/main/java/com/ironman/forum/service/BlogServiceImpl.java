@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
 import com.ironman.forum.dao.LikeLogDAO;
 import com.ironman.forum.dao.ShareDAO;
@@ -41,7 +42,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     @Transactional
     public String publishBlog(BlogPublishForm form) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         String title = form.getTitle();
         String content = form.getContent();
         Boolean isPrivate = form.getIsPrivate();
@@ -99,7 +100,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<BlogAbsVO> pageMyBlogs(PageRequest pageRequest) throws GlobalException {
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         List<Blog> blogList = blogDAO.getAllLimitByUserId(userId, pageRequest);
         List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
         if (blogList != null && blogList.size() != 0) {
@@ -125,7 +126,7 @@ public class BlogServiceImpl implements BlogService {
         blogAbsVO.setContent(absContent.getContent());
         blogAbsVO.setUsername(user.getUsername());
         blogAbsVO.setProfile(user.getProfile());
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), ArticleType.BLOG.getId());
         if (likeLog != null) {
             blogAbsVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
@@ -147,7 +148,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogDetailVO getBlogDetail(String uniqueId) throws GlobalException {
         Blog blog = blogDAO.getByUniqueId(uniqueId);
-        Long userId = 123L;
+        Long userId = UserLoginUtil.getLoginUserId();
         if (blog == null) {
             throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
         }
