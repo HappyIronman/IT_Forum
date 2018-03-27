@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uk-padding uk-padding-remove-top">
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">我的博客</span>
     </div>

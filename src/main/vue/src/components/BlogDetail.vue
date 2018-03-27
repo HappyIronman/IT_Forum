@@ -1,14 +1,15 @@
 <template>
-  <div class="uk-container">
-    <p>{{blogDetail.title}}</p>
+  <div class="uk-padding">
+    <p class="uk-text-center uk-text-lead">{{blogDetail.title}}</p>
     <div>
       <div v-html="blogDetail.content"></div>
-      <hr class="uk-divider-icon uk-margin-small">
       <div v-show="blogDetail.share">
-        <p>{{blogDetail.originTitle}}</p>
+        <hr class="uk-divider-icon uk-margin-small">
+        <p class="uk-text-bold">{{blogDetail.originTitle}}</p>
         <div v-html="blogDetail.originContent"></div>
       </div>
     </div>
+
   </div>
 
 </template>

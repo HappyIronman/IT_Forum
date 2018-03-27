@@ -6,6 +6,12 @@ const state = {
 }
 
 const actions = {
+  userLoginAction({commit}, payload) {
+    return requestApi('post', 'user/login', payload, (res) => {
+      commit(types.USER_INFO, res)
+      return true
+    })
+  },
   fetchMineInfoAction({commit}) {
     requestApi('get', 'user/mine', null, (res) => commit(types.USER_INFO, res))
   }

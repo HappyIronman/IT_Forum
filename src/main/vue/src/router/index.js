@@ -4,6 +4,7 @@ import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
 import shareBlogPage from '../pages/ShareBlogPage.vue'
 import aboutmePage from '../pages/AboutmePage'
+import loginPage from '../pages/LoginPage'
 import friendCircle from '../components/FriendCircle'
 import momentHome from '../components/MomentHome.vue'
 import blogHome from '../components/BlogHome.vue'
@@ -68,6 +69,12 @@ export default new Router({
       path: '/aboutme',
       name: 'aboutmePage',
       component: aboutmePage,
+      children: []
+    },
+    {
+      path: '/login',
+      name: 'loginPage',
+      component: loginPage,
       children: []
     }
   ]

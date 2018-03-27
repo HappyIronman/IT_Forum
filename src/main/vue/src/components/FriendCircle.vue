@@ -7,6 +7,7 @@
       <moment-item v-if="item.type===1" v-bind:moment="item.entity"></moment-item>
       <blog-item v-if="item.type===2" v-bind:blog="item.entity"></blog-item>
     </div>
+
     <div v-show="!isBottom" class="uk-text-center uk-margin-left uk-margin-right" v-on:click="this.fetchMyCircleList">
       <button class="uk-button uk-button-text uk-width-1-1">
         <span class="uk-text-success">点击加载更多...</span>

@@ -8,7 +8,7 @@
       <div class="uk-width-3-5 uk-padding-remove">
         <middle-home></middle-home>
       </div>
-      <div class="uk-width-1-5 uk-padding-small">
+      <div class="uk-width-1-5 uk-padding-remove">
         <right-home></right-home>
       </div>
     </div>

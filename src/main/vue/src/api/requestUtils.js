@@ -2,14 +2,15 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource);
-
 export function requestApi(method, path, params, callback) {
+
   var baseUrl = 'http://localhost:8081/data/';
   var requestUri = baseUrl + path;
   var responseData = '';
   if (method === 'get') {
+    Vue.http.options.xhr = {withCredentials: true}
     // GET /someUrl
-    return Vue.http.get(requestUri, {params: params}).then(response => {
+    return Vue.http.get(requestUri, {params: params,credentials: true}).then(response => {
       // get body data
       responseData = response.body;
       console.log("ResponseData: " + JSON.stringify(responseData));
@@ -21,7 +22,7 @@ export function requestApi(method, path, params, callback) {
   }
 
   else if (method === 'post') {
-    return Vue.http.post(requestUri, params).then((response) => {
+    return Vue.http.post(requestUri, params,{credentials: true}).then((response) => {
       // success callback
       responseData = response.data;
       console.log("ResponseData: " + JSON.stringify(responseData));
