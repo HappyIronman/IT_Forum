@@ -5,8 +5,10 @@ import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.IronUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,9 +24,13 @@ import java.util.Set;
  * @Description:
  * @Date: Created in 11:14 2017/12/31 0031
  **/
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     private static Log logger = LogFactory.getLog(LoginInterceptor.class);
+
+    @Value("#{prop.permitted_origin_host}")
+    private String permittedOriginHost;
 
     //url和权限对应表
     private RegexHashMap<String, Set<String>> urlMap;

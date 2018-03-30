@@ -10,7 +10,8 @@
        http://www.springframework.org/schema/task
        http://www.springframework.org/schema/task/spring-task.xsd">
 
-    <context:component-scan base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util"/>
+    <context:component-scan
+            base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util,com.ironman.forum.conf"/>
     <!--<context:property-placeholder location="classpath:config.properties"/>-->
 
     <!-- 第二种方式是使用注解的方式注入，主要用在java代码中使用注解注入properties文件中相应的value值 -->
