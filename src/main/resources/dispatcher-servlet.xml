@@ -31,8 +31,7 @@
 			<bean class="com.ironman.forum.conf.LoginInterceptor">
 				<property name="publicUrl">
 					<set>
-                        <value>/data/moment</value>
-                        <value>/data/mine/moment</value>
+                        <value>/data/user/login</value>
 					</set>
 				</property>
 				<property name="urlMap">

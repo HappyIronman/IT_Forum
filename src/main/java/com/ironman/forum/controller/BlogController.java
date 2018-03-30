@@ -36,13 +36,28 @@ public class BlogController {
         }
     }
 
-    @RequestMapping(value = "/mine/blog", method = RequestMethod.GET)
-    public IronResponseEntity getMyBlogs(@Valid PageRequest pageRequest, BindingResult result) {
+    @RequestMapping(value = "/myblogs", method = RequestMethod.GET)
+    public IronResponseEntity pageMyBlogs(@Valid PageRequest pageRequest, BindingResult result) {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
         try {
             List<BlogAbsVO> blogAbsVOList = blogService.pageMyBlogs(pageRequest);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, blogAbsVOList);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
+
+    @RequestMapping(value = "/{userId}/blogs", method = RequestMethod.GET)
+    public IronResponseEntity pageUserBlogs(@PathVariable("userId") String userUniqueId,
+                                            @Valid PageRequest pageRequest, BindingResult result) {
+        if (result.hasErrors()) {
+            return IronUtil.processResult(result);
+        }
+        try {
+            List<BlogAbsVO> blogAbsVOList = blogService.pageUserBlogs(userUniqueId, pageRequest);
             return new IronResponseEntity(ResponseStatus.SUCCESS, blogAbsVOList);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);

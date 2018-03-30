@@ -3,5 +3,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ironman.forum.dao.FollowDAO">
+    <select id="getByFollowerIdAndUserId" resultType="com.ironman.forum.entity.Follow">
+        SELECT * FROM follow WHERE follower_id = #{followerId} AND user_id = #{targetId} AND disabled = FALSE
+        FOR UPDATE
+    </select>
 
+    <insert id="save" parameterType="com.ironman.forum.entity.Follow" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO follow(follower_id, user_id, disabled, create_time)
+        VALUES (#{followerId}, #{userId}, #{disabled}, #{createTime})
+    </insert>
+
+    <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.Follow">
+        SELECT * FROM follow WHERE user_id = #{userId}
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
+
+    <select id="getAllLimitByFollowerId" resultType="com.ironman.forum.entity.Follow">
+        SELECT * FROM follow WHERE follower_id = #{followerId}
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 </mapper>

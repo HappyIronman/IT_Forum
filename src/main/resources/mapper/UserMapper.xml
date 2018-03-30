@@ -5,10 +5,23 @@
 
 <mapper namespace="com.ironman.forum.dao.UserDAO">
     <select id="getArticleBaseInfoById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.User">
-        select unique_id, username, profile from user where id = #{id}
+        SELECT id, unique_id, username, profile FROM user WHERE id = #{id} AND disabled = FALSE
+    </select>
+
+    <select id="getArticleBaseInfoByUniqueId" parameterType="java.lang.String"
+            resultType="com.ironman.forum.entity.User">
+        SELECT id, unique_id, username, profile FROM user WHERE unique_id = #{uniqueId} AND disabled = FALSE
     </select>
 
     <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.User">
-        select * from user where id = #{id}
+        SELECT * FROM user WHERE id = #{id} AND disabled = FALSE
+    </select>
+
+    <select id="getByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.User">
+        SELECT * FROM user WHERE unique_id = #{uniqueId} AND disabled = FALSE
+    </select>
+
+    <select id="getByUsernameAndPassword" resultType="com.ironman.forum.entity.User">
+        SELECT * FROM user WHERE username = #{username} AND password = #{password} AND disabled = FALSE ;
     </select>
 </mapper>

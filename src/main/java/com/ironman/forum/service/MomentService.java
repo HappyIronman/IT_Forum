@@ -17,4 +17,6 @@ public interface MomentService {
     MomentVO assembleMomentVO(Moment moment, User user) throws GlobalException;
 
     MomentVO assembleMomentVO(Moment moment) throws GlobalException;
+
+    List<MomentVO> pageUserMoments(String userUniqueId, PageRequest pageRequest) throws GlobalException;
 }

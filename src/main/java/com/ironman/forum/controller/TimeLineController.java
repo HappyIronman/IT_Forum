@@ -21,7 +21,7 @@ public class TimeLineController {
     @Autowired
     private TimeLineService timeLineService;
 
-    @RequestMapping(value = "/mine/circle", method = RequestMethod.GET)
+    @RequestMapping(value = "/mycircle", method = RequestMethod.GET)
     public IronResponseEntity myFriendCircle(@Valid PageRequest pageRequest, BindingResult result) {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);

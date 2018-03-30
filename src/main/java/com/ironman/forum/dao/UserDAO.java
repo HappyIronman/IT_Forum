@@ -10,5 +10,9 @@ public interface UserDAO {
 
     User getById(Long id);
 
+    User getByUniqueId(String uniqueId);
+
     User getByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+
+    User getArticleBaseInfoByUniqueId(String uniqueId);
 }

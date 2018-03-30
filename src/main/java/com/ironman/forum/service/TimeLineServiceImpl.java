@@ -4,8 +4,8 @@ import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
 import com.ironman.forum.dao.MomentDAO;
 import com.ironman.forum.dao.TimeLineDAO;
-import com.ironman.forum.entity.ArticleType;
 import com.ironman.forum.entity.Blog;
+import com.ironman.forum.entity.EntityType;
 import com.ironman.forum.entity.Moment;
 import com.ironman.forum.entity.TimeLine;
 import com.ironman.forum.util.GlobalException;
@@ -48,17 +48,17 @@ public class TimeLineServiceImpl implements TimeLineService {
             int type = timeLine.getType();
             long articleId = timeLine.getArticleId();
             timeLineVO.setType(type);
-            if (type == ArticleType.MOMENT.getId()) {
+            if (type == EntityType.MOMENT.getId()) {
                 Moment moment = momentDAO.getById(articleId);
                 MomentVO momentVO = momentService.assembleMomentVO(moment);
                 timeLineVO.setEntity(momentVO);
-            } else if (type == ArticleType.BLOG.getId()) {
+            } else if (type == EntityType.BLOG.getId()) {
                 Blog blog = blogDAO.getById(articleId);
                 BlogAbsVO blogAbsVO = blogService.assembleBlogAbsVO(blog);
                 timeLineVO.setEntity(blogAbsVO);
-            } else if (type == ArticleType.QUESTION.getId()) {
+            } else if (type == EntityType.QUESTION.getId()) {
                 //todo
-            } else if (type == ArticleType.COMMENT.getId()) {
+            } else if (type == EntityType.COMMENT.getId()) {
                 //todo
             }
             timeLineVOList.add(timeLineVO);

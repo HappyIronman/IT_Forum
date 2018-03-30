@@ -5,6 +5,7 @@ import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.IronUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,9 +38,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
         httpServletResponse.setHeader("Access-Control-Allow-Headers",
-                "Origin, X-Requested-With, Content-Type, Accept");
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials","true");
+                "Origin, X-Requested-With, content-type, Accept");
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 
+        if (httpServletRequest.getMethod().equals(HttpMethod.OPTIONS.toString())) {
+            httpServletResponse.setStatus(HttpStatus.OK.value());
+            return true;
+        }
 
         //测试环境直接放行
 //        if (true) {

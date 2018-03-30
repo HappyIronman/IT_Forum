@@ -28,7 +28,7 @@
       })
     },
     created: function () {
-      this.fetchBlogDetailAction(this.$route.params.uniqueId)
+      this.fetchBlogDetailAction(this.$route.params.blogUniqueId)
     },
     methods: {
       ...mapActions([

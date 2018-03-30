@@ -49,4 +49,6 @@ public interface BlogService {
     BlogAbsVO assembleBlogAbsVO(Blog blog) throws GlobalException;
 
     BlogDetailVO getBlogDetail(String uniqueId) throws GlobalException;
+
+    List<BlogAbsVO> pageUserBlogs(String userUniqueId, PageRequest pageRequest) throws GlobalException;
 }

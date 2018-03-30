@@ -1,12 +1,13 @@
 package com.ironman.forum.entity;
 
-public enum ArticleType {
+public enum EntityType {
     COMMENT(0),
     MOMENT(1),
     BLOG(2),
-    QUESTION(3);
+    QUESTION(3),
+    USER(4);
 
-    ArticleType(int id) {
+    EntityType(int id) {
         this.id = id;
     }
 

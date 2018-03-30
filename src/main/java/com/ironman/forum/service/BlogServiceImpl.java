@@ -74,7 +74,7 @@ public class BlogServiceImpl implements BlogService {
             Share share = new Share();
             share.setArticleId(blog.getId());
             share.setOriginId(originBlog.getId());
-            share.setType(ArticleType.BLOG.getId());
+            share.setType(EntityType.BLOG.getId());
             share.setDeleted(false);
             share.setCreateTime(createTime);
             shareDAO.save(share);
@@ -91,7 +91,7 @@ public class BlogServiceImpl implements BlogService {
         timeLine.setArticleId(blog.getId());
         timeLine.setSelf(true);
         timeLine.setNew(true);
-        timeLine.setType(ArticleType.BLOG.getId());
+        timeLine.setType(EntityType.BLOG.getId());
         timeLine.setCreateTime(new Date());
         ansyCommonService.ansyAddTimeLine(timeLine);
 
@@ -105,13 +105,24 @@ public class BlogServiceImpl implements BlogService {
         List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
         if (blogList != null && blogList.size() != 0) {
             for (Blog blog : blogList) {
-                BlogAbsVO blogAbsVO = new BlogAbsVO();
-                blogAbsVO.setUniqueId(blog.getUniqueId());
-                blogAbsVO.setTitle(blog.getTitle());
-                blog.setCommentNum(blog.getCommentNum());
-                blogAbsVO.setViewNum(blog.getViewNum());
-                blogAbsVO.setCreateTime(blog.getCreateTime());
-                blogAbsVO.setPrivate(blog.isPrivate());
+                BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
+                blogAbsVOList.add(blogAbsVO);
+            }
+        }
+        return blogAbsVOList;
+    }
+
+    @Override
+    public List<BlogAbsVO> pageUserBlogs(String userUniqueId, PageRequest pageRequest) throws GlobalException {
+        User user = userDAO.getArticleBaseInfoByUniqueId(userUniqueId);
+        if (user == null) {
+            throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
+        }
+        List<Blog> blogList = blogDAO.getAllLimitByUserId(user.getId(), pageRequest);
+        List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
+        if (blogList != null && blogList.size() != 0) {
+            for (Blog blog : blogList) {
+                BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
                 blogAbsVOList.add(blogAbsVO);
             }
         }
@@ -127,7 +138,7 @@ public class BlogServiceImpl implements BlogService {
         blogAbsVO.setUsername(user.getUsername());
         blogAbsVO.setProfile(user.getProfile());
         Long userId = UserLoginUtil.getLoginUserId();
-        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), ArticleType.BLOG.getId());
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), EntityType.BLOG.getId());
         if (likeLog != null) {
             blogAbsVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
         } else {
@@ -160,7 +171,7 @@ public class BlogServiceImpl implements BlogService {
         blogDetailVO.setUsername(author.getUsername());
         if (blog.isShare()) {
             blogDetailVO.setShare(true);
-            Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleType.BLOG.getId());
+            Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityType.BLOG.getId());
             if (share == null) {
                 log.error(blog.getId() + " 分享信息为空");
                 throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
@@ -181,7 +192,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     private void assembleBlogAbsShareInfo(BlogAbsVO blogAbsVO, Blog blog) throws GlobalException {
-        Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleType.BLOG.getId());
+        Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityType.BLOG.getId());
         if (share == null) {
             log.error(blog.getId() + " 分享信息为空");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);

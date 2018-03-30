@@ -13,19 +13,23 @@
     </div>
 
     <div style="height: 800px" class="uk-grid uk-margin-remove">
-      <div class="uk-width-1-4 uk-padding-remove uk-margin-small-right uk-margin-remove-left">
+      <div class="uk-width-1-4 uk-padding-remove uk-margin-right uk-margin-remove-left">
         <div class="uk-margin-small-bottom uk-margin-remove-left uk-padding-small
         uk-margin-remove-bottom uk-padding-remove-bottom"
              uk-grid>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
-            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>
+            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+              <router-link to="/aboutme/my_following">35</router-link>
+            </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">关注</p>
           </div>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
             <a class="uk-button-text">
-              <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>
+              <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+                <router-link to="/aboutme/my_follower">35</router-link>
+              </p>
               <p class="uk-margin-remove-top uk-text-small uk-text-muted">粉丝</p>
             </a>
           </div>
@@ -130,6 +134,9 @@
             <li><a href="#">我的提问</a></li>
           </ul>
 
+        </div>
+        <div>
+          <router-view></router-view>
         </div>
       </div>
     </div>

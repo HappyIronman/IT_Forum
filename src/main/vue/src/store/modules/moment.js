@@ -5,6 +5,7 @@ const state = {
   circleList: [], //首页朋友圈列表
   momentList: [],//首页推荐动态列表
   myMomentList: [],//我的动态列表
+  userMomentList: [],//用户动态列表
   isShowPublishMoment: false, //是否显示发表动态组件
 }
 
@@ -26,14 +27,18 @@ const actions = {
   },
   //获取我的动态朋友圈列表
   fetchMyCircleListAction({commit}, payload) {
-    return requestApi('get', 'mine/circle', payload, (res) => {
+    return requestApi('get', 'mycircle', payload, (res) => {
       commit(types.MY_CIRCLE_LIST, res)
       return (res.responseVO != null && res.responseVO.length !== 0)
     })
   },
   //获取我的动态列表
   fetchMyMomentListAction({commit}, payload) {
-    requestApi('get', 'mine/moment', payload, (res) => commit(types.MY_MOMENT_LIST, res))
+    requestApi('get', 'mymoments', payload, (res) => commit(types.MY_MOMENT_LIST, res))
+  },
+  //获取用户的动态列表
+  fetchUserMomentListAction({commit}, payload) {
+    requestApi('get', payload.uniqueId + '/moments', payload.pageParam, (res) => commit(types.USER_MOMENT_LIST, res))
   }
 }
 
@@ -49,6 +54,9 @@ const mutations = {
   },
   [types.MY_MOMENT_LIST](state, data) {
     state.myMomentList = state.myMomentList.concat(data.responseVO)
+  },
+  [types.USER_MOMENT_LIST](state, data) {
+    state.userMomentList = state.userMomentList.concat(data.responseVO)
   }
 }
 

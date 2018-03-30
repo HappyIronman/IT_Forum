@@ -17,7 +17,8 @@ public class AboutMe extends BaseEntity {
 
         LIKE_LOG(0),
         VIEW_LOG(1),
-        COMMENT_LOG(2);
+        COMMENT(2),
+        FOLLOW(3);
 
         LogType(int id) {
             this.id = id;

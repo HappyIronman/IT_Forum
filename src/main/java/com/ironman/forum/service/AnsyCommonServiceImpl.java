@@ -4,6 +4,8 @@ import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.ResponseStatus;
+import com.ironman.forum.vo.CommentLog;
+import com.ironman.forum.vo.FollowLog;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -11,6 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+/**
+ * 异步操作类
+ * 需要加入确保成功措施
+ */
 @Service
 @Log4j
 public class AnsyCommonServiceImpl implements AnsyCommonService {
@@ -65,7 +71,9 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
         } else if (baseLog instanceof ViewLog) {
             aboutMe.setType(AboutMe.LogType.VIEW_LOG.getId());
         } else if (baseLog instanceof CommentLog) {
-            aboutMe.setType(AboutMe.LogType.COMMENT_LOG.getId());
+            aboutMe.setType(AboutMe.LogType.COMMENT.getId());
+        } else if (baseLog instanceof FollowLog) {
+            aboutMe.setType(AboutMe.LogType.FOLLOW.getId());
         } else {
             log.error("baseLog类型不合法");
             throw new GlobalException();
@@ -73,21 +81,23 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
 
         int type = baseLog.getType();
 
-        if (type == ArticleType.COMMENT.getId()) {
+        if (type == EntityType.USER.getId()) {
+            aboutMe.setUserId(targetId);
+        } else if (type == EntityType.COMMENT.getId()) {
             //todo
-        } else if (type == ArticleType.MOMENT.getId()) {
+        } else if (type == EntityType.MOMENT.getId()) {
             Moment moment = momentDAO.getBaseInfoById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             aboutMe.setUserId(moment.getUserId());
-        } else if (type == ArticleType.BLOG.getId()) {
+        } else if (type == EntityType.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             aboutMe.setUserId(blog.getUserId());
-        } else if (type == ArticleType.QUESTION.getId()) {
+        } else if (type == EntityType.QUESTION.getId()) {
             //todo
         } else {
             log.error("type类型不合法");
@@ -104,7 +114,7 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
         } else if (baseLog instanceof ViewLog) {
             type = AboutMe.LogType.VIEW_LOG.getId();
         } else if (baseLog instanceof CommentLog) {
-            type = AboutMe.LogType.COMMENT_LOG.getId();
+            type = AboutMe.LogType.COMMENT.getId();
         } else {
             log.error("baseLog类型不合法");
             throw new GlobalException();
