@@ -30,7 +30,7 @@
     data() {
       return {
         page: 0,
-        size: 2,
+        size: 5,
         isBottom: true
       }
     },

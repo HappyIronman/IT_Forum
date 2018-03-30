@@ -3,12 +3,16 @@ package com.ironman.forum.service;
 import com.ironman.forum.form.UserLoginForm;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.PageRequest;
+import com.ironman.forum.vo.BaseLogVO;
 import com.ironman.forum.vo.FollowerVO;
 import com.ironman.forum.vo.UserInfoVO;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ *
+ */
 public interface UserService {
     UserInfoVO getMyBaseInfo() throws GlobalException;
 
@@ -40,4 +44,6 @@ public interface UserService {
      * @throws GlobalException
      */
     List<FollowerVO> pageMyFollowingList(PageRequest pageRequest) throws GlobalException;
+
+    List<BaseLogVO> pageAboutMeList(PageRequest pageRequest) throws GlobalException;
 }

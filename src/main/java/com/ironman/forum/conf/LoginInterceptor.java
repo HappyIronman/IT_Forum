@@ -40,7 +40,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", this.permittedOriginHost);
         httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
         httpServletResponse.setHeader("Access-Control-Allow-Headers",

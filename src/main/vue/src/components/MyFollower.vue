@@ -56,7 +56,7 @@
   import {mapActions, mapState} from 'vuex'
 
   export default {
-    name: 'MyFollowing',
+    name: 'MyFollower',
     data() {
       return {}
     },
@@ -66,11 +66,11 @@
       })
     },
     created: function () {
-      this.fetchMyFollowingListAction({page: 0, size: 10})
+      this.fetchMyFollowerListAction({page: 0, size: 10})
     },
     methods: {
       ...mapActions([
-        'fetchMyFollowingListAction'
+        'fetchMyFollowerListAction'
       ])
     }
   }

@@ -15,4 +15,6 @@ public interface FollowDAO {
 
     List<Follow> getAllLimitByFollowerId(@Param("followerId") Long followerId,
                                          @Param("pageRequest") PageRequest pageRequest);
+
+    Follow getById(long id);
 }

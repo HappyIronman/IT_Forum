@@ -26,4 +26,8 @@
             <property name="pageRequest" value="pageRequest"/>
         </include>
     </select>
+
+    <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Follow">
+        SELECT * FROM follow WHERE id = #{id} AND disabled = FALSE
+    </select>
 </mapper>

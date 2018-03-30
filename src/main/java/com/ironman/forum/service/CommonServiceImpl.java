@@ -93,7 +93,7 @@ public class CommonServiceImpl implements CommonService {
         LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
         if (null == likeLog) {
             //证明表中无匹配记录，报错
-            throw new GlobalException(ResponseStatus.LIKE_LOG_NOT_EXIST);
+            throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
         }
         likeLogDAO.updateDisabledByUserIdAndTargetIdAndTypeAndIsLike(userId, targetId, type, isLike);
         //异步减少对应文章赞或踩数量

@@ -20,18 +20,16 @@
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
             <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
-              <router-link to="/aboutme/my_following">35</router-link>
+              <router-link to="/self/my_following">35</router-link>
             </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">关注</p>
           </div>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
-            <a class="uk-button-text">
-              <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
-                <router-link to="/aboutme/my_follower">35</router-link>
-              </p>
-              <p class="uk-margin-remove-top uk-text-small uk-text-muted">粉丝</p>
-            </a>
+            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+              <router-link to="/self/my_follower">35</router-link>
+            </p>
+            <p class="uk-margin-remove-top uk-text-small uk-text-muted">粉丝</p>
           </div>
           <!--<div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top">-->
           <!--<p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>-->
@@ -145,7 +143,7 @@
 
 <script>
   export default {
-    name: 'aboutmePage',
+    name: 'selfPage',
     data() {
       return {
         msg: 'Welcome to Ironman\'s world haha !'

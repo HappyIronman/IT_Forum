@@ -6,7 +6,9 @@
           <img class="uk-border-circle" width="160" height="160" src="../assets/logo.png">
         </div>
         <div class="uk-padding-small uk-text-center">
-          <h3 class="uk-card-title uk-margin-remove-bottom">{{userInfo.username}}</h3>
+          <h3 class="uk-card-title uk-margin-remove-bottom">
+            <router-link to="/self">{{userInfo.username}}</router-link>
+          </h3>
           <p class="uk-text-meta uk-margin-remove-top">
             {{userInfo.intro}}
           </p>

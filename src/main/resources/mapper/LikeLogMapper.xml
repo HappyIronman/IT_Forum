@@ -20,4 +20,8 @@
         AND is_like = #{isLike} AND disabled = FALSE
     </update>
 
+    <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.LikeLog">
+        SELECT * FROM like_log WHERE id = #{id} AND disabled = FALSE
+    </select>
+
 </mapper>

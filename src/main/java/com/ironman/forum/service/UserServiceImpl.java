@@ -1,16 +1,11 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.conf.UserLoginUtil;
-import com.ironman.forum.dao.FollowDAO;
-import com.ironman.forum.dao.UserDAO;
-import com.ironman.forum.entity.EntityType;
-import com.ironman.forum.entity.Follow;
-import com.ironman.forum.entity.User;
+import com.ironman.forum.dao.*;
+import com.ironman.forum.entity.*;
 import com.ironman.forum.form.UserLoginForm;
 import com.ironman.forum.util.*;
-import com.ironman.forum.vo.FollowLog;
-import com.ironman.forum.vo.FollowerVO;
-import com.ironman.forum.vo.UserInfoVO;
+import com.ironman.forum.vo.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +28,25 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Autowired
+    private AboutMeDAO aboutMeDAO;
+
+    @Autowired
+    private LikeLogDAO likeLogDAO;
+
+    @Autowired
+    private ViewLogDAO viewLogDAO;
+
+    @Autowired
     private FollowDAO followDAO;
+
+    @Autowired
+    private CommentDAO commentDAO;
+
+    @Autowired
+    private MomentDAO momentDAO;
+
+    @Autowired
+    private BlogDAO blogDAO;
 
     @Autowired
     private AnsyCommonService ansyCommonService;
@@ -63,6 +76,159 @@ public class UserServiceImpl implements UserService {
         return this.getFollowingListByUserId(userId, pageRequest);
     }
 
+    @Override
+    public List<BaseLogVO> pageAboutMeList(PageRequest pageRequest) throws GlobalException {
+        //校验
+        long userId = UserLoginUtil.getLoginUserId();
+        List<AboutMe> aboutMeList = aboutMeDAO.getAllLimitByUserId(userId, pageRequest);
+
+        List<BaseLogVO> baseLogVOList = new ArrayList<>();
+        if (aboutMeList == null || aboutMeList.size() == 0) {
+            return baseLogVOList;
+        }
+
+        for (AboutMe aboutMe : aboutMeList) {
+            BaseLogVO baseLogVO;
+            int aboutmeType = aboutMe.getType();
+            long logId = aboutMe.getLogId();
+            if (aboutmeType == AboutMe.LogType.LIKE_LOG.getId()) {
+                LikeLog likeLog = likeLogDAO.getById(logId);
+                if (likeLog == null) {
+                    throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
+                }
+                baseLogVO = this.assembleLikeLogVO(likeLog);
+            } else if (aboutmeType == AboutMe.LogType.VIEW_LOG.getId()) {
+                ViewLog viewLog = viewLogDAO.getById(logId);
+                if (viewLog == null) {
+                    throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
+                }
+                baseLogVO = this.assembleViewLogVO(viewLog);
+            } else if (aboutmeType == AboutMe.LogType.COMMENT.getId()) {
+                //todo
+                baseLogVO = new BaseLogVO();
+            } else if (aboutmeType == AboutMe.LogType.FOLLOW.getId()) {
+                Follow follow = followDAO.getById(logId);
+                if (follow == null) {
+                    throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
+                }
+                baseLogVO = this.assembleFollowLogVo(follow);
+            } else {
+                throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
+            }
+
+            baseLogVO.setNew(aboutMe.isNew());
+            baseLogVO.setCreateTime(aboutMe.getCreateTime());
+            baseLogVOList.add(baseLogVO);
+        }
+        return baseLogVOList;
+    }
+
+
+    private BaseLogVO assembleCommentLogVo(Comment comment) {
+        return null;
+    }
+
+    private FollowLogVO assembleFollowLogVo(Follow follow) {
+        FollowLogVO followLogVO = new FollowLogVO();
+        followLogVO.setType(AboutMe.LogType.FOLLOW.getId());
+
+        User user = userDAO.getById(follow.getFollowerId());
+        followLogVO.setUserId(user.getUniqueId());
+        followLogVO.setUsername(user.getUsername());
+        followLogVO.setProfile(user.getProfile());
+
+        followLogVO.setCreateTime(follow.getCreateTime());
+
+        return followLogVO;
+    }
+
+    private ViewLogVO assembleViewLogVO(ViewLog viewLog) throws GlobalException {
+        ViewLogVO viewLogVO = new ViewLogVO();
+        viewLogVO.setType(AboutMe.LogType.VIEW_LOG.getId());
+
+        int articleType = viewLog.getType();
+        long targetId = viewLog.getTargetId();
+
+        viewLogVO.setArticleType(articleType);
+
+        if (articleType == EntityType.COMMENT.getId()) {
+            //todo
+        } else if (articleType == EntityType.MOMENT.getId()) {
+            Moment moment = momentDAO.getById(targetId);
+            if (moment == null) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+            viewLogVO.setArticleId(moment.getUniqueId());
+            viewLogVO.setArticleContent(moment.getContent());
+        } else if (articleType == EntityType.BLOG.getId()) {
+            Blog blog = blogDAO.getBaseInfoById(targetId);
+            if (blog == null) {
+                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+            }
+            viewLogVO.setArticleId(blog.getUniqueId());
+            viewLogVO.setArticleTitle(blog.getTitle());
+        } else if (articleType == EntityType.QUESTION.getId()) {
+            //todo
+        } else {
+            log.error("type类型不合法");
+            throw new GlobalException();
+        }
+
+
+        User user = userDAO.getById(viewLog.getUserId());
+        viewLogVO.setUserId(user.getUniqueId());
+        viewLogVO.setUsername(user.getUsername());
+        viewLogVO.setProfile(user.getProfile());
+
+        viewLogVO.setCreateTime(viewLog.getCreateTime());
+
+        return viewLogVO;
+    }
+
+    private LikeLogVO assembleLikeLogVO(LikeLog likeLog) throws GlobalException {
+
+        LikeLogVO likeLogVO = new LikeLogVO();
+        likeLogVO.setType(AboutMe.LogType.LIKE_LOG.getId());
+        likeLogVO.setLike(likeLog.isLike());
+
+        int articleType = likeLog.getType();
+        long targetId = likeLog.getTargetId();
+
+        likeLogVO.setArticleType(articleType);
+
+        if (articleType == EntityType.COMMENT.getId()) {
+            //todo
+        } else if (articleType == EntityType.MOMENT.getId()) {
+            Moment moment = momentDAO.getById(targetId);
+            if (moment == null) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+            likeLogVO.setArticleId(moment.getUniqueId());
+            likeLogVO.setArticleContent(moment.getContent());
+        } else if (articleType == EntityType.BLOG.getId()) {
+            Blog blog = blogDAO.getBaseInfoById(targetId);
+            if (blog == null) {
+                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+            }
+            likeLogVO.setArticleId(blog.getUniqueId());
+            likeLogVO.setArticleTitle(blog.getTitle());
+        } else if (articleType == EntityType.QUESTION.getId()) {
+            //todo
+        } else {
+            log.error("type类型不合法");
+            throw new GlobalException();
+        }
+
+
+        User user = userDAO.getById(likeLog.getUserId());
+        likeLogVO.setUserId(user.getUniqueId());
+        likeLogVO.setUsername(user.getUsername());
+        likeLogVO.setProfile(user.getProfile());
+
+        likeLogVO.setCreateTime(likeLog.getCreateTime());
+
+        return likeLogVO;
+    }
 
     private List<FollowerVO> getFollowerListByUserId(Long userId, PageRequest pageRequest) throws GlobalException {
         List<Follow> followList = followDAO.getAllLimitByUserId(userId, pageRequest);

@@ -11,7 +11,7 @@ public enum ResponseStatus {
     BLOG_NOT_EXIST(4001, HttpStatus.BAD_REQUEST, "动态不存在"),
     DUPLICATE_LIKE_LOG(7001, HttpStatus.BAD_REQUEST, "不能重复赞或者踩"),
     DUPLICATE_FOLLOW_LOG(7002, HttpStatus.BAD_REQUEST, "不能重复关注或取关"),
-    LIKE_LOG_NOT_EXIST(7002, HttpStatus.BAD_REQUEST, "赞或踩记录不存在"),
+    LOG_NOT_EXIST(7002, HttpStatus.BAD_REQUEST, "记录不存在"),
     SYSTEM_ERROR(9999, HttpStatus.INTERNAL_SERVER_ERROR, "系统错误"),
     ARTICLE_TYPE_ILLEGAL(7003, HttpStatus.INTERNAL_SERVER_ERROR, "ArticleType类型不合法");
     private int code;

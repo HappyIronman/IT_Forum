@@ -6,7 +6,7 @@
           <router-link to="/friend_circle">朋友圈</router-link>
         </li>
         <li>
-          <router-link to="/moment">今日推荐</router-link>
+          <router-link to="/recommend">今日推荐</router-link>
         </li>
         <!--<li>-->
         <!--<router-link to="/blog">博客</router-link>-->

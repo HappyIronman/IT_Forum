@@ -4,6 +4,7 @@ import com.ironman.forum.form.UserLoginForm;
 import com.ironman.forum.service.UserService;
 import com.ironman.forum.util.*;
 import com.ironman.forum.util.ResponseStatus;
+import com.ironman.forum.vo.BaseLogVO;
 import com.ironman.forum.vo.FollowerVO;
 import com.ironman.forum.vo.UserInfoVO;
 import lombok.extern.log4j.Log4j;
@@ -33,6 +34,18 @@ public class UserController {
             return new IronResponseEntity(e.getResponseStatus());
         }
     }
+
+    @RequestMapping(value = "my/aboutmes", method = RequestMethod.GET)
+    public IronResponseEntity getAboutmeList(PageRequest pageRequest) {
+        try {
+            List<BaseLogVO> baseLogVOList = userService.pageAboutMeList(pageRequest);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, baseLogVOList);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
+
 
     /**
      * 获取我的粉丝

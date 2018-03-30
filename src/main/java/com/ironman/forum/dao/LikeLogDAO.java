@@ -20,4 +20,6 @@ public interface LikeLogDAO {
 
     LikeLog getByUserIdAndTargetIdAndType(@Param("userId") Long userId, @Param("targetId") long targetId,
                                           @Param("type") int type);
+
+    LikeLog getById(long id);
 }

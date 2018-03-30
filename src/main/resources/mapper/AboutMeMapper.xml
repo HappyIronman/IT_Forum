@@ -11,4 +11,11 @@
     <update id="deleteByLogIdAndType">
         UPDATE about_me SET deleted = TRUE WHERE log_id = #{logId} AND type = #{type} AND deleted = FALSE
     </update>
+
+    <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.AboutMe">
+        SELECT * FROM about_me WHERE user_id = #{userId} AND deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 </mapper>

@@ -3,12 +3,14 @@ import Router from 'vue-router'
 import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
 import shareBlogPage from '../pages/ShareBlogPage.vue'
-import aboutmePage from '../pages/AboutmePage'
+import selfPage from '../pages/SelfPage'
 import loginPage from '../pages/LoginPage'
 import friendCircle from '../components/FriendCircle'
+import aboutme from '../components/Aboutme'
 import myMoment from '../components/MyMoment.vue'
 import myBlog from '../components/MyBlog.vue'
 import myFollowing from '../components/MyFollowing.vue'
+import myFollower from '../components/MyFollower.vue'
 import userMoment from '../components/UserMoment.vue'
 import userBlog from '../components/UserBlog.vue'
 import blogDetail from '../components/BlogDetail.vue'
@@ -30,6 +32,11 @@ export default new Router({
           component: friendCircle
         },
         {
+          path: '/aboutme',
+          name: 'aboutme',
+          component: aboutme
+        },
+        {
           path: '/my_moment',
           name: 'myMoment',
           component: myMoment
@@ -40,7 +47,7 @@ export default new Router({
           component: myBlog
         },
         {
-          path: '/my_blog/:uniqueId',
+          path: '/my_blog/:blogId',
           name: 'blogDetail',
           component: blogDetail
         }
@@ -59,9 +66,9 @@ export default new Router({
       children: []
     },
     {
-      path: '/aboutme',
-      name: 'aboutmePage',
-      component: aboutmePage,
+      path: '/self',
+      name: 'selfPage',
+      component: selfPage,
       children: [
         {
           path: 'my_following',
@@ -70,8 +77,8 @@ export default new Router({
         },
         {
           path: 'my_follower',
-          name: 'myFollowing',
-          component: myFollowing,
+          name: 'myFollower',
+          component: myFollower,
         }
       ]
     },
@@ -98,7 +105,7 @@ export default new Router({
           component: userBlog
         },
         {
-          path: ':blogUniqueId',
+          path: '/blog/:blogId',
           name: 'blogDetail',
           component: blogDetail
         }

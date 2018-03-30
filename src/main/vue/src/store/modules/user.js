@@ -2,7 +2,9 @@ import {requestApi} from '../../api/requestUtils'
 import types from '../mutation-types'
 
 const state = {
-  userInfo: {}
+  userInfo: {},
+  followList: [],
+  aboutmeList: []
 }
 
 const actions = {
@@ -20,6 +22,15 @@ const actions = {
   },
   followUserAction({commit}, uniqueId) {
     requestApi('post', 'user/follow/' + uniqueId, null, (res) => commit(types.FOLLOW_USER, res))
+  },
+  fetchAboutmeListAction({commit}, payload) {
+    requestApi('get', 'my/aboutmes', payload, (res) => commit(types.ABOUT_ME_LIST, res))
+  },
+  fetchMyFollowingListAction({commit}) {
+    requestApi('get', '/my/followings', null, (res) => commit(types.FOLLOW_LIST, res))
+  },
+  fetchMyFollowerListAction({commit}) {
+    requestApi('get', '/my/followers', null, (res) => commit(types.FOLLOW_LIST, res))
   }
 }
 
@@ -31,6 +42,12 @@ const mutations = {
     console.log('follow success')
     state.userInfo.relation = data.responseVO
     state.userInfo.followerNum += 1
+  },
+  [types.FOLLOW_LIST](state, data) {
+    state.followList = data.responseVO
+  },
+  [types.ABOUT_ME_LIST](state, data) {
+    state.aboutmeList = data.responseVO
   }
 }
 
