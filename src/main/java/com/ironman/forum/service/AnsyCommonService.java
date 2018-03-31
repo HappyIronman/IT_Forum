@@ -2,8 +2,11 @@ package com.ironman.forum.service;
 
 import com.ironman.forum.entity.BaseLog;
 import com.ironman.forum.entity.TimeLine;
+import com.ironman.forum.entity.ViewLog;
 import com.ironman.forum.util.GlobalException;
 import org.springframework.scheduling.annotation.Async;
+
+import java.util.List;
 
 /**
  * 异步事件处理服务
@@ -45,4 +48,11 @@ public interface AnsyCommonService {
      */
     @Async
     void ansyDeleteAboutMe(BaseLog baseLog) throws GlobalException;
+
+    @Async
+    void ansySaveViewLog(ViewLog viewLog) throws GlobalException;
+
+    void ansySaveViewLogList(List<ViewLog> viewLogList) throws GlobalException;
+
+    void increaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException;
 }

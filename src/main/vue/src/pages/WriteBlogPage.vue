@@ -71,7 +71,7 @@
         this.publishBlogAction(this.blog).then(uniqueId => {
           console.log(uniqueId)
           if (uniqueId) {
-            this.$router.push({path: `/blog/${uniqueId}`}) // -> /blog/123
+            this.$router.push({path: `/my_blog/${uniqueId}`}) // -> /blog/123
           }
         })
       }

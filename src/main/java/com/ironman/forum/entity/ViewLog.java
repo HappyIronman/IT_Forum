@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ViewLog extends BaseLog {
-    private long length;
+    private long length = 0L;
 }

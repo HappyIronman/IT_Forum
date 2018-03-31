@@ -122,8 +122,10 @@ public class BlogServiceImpl implements BlogService {
         List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
         if (blogList != null && blogList.size() != 0) {
             for (Blog blog : blogList) {
-                BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
-                blogAbsVOList.add(blogAbsVO);
+                if (!blog.isPrivate()) {
+                    BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
+                    blogAbsVOList.add(blogAbsVO);
+                }
             }
         }
         return blogAbsVOList;
@@ -168,6 +170,7 @@ public class BlogServiceImpl implements BlogService {
         }
         BlogDetailVO blogDetailVO = BeanUtils.copy(blog, BlogDetailVO.class);
         User author = userDAO.getArticleBaseInfoById(blog.getUserId());
+        blogDetailVO.setUserId(author.getUniqueId());
         blogDetailVO.setUsername(author.getUsername());
         if (blog.isShare()) {
             blogDetailVO.setShare(true);
@@ -188,6 +191,9 @@ public class BlogServiceImpl implements BlogService {
                 blogDetailVO.setOriginContent(originBlog.getContent());
             }
         }
+
+
+        //执行代理异步添加访问日志
         return blogDetailVO;
     }
 

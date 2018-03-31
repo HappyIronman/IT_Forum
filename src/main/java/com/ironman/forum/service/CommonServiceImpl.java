@@ -1,9 +1,7 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.conf.UserLoginUtil;
-import com.ironman.forum.dao.BlogDAO;
-import com.ironman.forum.dao.LikeLogDAO;
-import com.ironman.forum.dao.MomentDAO;
+import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.Blog;
 import com.ironman.forum.entity.EntityType;
 import com.ironman.forum.entity.LikeLog;
@@ -44,6 +42,12 @@ public class CommonServiceImpl implements CommonService {
 
     @Autowired
     private BlogDAO blogDAO;
+
+    @Autowired
+    private ViewLogDAO viewLogDAO;
+
+    @Autowired
+    private CommonDAO commonDAO;
 
     @Value("#{prop.user_pic_path}")
     private String userPicPath;
@@ -204,4 +208,6 @@ public class CommonServiceImpl implements CommonService {
     public void setHost(String host) {
         this.host = host;
     }
+
+
 }

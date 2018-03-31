@@ -12,4 +12,9 @@
         </if>
         where id = #{id}
     </update>
+
+    <update id="increasePropertyNumById">
+        update ${table} set ${property} = ${property} + ${addNum}
+        where id = #{id}
+    </update>
 </mapper>

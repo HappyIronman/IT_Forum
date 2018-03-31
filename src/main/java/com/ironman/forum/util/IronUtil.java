@@ -2,12 +2,15 @@ package com.ironman.forum.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonNull;
+import com.ironman.forum.entity.ViewLog;
 import lombok.extern.log4j.Log4j;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Log4j
@@ -58,5 +61,37 @@ public class IronUtil {
             picUrl = host + "/img/" + imgName;
         }
         return picUrl;
+    }
+
+
+    public static Map<String, Integer> constructViewNumMap(List<ViewLog> viewLogList) {
+        Map<String, Integer> viewNumMap = new HashMap<>();
+        for (ViewLog viewLog : viewLogList) {
+            long targetId = viewLog.getTargetId();
+            int type = viewLog.getType();
+            String entityKey = targetId + ":" + type;
+            if (viewNumMap.containsKey(entityKey)) {
+                viewNumMap.put(entityKey, viewNumMap.get(entityKey) + 1);
+            } else {
+                viewNumMap.put(entityKey, 1);
+            }
+        }
+        return viewNumMap;
+    }
+
+    public static long getTargetIdByViewNumMapKey(String key) throws GlobalException {
+        String[] keyArray = key.split(":");
+        if (keyArray.length != 2) {
+            throw new GlobalException("ViewNumMap¼üÖµ½âÎö´íÎó: " + key);
+        }
+        return Long.parseLong(keyArray[0]);
+    }
+
+    public static int getTypeByViewNumMapKey(String key) throws GlobalException {
+        String[] keyArray = key.split(":");
+        if (keyArray.length != 2) {
+            throw new GlobalException("ViewNumMap¼üÖµ½âÎö´íÎó: " + key);
+        }
+        return Integer.parseInt(keyArray[1]);
     }
 }

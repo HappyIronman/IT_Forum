@@ -3,6 +3,8 @@ package com.ironman.forum.service;
 import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.util.GlobalException;
+import com.ironman.forum.util.IronCache;
+import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.ResponseStatus;
 import com.ironman.forum.vo.CommentLog;
 import com.ironman.forum.vo.FollowLog;
@@ -12,6 +14,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 异步操作类
@@ -36,7 +39,7 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
     private AboutMeDAO aboutMeDAO;
 
     @Autowired
-    private LikeLogDAO likeLogDAO;
+    private ViewLogDAO viewLogDAO;
 
     @Override
     @Async
@@ -70,6 +73,10 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
             aboutMe.setType(AboutMe.LogType.LIKE_LOG.getId());
         } else if (baseLog instanceof ViewLog) {
             aboutMe.setType(AboutMe.LogType.VIEW_LOG.getId());
+            //只有博客相关的浏览记录会写入aboutMe表
+            if (baseLog.getType() != EntityType.BLOG.getId()) {
+                return;
+            }
         } else if (baseLog instanceof CommentLog) {
             aboutMe.setType(AboutMe.LogType.COMMENT.getId());
         } else if (baseLog instanceof FollowLog) {
@@ -120,5 +127,47 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
             throw new GlobalException();
         }
         aboutMeDAO.deleteByLogIdAndType(baseLog.getId(), type);
+    }
+
+    @Override
+    public void ansySaveViewLog(ViewLog viewLog) throws GlobalException {
+        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
+            log.info("缓存已满,直接落库");
+            this.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            viewLogDAO.save(viewLog);
+        } else {
+            IronCache.addViewLog(viewLog);
+        }
+    }
+
+    @Override
+    public void ansySaveViewLogList(List<ViewLog> viewLogList) throws GlobalException {
+        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
+            log.info("缓存已满,直接落库");
+            for (ViewLog viewLog : viewLogList) {
+                this.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+                viewLogDAO.save(viewLog);
+            }
+        } else {
+            for (ViewLog viewLog : viewLogList) {
+                IronCache.addViewLog(viewLog);
+            }
+        }
+    }
+
+    @Override
+    public void increaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException {
+        String property = IronConstant.ARTICLE_PROPERTY_VIEW_NUM;
+        if (type == EntityType.COMMENT.getId()) {
+            commonDAO.increasePropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, addNum);
+        } else if (type == EntityType.MOMENT.getId()) {
+            commonDAO.increasePropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, addNum);
+        } else if (type == EntityType.BLOG.getId()) {
+            commonDAO.increasePropertyNumById(IronConstant.TABLE_BLOG, targetId, property, addNum);
+        } else if (type == EntityType.QUESTION.getId()) {
+            commonDAO.increasePropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, addNum);
+        } else {
+            throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
+        }
     }
 }

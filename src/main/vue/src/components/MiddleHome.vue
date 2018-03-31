@@ -110,6 +110,7 @@
 
         beforeSend: function () {
           console.log('beforeSend', arguments);
+          arguments[0].xhr.withCredentials = true
         },
         beforeAll: function () {
           console.log('beforeAll', arguments);

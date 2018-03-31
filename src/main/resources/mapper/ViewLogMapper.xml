@@ -7,4 +7,19 @@
     <select id="getById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.ViewLog">
         SELECT * FROM view_log WHERE id = #{id} AND disabled = FALSE
     </select>
+
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO view_log(user_id,target_id,type,disabled,length,create_time)
+        VALUES
+        <foreach collection="viewLogList" item="log" separator=",">
+            (#{log.userId},#{log.targetId},#{log.type},#{log.disabled},#{log.length},#{log.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="save" parameterType="com.ironman.forum.entity.ViewLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO view_log(user_id,target_id,type,disabled,length,create_time)
+        VALUES
+        (#{userId},#{targetId},#{type},#{disabled},#{length},#{createTime})
+
+    </insert>
 </mapper>

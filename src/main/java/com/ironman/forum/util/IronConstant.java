@@ -30,4 +30,18 @@ public class IronConstant {
     public static final int LIKE_CONDITION_LIKED = 2;
     //文章已被踩过
     public static final int LIKE_CONDITION_DISLIKED = 3;
+
+
+    /**
+     * 自定义线程池初始线程数量
+     */
+    public static final int DEFAULT_POOL_SIZE = 5;
+
+    /**
+     * viewLog触发落库动作缓存最多数量
+     */
+    public static final int VIEW_LOG_MAX_CACHE_SIZE = 2;
+
+    public static final long AnonymousUserId = -1L;
+    public static final String AnonymousUserUniqueId = "-1";
 }

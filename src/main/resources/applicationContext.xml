@@ -2,16 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/task
-       http://www.springframework.org/schema/task/spring-task.xsd">
+       http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:component-scan
-            base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util,com.ironman.forum.conf"/>
+            base-package="com.ironman.forum.dao,com.ironman.forum.service,com.ironman.forum.util,
+            com.ironman.forum.conf,com.ironman.forum.listener,com.ironman.forum.test"/>
     <!--<context:property-placeholder location="classpath:config.properties"/>-->
 
     <!-- 第二种方式是使用注解的方式注入，主要用在java代码中使用注解注入properties文件中相应的value值 -->
@@ -31,6 +32,61 @@
     <task:annotation-driven executor="annotationExecutor"/>
     <!-- 支持 @Async 注解 -->
     <task:executor id="annotationExecutor" pool-size="20"/>
+
+    <!-- 配置一个切面 -->
+    <aop:config>
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+            <!-- 配置一个切点 -->
+            <aop:pointcut id="saveBlogViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.BlogService.getBlogDetail(..)) and args(uniqueId)"/>
+
+            <!-- 配置前置通知 -->
+            <!--<aop:before pointcut-ref="saveViewLogPoint" method="beforeSaveViewLog" arg-names="uniqueId"/>-->
+            <!-- 配置前置通知 -->
+            <!--<aop:after pointcut-ref="saveViewLogPoint" method="afterSaveViewLog" arg-names="uniqueId"/>-->
+            <!-- 配置后置返回通知 -->
+            <aop:after-returning pointcut-ref="saveBlogViewLogPoint" method="afterReturningGetBlogDetail"
+                                 arg-names="uniqueId,blogDetailVO" returning="blogDetailVO"/>
+
+
+            <!-- 异常通知 -->
+            <!--<aop:after-throwing pointcut-ref="saveViewLogPoint" method="afterThrowingSaveViewLog" arg-names="uniqueId,e"-->
+            <!--throwing="e"/>-->
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+
+            <aop:pointcut id="saveMyMomentViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.MomentService.pageMyMoments(..)) and args(pageRequest)"/>
+
+            <aop:after-returning pointcut-ref="saveMyMomentViewLogPoint" method="afterReturningPageMoments"
+                                 arg-names="pageRequest,momentVOList" returning="momentVOList"/>
+
+
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+
+            <aop:pointcut id="saveUserMomentViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.MomentService.pageUserMoments(..)) and args(userUniqueId,pageRequest)"/>
+
+            <aop:after-returning pointcut-ref="saveUserMomentViewLogPoint" method="afterReturningPageUserMoments"
+                                 arg-names="userUniqueId,pageRequest,momentVOList" returning="momentVOList"/>
+
+
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+
+            <aop:pointcut id="saveFriendCircleViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.TimeLineService.pageMyFriendCircle(..)) and args(pageRequest)"/>
+
+            <aop:after-returning pointcut-ref="saveFriendCircleViewLogPoint" method="afterReturningPageMyFriendCircle"
+                                 arg-names="pageRequest,timeLineVOList" returning="timeLineVOList"/>
+
+
+        </aop:aspect>
+    </aop:config>
 
 
 </beans>

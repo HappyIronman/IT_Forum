@@ -1,5 +1,6 @@
 package com.ironman.forum.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,9 @@ import java.util.List;
 @Getter
 @Setter
 public class MomentVO {
+    //id字段必须存在，用于代理方法
+    @JsonIgnore
+    private long id;
     private String uniqueId;
     private String userId;
     private String username;

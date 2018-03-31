@@ -36,7 +36,8 @@
               动态: {{item.articleContent}}
             </span>
             <span v-if="item.articleType===2">
-              博客: {{item.articleTitle}}
+              博客:
+              <router-link v-bind:to="'/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
             </span>
             <span v-if="item.articleType===3">
               提问: {{item.articleTitle}}

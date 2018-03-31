@@ -124,6 +124,8 @@ public class MomentServiceImpl implements MomentService {
                 momentVOList.add(momentVO);
             }
         }
+
+        //执行代理异步添加访问日志
         return momentVOList;
     }
 
@@ -141,6 +143,7 @@ public class MomentServiceImpl implements MomentService {
                 momentVOList.add(momentVO);
             }
         }
+        //执行代理异步添加访问日志
         return momentVOList;
     }
 
