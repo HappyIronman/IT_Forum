@@ -29,12 +29,16 @@
 			<!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
 			<mvc:mapping path="/**"/>
 			<bean class="com.ironman.forum.conf.LoginInterceptor">
-				<property name="publicUrl">
+				<property name="publicUrlSet">
 					<set>
                         <value>/data/user/login</value>
+						<value>/data/user/.*</value>
+						<value>/data/.*/moments</value>
+						<value>/data/.*/blogs</value>
+						<value>/data/blog/.*</value>
 					</set>
 				</property>
-				<property name="urlMap">
+				<property name="restrictUrlMap">
 					<map>
 						<entry key="/homepage/.*">
 							<set>
@@ -43,12 +47,7 @@
 							</set>
 						</entry>
 
-						<entry key="/comment/.*">
-							<set>
-								<value>ROLE_USER</value>
-								<value>ROLE_ADMIN</value>
-							</set>
-						</entry>
+						<!--默认其余都为受限url-->
 					</map>
 				</property>
 			</bean>

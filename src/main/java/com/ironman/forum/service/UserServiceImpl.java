@@ -175,10 +175,17 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        User user = userDAO.getById(viewLog.getUserId());
-        viewLogVO.setUserId(user.getUniqueId());
-        viewLogVO.setUsername(user.getUsername());
-        viewLogVO.setProfile(user.getProfile());
+        //ƒ‰√˚∑√Œ 
+        if (viewLog.getUserId() == IronConstant.ANONYMOUS_USER_ID) {
+            viewLogVO.setUserId(IronConstant.ANONYMOUS_USER_UNIQUE_ID);
+            viewLogVO.setUsername(IronConstant.ANONYMOUS_USER_NAME);
+            viewLogVO.setProfile(IronConstant.ANONYMOUS_USER_PROFILE);
+        } else {
+            User user = userDAO.getById(viewLog.getUserId());
+            viewLogVO.setUserId(user.getUniqueId());
+            viewLogVO.setUsername(user.getUsername());
+            viewLogVO.setProfile(user.getProfile());
+        }
 
         viewLogVO.setCreateTime(viewLog.getCreateTime());
 
@@ -322,7 +329,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void userLogin(UserLoginForm form, HttpSession session) throws GlobalException {
+    public UserInfoVO userLogin(UserLoginForm form, HttpSession session) throws GlobalException {
         User user = userDAO.getByUsernameAndPassword(form.getUsername(), form.getPassword());
         if (user == null) {
             throw new GlobalException(ResponseStatus.USERNAME_OR_PASSWORD_INCORRECT);
@@ -330,6 +337,8 @@ public class UserServiceImpl implements UserService {
         session.setAttribute(IronConstant.SESSION_USER_KEY, user);
         session.setAttribute(IronConstant.SESSION_ROLE_KEY, Arrays.asList("ROLE_USER"));
         log.info(IronUtil.toJson(session));
+        UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
+        return userInfoVO;
     }
 
     @Override

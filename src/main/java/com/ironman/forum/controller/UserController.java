@@ -98,15 +98,15 @@ public class UserController {
             return IronUtil.processResult(result);
         }
         try {
-            userService.userLogin(form, session);
-            return new IronResponseEntity(ResponseStatus.SUCCESS);
+            UserInfoVO userInfoVO = userService.userLogin(form, session);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);
             return new IronResponseEntity(e.getResponseStatus());
         }
     }
 
-    @RequestMapping(value = "/user/follow/{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/my/follow/{userId}", method = RequestMethod.POST)
     public IronResponseEntity userFollow(@PathVariable("userId") String userUniqueId) {
         try {
             int relation = userService.followUser(userUniqueId);

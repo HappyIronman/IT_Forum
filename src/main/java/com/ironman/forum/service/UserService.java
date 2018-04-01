@@ -18,7 +18,7 @@ public interface UserService {
 
     UserInfoVO getUserBaseInfo(String uniqueId) throws GlobalException;
 
-    void userLogin(UserLoginForm form, HttpSession session) throws GlobalException;
+    UserInfoVO userLogin(UserLoginForm form, HttpSession session) throws GlobalException;
 
     /**
      * @param userUniqueId

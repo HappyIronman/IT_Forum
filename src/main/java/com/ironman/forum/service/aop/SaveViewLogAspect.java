@@ -6,6 +6,7 @@ import com.ironman.forum.entity.EntityType;
 import com.ironman.forum.entity.ViewLog;
 import com.ironman.forum.service.AnsyCommonService;
 import com.ironman.forum.util.GlobalException;
+import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.PageRequest;
 import com.ironman.forum.vo.BlogDetailVO;
 import com.ironman.forum.vo.MomentVO;
@@ -33,7 +34,8 @@ public class SaveViewLogAspect {
         }
         log.info("执行方法getBlogDetail返回后运行，参数为:" + blogDetailVO);
         ViewLog viewLog = new ViewLog();
-        viewLog.setUserId(UserLoginUtil.getLoginUserId());
+        long userId = UserLoginUtil.getLoginUserId();
+        viewLog.setUserId(userId);
         viewLog.setType(EntityType.BLOG.getId());
         viewLog.setTargetId(blogDetailVO.getId());
         viewLog.setDisabled(false);
@@ -42,6 +44,10 @@ public class SaveViewLogAspect {
             //注意，此处必须同步插入db，因为后面要用到id，所以不能加入缓存
             ansyCommonService.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
             viewLogDAO.save(viewLog);
+            //匿名用户访问不写aboutMe表
+            if (userId == IronConstant.ANONYMOUS_USER_ID) {
+                return;
+            }
             //如果不是自己看自己的文章，需要写入aboutme表
             if (!blogDetailVO.getUserId().equals(UserLoginUtil.getLoginUserUniqueId())) {
                 ansyCommonService.ansySaveAboutMe(viewLog);

@@ -33,9 +33,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     private String permittedOriginHost;
 
     //url和权限对应表
-    private RegexHashMap<String, Set<String>> urlMap;
+    private RegexHashMap<String, Set<String>> restrictUrlMap;
 
-    private Set<String> publicUrl;
+    private RegexSet<String> publicUrlSet;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
@@ -58,7 +58,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 //        }
 
         String requestUri = httpServletRequest.getRequestURI();
-        if (publicUrl.contains(requestUri)) {
+        if (publicUrlSet.contains(requestUri)) {
             logger.info("访问公开url:" + requestUri);
             return true;
         }
@@ -75,7 +75,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 return false;
             }
             logger.info("用户权限: " + IronUtil.toJson(userRoles));
-            Set<String> permittedRoles = this.urlMap.get(requestUri);
+            Set<String> permittedRoles = this.restrictUrlMap.get(requestUri);
             //默认为用户权限
             if (permittedRoles == null) {
                 permittedRoles = new HashSet<>();
@@ -94,7 +94,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         } else {
             logger.error("session中用户信息为空");
-            httpServletResponse.sendRedirect("/xxx");
+            httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
     }
@@ -109,19 +109,23 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     }
 
-    public RegexHashMap<String, Set<String>> getUrlMap() {
-        return urlMap;
+    public RegexHashMap<String, Set<String>> getRestrictUrlMap() {
+        return restrictUrlMap;
     }
 
-    public void setUrlMap(RegexHashMap<String, Set<String>> urlMap) {
-        this.urlMap = urlMap;
+    public void setRestrictUrlMap(RegexHashMap<String, Set<String>> restrictUrlMap) {
+        this.restrictUrlMap = restrictUrlMap;
     }
 
-    public Set<String> getPublicUrl() {
-        return publicUrl;
+    public RegexSet<String> getPublicUrlSet() {
+        return publicUrlSet;
     }
 
-    public void setPublicUrl(Set<String> publicUrl) {
-        this.publicUrl = publicUrl;
+    public void setPublicUrlSet(RegexSet<String> publicUrlSet) {
+        this.publicUrlSet = publicUrlSet;
+    }
+
+    public void setPermittedOriginHost(String permittedOriginHost) {
+        this.permittedOriginHost = permittedOriginHost;
     }
 }

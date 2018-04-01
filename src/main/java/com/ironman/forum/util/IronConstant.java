@@ -42,6 +42,8 @@ public class IronConstant {
      */
     public static final int VIEW_LOG_MAX_CACHE_SIZE = 2;
 
-    public static final long AnonymousUserId = -1L;
-    public static final String AnonymousUserUniqueId = "-1";
+    public static final long ANONYMOUS_USER_ID = -1L;
+    public static final String ANONYMOUS_USER_UNIQUE_ID = "-1";
+    public static final String ANONYMOUS_USER_NAME = "ƒ‰√˚”√ªß";
+    public static final String ANONYMOUS_USER_PROFILE = "ironman";
 }

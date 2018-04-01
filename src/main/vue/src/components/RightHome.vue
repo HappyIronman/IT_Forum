@@ -7,10 +7,10 @@
         </div>
         <div class="uk-padding-small uk-text-center">
           <h3 class="uk-card-title uk-margin-remove-bottom">
-            <router-link to="/self">{{userInfo.username}}</router-link>
+            <router-link to="/self">{{loginUserInfo.username}}</router-link>
           </h3>
           <p class="uk-text-meta uk-margin-remove-top">
-            {{userInfo.intro}}
+            {{loginUserInfo.intro}}
           </p>
         </div>
 
@@ -44,27 +44,27 @@
 
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的粉丝</span>
-          <span class="uk-text-bold">{{userInfo.followerNum}}</span>
+          <span class="uk-text-bold">{{loginUserInfo.followerNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">关注的人</span>
-          <span class="uk-text-bold">{{userInfo.followingNum}}</span>
+          <span class="uk-text-bold">{{loginUserInfo.followingNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的动态</span>
-          <router-link to="/my_moment" class="uk-text-bold">{{userInfo.momentNum}}</router-link>
+          <router-link to="/my_moment" class="uk-text-bold">{{loginUserInfo.momentNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的博客</span>
-          <router-link to="/my_blog" class="uk-text-bold">{{userInfo.blogNum}}</router-link>
+          <router-link to="/my_blog" class="uk-text-bold">{{loginUserInfo.blogNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的提问</span>
-          <router-link to="/my_question" class="uk-text-bold">{{userInfo.questionNum}}</router-link>
+          <router-link to="/my_question" class="uk-text-bold">{{loginUserInfo.questionNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">学校</span>
-          <span class="uk-text-bold">{{userInfo.school}}</span>
+          <span class="uk-text-bold">{{loginUserInfo.school}}</span>
         </div>
       </div>
 
@@ -84,7 +84,7 @@
     },
     computed: {
       ...mapState({
-        userInfo: state => state.user.userInfo
+        loginUserInfo: state => state.user.loginUserInfo
       })
     },
     created: function () {

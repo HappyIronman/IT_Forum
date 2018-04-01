@@ -19,12 +19,12 @@ public class UserLoginUtil {
 
     public static Long getLoginUserId() {
         User user = getLoginUserInfo();
-        return user != null ? user.getId() : IronConstant.AnonymousUserId;
+        return user != null ? user.getId() : IronConstant.ANONYMOUS_USER_ID;
     }
 
     public static String getLoginUserUniqueId() {
         User user = getLoginUserInfo();
-        return user != null ? user.getUniqueId() : IronConstant.AnonymousUserUniqueId;
+        return user != null ? user.getUniqueId() : IronConstant.ANONYMOUS_USER_UNIQUE_ID;
     }
 
 }

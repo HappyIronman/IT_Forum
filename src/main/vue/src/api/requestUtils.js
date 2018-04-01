@@ -15,9 +15,13 @@ export function requestApi(method, path, params, callback) {
     return Vue.http.get(requestUri, {params: params, credentials: true}).then(response => {
       // get body data
       responseData = response.body;
+      // console.log(JSON.stringify(response))
       console.log("ResponseData: " + JSON.stringify(responseData));
       return callback(responseData);
     }).catch(response => {
+      if (response.status === 401) {
+        alert("请先登录")
+      }
       // error callback
       console.error("request ERROR! " + JSON.stringify(response));
     });
@@ -30,10 +34,15 @@ export function requestApi(method, path, params, callback) {
       console.log("ResponseData: " + JSON.stringify(responseData));
       return callback(responseData);
     }).catch((response) => {
-      console.error("request ERROR! " + JSON.stringify(response));
-      alert(response.body.msg)
-      // error callback
-    });
+        console.error("request ERROR! " + JSON.stringify(response));
+        if (response.status === 401) {
+          alert("请先登录")
+        } else {
+          alert(response.body.msg)
+        }
+        // error callback
+      }
+    );
   }
 
   else if (method === 'put') {
