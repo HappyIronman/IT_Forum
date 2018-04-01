@@ -88,7 +88,7 @@
       })
     },
     created: function () {
-      this.fetchMineInfoAction()
+      // this.fetchMineInfoAction()
     },
     methods: {
       ...mapActions([

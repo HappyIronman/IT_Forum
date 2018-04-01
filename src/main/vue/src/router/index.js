@@ -6,6 +6,8 @@ import writeBlogPage from '../pages/WriteBlogPage.vue'
 import shareBlogPage from '../pages/ShareBlogPage.vue'
 import selfPage from '../pages/SelfPage'
 import loginPage from '../pages/LoginPage'
+import userLoginPage from '../pages/UserLoginPage'
+import registerPage from '../pages/RegisterPage'
 import friendCircle from '../components/FriendCircle'
 import aboutme from '../components/Aboutme'
 import myMoment from '../components/MyMoment.vue'
@@ -31,6 +33,11 @@ const router = new Router({
         auth: true // 这里设置，当前路由需要校验
       },
       children: [
+        {
+          path: '',
+          name: 'friendCircle',
+          component: friendCircle
+        },
         {
           path: '/friend_circle',
           name: 'friendCircle',
@@ -100,6 +107,18 @@ const router = new Router({
       path: '/login',
       name: 'loginPage',
       component: loginPage,
+      children: []
+    },
+    {
+      path: '/userLogin',
+      name: 'userLoginPage',
+      component: userLoginPage,
+      children: []
+    },
+    {
+      path: '/register',
+      name: 'registerPage',
+      component: registerPage,
       children: []
     },
     {

@@ -8,7 +8,7 @@
         SELECT * FROM view_log WHERE id = #{id} AND disabled = FALSE
     </select>
 
-    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+    <insert id="batchSave">
         INSERT INTO view_log(user_id,target_id,type,disabled,length,create_time)
         VALUES
         <foreach collection="viewLogList" item="log" separator=",">

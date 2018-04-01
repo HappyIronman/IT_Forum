@@ -5,7 +5,7 @@ import storage from '../../storage'
 
 const state = {
   //登录信息
-  loginUserInfo: {},
+  loginUserInfo: storage.getStorage("loginUserInfo"),
   //个人信息
   userInfo: {},
   followList: [],
