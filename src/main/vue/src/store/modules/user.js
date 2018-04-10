@@ -19,6 +19,18 @@ const actions = {
       return true
     })
   },
+  userRegisterAction({commit}, payload) {
+    return requestApi('post', 'user/register', payload, (res) => {
+      commit(types.LOGIN_USER_INFO, res)
+      return true
+    })
+  },
+  editInfoAction({commit}, payload) {
+    return requestApi('put', 'my/edit', payload, (res) => {
+      commit(types.LOGIN_USER_INFO, res)
+      return true
+    })
+  },
   fetchMineInfoAction({commit}) {
     requestApi('get', 'my/info', null, (res) => commit(types.LOGIN_USER_INFO, res))
   },
@@ -42,7 +54,7 @@ const actions = {
 const mutations = {
   [types.LOGIN_USER_INFO](state, data) {
     state.loginUserInfo = data.responseVO
-    storage.setStorage("loginUserInfo", state.loginUserInfo, 1000 * 60)
+    storage.setStorage("loginUserInfo", state.loginUserInfo, 1000 * 60 * 20)
     console.log('个人信息存储成功' + JSON.stringify(state.loginUserInfo))
   },
   [types.USER_INFO](state, data) {

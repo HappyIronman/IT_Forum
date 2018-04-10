@@ -7,7 +7,7 @@ body {
   box-sizing: border-box;
   height: 100vh;
   background: url("../../img/bj.jpg") no-repeat center;
-  background-size: auto 100vh;
+  background-size: 100%;
   position: relative;
 }
 

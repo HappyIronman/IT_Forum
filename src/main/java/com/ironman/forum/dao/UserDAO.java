@@ -15,4 +15,10 @@ public interface UserDAO {
     User getByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     User getArticleBaseInfoByUniqueId(String uniqueId);
+
+    User getByPhone(String phone);
+
+    void save(User user);
+
+    void update(User user);
 }

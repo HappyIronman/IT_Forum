@@ -16,9 +16,11 @@
   "dependencies": {
     "jquery": "^2.2.4",
     "uikit": "^3.0.0-beta.40",
+    "vee-validate": "^2.0.6",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
+    "vue-validator": "^3.0.0-alpha.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

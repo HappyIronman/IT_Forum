@@ -1,27 +1,32 @@
 <template>
-  <div class="uk-padding uk-padding-remove-top">
-    <div class="uk-text-center">
-      <span class="uk-label uk-label-success">我的博客</span>
-    </div>
-    <ul class="uk-list uk-list-divider">
-      <li v-for="blog in myBlogList">
-        <router-link v-bind:to="'/my_blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
-        <span class="uk-align-right uk-text-small uk-text-muted uk-margin-remove">
+  <div>
+    <self-page-nav></self-page-nav>
+
+    <div class="uk-padding uk-padding-remove-top">
+      <div class="uk-text-center">
+        <span class="uk-label uk-label-success">我的博客</span>
+      </div>
+      <ul class="uk-list uk-list-divider">
+        <li v-for="blog in myBlogList">
+          <router-link v-bind:to="'/my_blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
+          <span class="uk-align-right uk-text-small uk-text-muted uk-margin-remove">
           （{{blog.commentNum}}／{{blog.viewNum}}）
         </span>
-        <span class="uk-align-right uk-text-small uk-text-muted uk-margin-right">
+          <span class="uk-align-right uk-text-small uk-text-muted uk-margin-right">
           {{blog.createTime | formatDate('yyyy-MM-dd hh:mm')}}
         </span>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
-
 </template>
 
 <script>
   import {mapActions, mapState} from 'vuex'
+  import SelfPageNav from "./SelfPageNav";
 
   export default {
+    components: {SelfPageNav},
     name: 'MyBlog',
     data() {
       return {}

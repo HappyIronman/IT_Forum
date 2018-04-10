@@ -32,6 +32,8 @@
 				<property name="publicUrlSet">
 					<set>
                         <value>/data/user/login</value>
+                        <value>/data/user/checkPhone</value>
+                        <value>/data/register</value>
 						<value>/data/user/.*</value>
 						<value>/data/.*/moments</value>
 						<value>/data/.*/blogs</value>

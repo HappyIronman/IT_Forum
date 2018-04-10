@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div style="height: 800px" class="uk-grid uk-margin-remove">
+    <div style="min-height: 800px" class="uk-grid uk-margin-remove">
       <div class="uk-width-1-4 uk-padding-remove uk-margin-right uk-margin-remove-left">
         <div class="uk-margin-small-bottom uk-margin-remove-left uk-padding-small
         uk-margin-remove-bottom uk-padding-remove-bottom"
@@ -64,7 +64,7 @@
               <p><span class="uk-text-small">个人资料完成度 </span><span class="uk-text-bold uk-text-large">25%</span></p>
             </div>
             <div class="uk-card-footer">
-              <a href="#" class="uk-button uk-button-text">编辑个人资料 ></a>
+              <router-link to="/self/edit" class="uk-button uk-button-text">编辑个人资料 ></router-link>
             </div>
           </div>
         </div>
@@ -117,26 +117,16 @@
 
 
           <div class="uk-card-footer">
-            <a href="#" class="uk-button uk-button-text">查看更多 ></a>
+            <button href="#" class="uk-button uk-button-text" disabled>查看更多 ></button>
           </div>
         </div>
 
       </div>
 
-
       <div class="uk-width-expand uk-padding-remove">
-        <div>
-          <ul class="uk-tab">
-            <li class="uk-active uk-margin-large-right uk-margin-large-left"><a href="#">我的动态</a></li>
-            <li class="uk-margin-large-right"><a href="#">我的博客</a></li>
-            <li><a href="#">我的提问</a></li>
-          </ul>
-
-        </div>
-        <div>
-          <router-view></router-view>
-        </div>
+        <router-view></router-view>
       </div>
+
     </div>
   </div>
 </template>

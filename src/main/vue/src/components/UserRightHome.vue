@@ -3,7 +3,7 @@
     <div class="uk-card uk-card-default uk-card-large">
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-text-center">
-          <img class="uk-border-circle" width="160" height="160" src="../assets/logo.png">
+          <img class="uk-border-circle" width="160" height="160" v-bind:src="loginUserInfo.profileUrl">
         </div>
         <div class="uk-padding-small uk-text-center">
           <h3 class="uk-card-title uk-margin-remove-bottom">{{userInfo.username}}</h3>
@@ -50,15 +50,15 @@
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的动态</span>
-          <router-link to="/moment" class="uk-text-bold">{{userInfo.momentNum}}</router-link>
+          <span to="/moment" class="uk-text-bold">{{userInfo.momentNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的博客</span>
-          <router-link to="/blog" class="uk-text-bold">{{userInfo.blogNum}}</router-link>
+          <span to="/blog" class="uk-text-bold">{{userInfo.blogNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的提问</span>
-          <router-link to="/question" class="uk-text-bold">{{userInfo.questionNum}}</router-link>
+          <span to="/question" class="uk-text-bold">{{userInfo.questionNum}}</span>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">学校</span>

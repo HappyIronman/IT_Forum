@@ -5,8 +5,12 @@ import App from './App'
 import router from './router'
 import store from './store'
 import {formatDate} from './formater'
+import VeeValidate from 'vee-validate';
+import './const'
 
 Vue.config.productionTip = false
+
+Vue.use(VeeValidate)
 
 Vue.filter('formatDate', formatDate);
 

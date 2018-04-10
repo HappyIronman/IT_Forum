@@ -41,7 +41,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
         httpServletResponse.setHeader("Access-Control-Allow-Origin", this.permittedOriginHost);
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
         httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
         httpServletResponse.setHeader("Access-Control-Allow-Headers",
                 "Origin, X-Requested-With, content-type, Accept");
@@ -58,17 +58,21 @@ public class LoginInterceptor implements HandlerInterceptor {
 //        }
 
         String requestUri = httpServletRequest.getRequestURI();
+
         if (publicUrlSet.contains(requestUri)) {
             logger.info("访问公开url:" + requestUri);
+            HttpSession session = httpServletRequest.getSession();
+            User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
+            if (user != null) {
+                LoginContext.saveLoginInfo(user);
+            }
             return true;
         }
 
         logger.info("当前访问url:" + requestUri);
         HttpSession session = httpServletRequest.getSession();
-        logger.info(IronUtil.toJson(session));
         User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
         if (user != null) {
-            logger.info(user.toString());
             List<String> userRoles = (List<String>) session.getAttribute(IronConstant.SESSION_ROLE_KEY);
             if (userRoles == null) {
                 logger.error(user.getId() + "权限为空");

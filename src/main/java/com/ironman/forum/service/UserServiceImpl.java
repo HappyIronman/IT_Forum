@@ -3,12 +3,15 @@ package com.ironman.forum.service;
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
+import com.ironman.forum.form.RegisterForm;
+import com.ironman.forum.form.UserEditForm;
 import com.ironman.forum.form.UserLoginForm;
 import com.ironman.forum.util.*;
 import com.ironman.forum.vo.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +54,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private AnsyCommonService ansyCommonService;
 
+    @Value("#{prop.host}")
+    private String host;
+
     @Override
     public UserInfoVO getMyBaseInfo() throws GlobalException {
         Long userId = UserLoginUtil.getLoginUserId();
@@ -58,8 +64,27 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
         }
-        UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
-        return userInfoVO;
+        return this.assembleUserInfoVO(user);
+    }
+
+
+    @Override
+    public UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException {
+        long userId = UserLoginUtil.getLoginUserId();
+        User user = userDAO.getById(userId);
+        if (user == null) {
+            throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
+        }
+        user.setProfile(form.getProfile());
+        user.setPhone(form.getPhone());
+        user.setEmail(form.getEmail());
+        user.setSex(form.getSex());
+        user.setSchool(form.getSchool());
+        user.setIntro(form.getIntro());
+        userDAO.update(user);
+
+        this.saveUserSession(session, user);
+        return this.assembleUserInfoVO(user);
     }
 
     @Override
@@ -304,6 +329,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private int judgeUserRelation(long selfId, long userId) {
+        //用户未登录，直接返回陌生人
+        if (selfId == IronConstant.ANONYMOUS_USER_ID) {
+            return UserInfoVO.Relation.STRANGER.getId();
+        }
         //如果selfId和userId相等，直接返回互粉关系
         if (selfId == userId) {
             return UserInfoVO.Relation.FANS_TO_EACH_OTHER.getId();
@@ -334,11 +363,8 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new GlobalException(ResponseStatus.USERNAME_OR_PASSWORD_INCORRECT);
         }
-        session.setAttribute(IronConstant.SESSION_USER_KEY, user);
-        session.setAttribute(IronConstant.SESSION_ROLE_KEY, Arrays.asList("ROLE_USER"));
-        log.info(IronUtil.toJson(session));
-        UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
-        return userInfoVO;
+        this.saveUserSession(session, user);
+        return this.assembleUserInfoVO(user);
     }
 
     @Override
@@ -393,5 +419,43 @@ public class UserServiceImpl implements UserService {
             //他是，则关系为互粉
             return UserInfoVO.Relation.FANS_TO_EACH_OTHER.getId();
         }
+    }
+
+
+    @Override
+    public void checkPhone(String phone) throws GlobalException {
+        User user = userDAO.getByPhone(phone);
+        if (user != null) {
+            throw new GlobalException(ResponseStatus.DUPLICATE_PHONE);
+        }
+    }
+
+
+    @Override
+    public UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException {
+        //后台校验逻辑
+        User user = new User();
+        user.setUniqueId(form.getUsername());
+        user.setPhone(form.getPhone());
+        user.setUsername(form.getUsername());
+        user.setPassword(form.getPassword());
+        user.setUniqueId(IronUtil.generateUniqueId());
+        user.setDisabled(false);
+        user.setCreateTime(new Date());
+        userDAO.save(user);
+        this.saveUserSession(session, user);
+        return this.assembleUserInfoVO(user);
+    }
+
+
+    private void saveUserSession(HttpSession session, User user) {
+        session.setAttribute(IronConstant.SESSION_USER_KEY, user);
+        session.setAttribute(IronConstant.SESSION_ROLE_KEY, Arrays.asList("ROLE_USER"));
+    }
+
+    private UserInfoVO assembleUserInfoVO(User user) throws GlobalException {
+        UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
+        userInfoVO.setProfileUrl(IronUtil.concatImageUrl(this.host, userInfoVO.getProfile()));
+        return userInfoVO;
     }
 }

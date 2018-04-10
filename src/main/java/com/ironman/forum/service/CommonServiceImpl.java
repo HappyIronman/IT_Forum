@@ -62,7 +62,7 @@ public class CommonServiceImpl implements CommonService {
         int type = formBean.getType();
         Long targetId = this.getArticleIdByUniqueIdAndType(formBean.getTargetId(), type);
         boolean isLike = formBean.isLike();
-        //加共享锁处理并发问题
+
         LikeLog existLikeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
         if (existLikeLog != null) {
             //不能重复赞或者踩

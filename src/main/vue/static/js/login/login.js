@@ -40,6 +40,19 @@ function Jlogin() {
   $('#num2').keyup(function (event) {
     $('.tel-warn').addClass('hide');
     checkBtn();
+  }).blur(function () {
+    checkPhone($.trim($('#num2').val()))
+  });
+
+  $('#username').blur(function () {
+    checkUsername($.trim($('#username').val()));
+  }).keyup(function () {
+    $('.tel-warn').addClass('hide');
+  });
+  $('#passport2').blur(function () {
+    checkConfidentialPsw($.trim($('#passport2').val()), $.trim($('#passport').val()))
+  }).keyup(function () {
+    $('.tel-warn').addClass('hide');
   });
 
   $('#veri-code').keyup(function (event) {
@@ -47,121 +60,6 @@ function Jlogin() {
     checkBtn();
   });
 
-  // 按钮是否可点击
-  function checkBtn() {
-    $(".log-btn").off('click');
-    if (tab == 'account_number') {
-      var inp = $.trim($('#num').val());
-      var pass = $.trim($('#pass').val());
-      if (inp != '' && pass != '') {
-        if (!$('.code').hasClass('hide')) {
-          code = $.trim($('#veri').val());
-          if (code == '') {
-            $(".log-btn").addClass("off");
-            $(".log-btn").attr("disabled", true);
-          } else {
-            $(".log-btn").removeClass("off");
-            $(".log-btn").attr("disabled", false);
-          }
-        } else {
-          $(".log-btn").removeClass("off");
-          $(".log-btn").attr("disabled", false);
-        }
-      } else {
-        $(".log-btn").addClass("off");
-        $(".log-btn").attr("disabled", true);
-      }
-    } else {
-      var phone = $.trim($('#num2').val());
-      var code2 = $.trim($('#veri-code').val());
-      if (phone != '' && code2 != '') {
-        $(".log-btn").removeClass("off");
-        $(".log-btn").attr("disabled", false);
-      } else {
-        $(".log-btn").addClass("off");
-        $(".log-btn").attr("disabled", true);
-      }
-    }
-  }
-
-  function checkAccount(username) {
-    if (username == '') {
-      $('.num-err').removeClass('hide').find("em").text('请输入账户');
-      return false;
-    } else {
-      $('.num-err').addClass('hide');
-      return true;
-    }
-  }
-
-  function checkPass(pass) {
-    if (pass == '') {
-      $('.pass-err').removeClass('hide').text('请输入密码');
-      return false;
-    } else {
-      $('.pass-err').addClass('hide');
-      return true;
-    }
-  }
-
-  function checkCode(code) {
-    if (code == '') {
-      // $('.tel-warn').removeClass('hide').text('请输入验证码');
-      return false;
-    } else {
-      // $('.tel-warn').addClass('hide');
-      return true;
-    }
-  }
-
-  function checkPhone(phone) {
-    var status = true;
-    if (phone == '') {
-      $('.num2-err').removeClass('hide').find("em").text('请输入手机号');
-      return false;
-    }
-    var param = /^1[34578]\d{9}$/;
-    if (!param.test(phone)) {
-      // globalTip({'msg':'手机号不合法，请重新输入','setTime':3});
-      $('.num2-err').removeClass('hide');
-      $('.num2-err').text('手机号不合法，请重新输入');
-      return false;
-    }
-    $.ajax({
-      url: '/checkPhone',
-      type: 'post',
-      dataType: 'json',
-      async: false,
-      data: {phone: phone, type: "login"},
-      success: function (data) {
-        if (data.code == '0') {
-          $('.num2-err').addClass('hide');
-          // console.log('aa');
-          // return true;
-        } else {
-          $('.num2-err').removeClass('hide').text(data.msg);
-          // console.log('bb');
-          status = false;
-          // return false;
-        }
-      },
-      error: function () {
-        status = false;
-        // return false;
-      }
-    });
-    return status;
-  }
-
-  function checkPhoneCode(pCode) {
-    if (pCode == '') {
-      $('.error').removeClass('hide').text('请输入验证码');
-      return false;
-    } else {
-      $('.error').addClass('hide');
-      return true;
-    }
-  }
 
   // 登录点击事件
   function sendBtn() {
@@ -271,6 +169,42 @@ function Jlogin() {
     }
   });
 
+// 按钮是否可点击
+  function checkBtn() {
+    $(".log-btn").off('click');
+    if (tab == 'account_number') {
+      var inp = $.trim($('#num').val());
+      var pass = $.trim($('#pass').val());
+      if (inp != '' && pass != '') {
+        if (!$('.code').hasClass('hide')) {
+          code = $.trim($('#veri').val());
+          if (code == '') {
+            $(".log-btn").addClass("off");
+            $(".log-btn").attr("disabled", true);
+          } else {
+            $(".log-btn").removeClass("off");
+            $(".log-btn").attr("disabled", false);
+          }
+        } else {
+          $(".log-btn").removeClass("off");
+          $(".log-btn").attr("disabled", false);
+        }
+      } else {
+        $(".log-btn").addClass("off");
+        $(".log-btn").attr("disabled", true);
+      }
+    } else {
+      var phone = $.trim($('#num2').val());
+      var code2 = $.trim($('#veri-code').val());
+      if (phone != '' && code2 != '') {
+        $(".log-btn").removeClass("off");
+        $(".log-btn").attr("disabled", false);
+      } else {
+        $(".log-btn").addClass("off");
+        $(".log-btn").attr("disabled", true);
+      }
+    }
+  }
 
   $(".form-data").delegate(".send", "click", function () {
     var phone = $.trim($('#num2').val());
@@ -315,4 +249,101 @@ function Jlogin() {
 
 };
 
+function checkConfidentialPsw(psw1, psw2) {
+  if (psw1 !== psw2) {
+    $('.confirmpwd-err').removeClass('hide').text('两次密码不一致');
+    return false
+  }
+  return true
+}
+
+
+function checkAccount(username) {
+  if (username == '') {
+    $('.num-err').removeClass('hide').find("em").text('请输入账户');
+    return false;
+  } else {
+    $('.num-err').addClass('hide');
+    return true;
+  }
+}
+
+function checkPass(pass) {
+  if (pass == '') {
+    $('.pass-err').removeClass('hide').text('请输入密码');
+    return false;
+  } else {
+    $('.pass-err').addClass('hide');
+    return true;
+  }
+}
+
+function checkCode(code) {
+  if (code == '') {
+    // $('.tel-warn').removeClass('hide').text('请输入验证码');
+    return false;
+  } else {
+    // $('.tel-warn').addClass('hide');
+    return true;
+  }
+}
+
+function checkUsername(username) {
+  if (username == null || username === "") {
+    $('.username-err').removeClass('hide').text('用户名不能为空');
+    return false;
+  }
+  if (username.length > 12) {
+    $('.username-err').removeClass('hide').text('用户名长度在12字符以内');
+    return false
+  }
+  return true
+}
+
+function checkPhone(phone) {
+  var status = true;
+  if (phone == '') {
+    $('.num2-err').removeClass('hide').find("em").text('请输入手机号');
+    return false;
+  }
+  var param = /^1[34578]\d{9}$/;
+  if (!param.test(phone)) {
+    // globalTip({'msg':'手机号不合法，请重新输入','setTime':3});
+    $('.num2-err').removeClass('hide').text('手机号不合法，请重新输入');
+    return false;
+  }
+  $.ajax({
+    url: 'http://localhost:8081/data/user/checkPhone',
+    type: 'post',
+    dataType: 'json',
+    // contentType: "application/json",
+    async: false,
+    data: {phone: phone},
+    success: function (data) {
+      $('.num2-err').removeClass('hide').text("手机号可用");
+      status = true;
+    },
+    error: function (data) {
+      console.log(JSON.stringify(data))
+      var msg = data.status === 400 ? "手机号重复" : "系统错误"
+      $('.num2-err').removeClass('hide').text(msg);
+      status = false;
+    }
+  });
+  return status;
+}
+
+function checkPhoneCode(pCode) {
+  if (pCode == '') {
+    $('.error').removeClass('hide').text('请输入验证码');
+    return false;
+  } else {
+    $('.error').addClass('hide');
+    return true;
+  }
+}
+
 export {Jlogin}
+export {checkUsername}
+export {checkPhone}
+export {checkConfidentialPsw}

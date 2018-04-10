@@ -11,6 +11,20 @@ public class PageRequest {
     private int size = 10;
     private String orderBy = "create_time";
 
+    public PageRequest() {
+    }
+
+    public PageRequest(int page, int size) {
+        this.page = page;
+        this.size = size;
+    }
+
+    public PageRequest(int page, int size, String orderBy) {
+        this.page = page;
+        this.size = size;
+        this.orderBy = orderBy;
+    }
+
     public int getPage() {
         return page;
     }

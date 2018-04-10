@@ -1,4 +1,4 @@
-<template xmlns:uk-icon="http://www.w3.org/1999/xhtml">
+<template>
   <div class="uk-container">
     <div class=" uk-margin-top uk-flex">
       <ul uk-tab class=" uk-margin-remove uk-width-2-3">
@@ -8,11 +8,6 @@
         <li>
           <router-link to="/recommend">今日推荐</router-link>
         </li>
-        <!--<li>-->
-        <!--<router-link to="/blog">博客</router-link>-->
-        <!--</li>-->
-        <!--<li>-->
-        <!--<router-link to="/question">提问</router-link>-->
       </ul>
       <div class="uk-width-expand uk-text-right uk-text-bottom uk-margin-right">
         <router-link class="uk-button uk-button-link uk-text-bold" to="/aboutme">
@@ -24,7 +19,7 @@
     </div>
 
     <div v-show="isShowPublishMoment">
-      <div class="uk-margin-small-top uk-margin-small-bottom uk-margin-small-left">
+      <div class="uk-margin-small-top uk-margin-small-bottom uk-margin-small-left uk-margin-small-right">
         <textarea v-model="moment.content"
                   class="uk-textarea" rows="6" placeholder="说点想说的..."></textarea>
         <div uk-grid class="uk-margin-remove">
@@ -104,7 +99,7 @@
       const self = this;
       UIkit.upload('.js-upload', {
         name: 'pics',
-        url: 'http://localhost:8081/data/upload/pic',
+        url: global.UPLOAD_PIC_URL,
         allow: '*.(jpg|jpeg|png)',
         multiple: true,
 

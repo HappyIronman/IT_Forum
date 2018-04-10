@@ -6,11 +6,11 @@ Vue.use(VueResource);
 
 export function requestApi(method, path, params, callback) {
 
-  var baseUrl = 'http://localhost:8081/data/';
+  var baseUrl = global.HOST + '/data/';
   var requestUri = baseUrl + path;
   var responseData = '';
   if (method === 'get') {
-    Vue.http.options.xhr = {withCredentials: true}
+    // Vue.http.options.xhr = {withCredentials: true}
     // GET /someUrl
     return Vue.http.get(requestUri, {params: params, credentials: true}).then(response => {
       // get body data
@@ -46,7 +46,7 @@ export function requestApi(method, path, params, callback) {
   }
 
   else if (method === 'put') {
-    return Vue.http.put(requestUri, params).then((response) => {
+    return Vue.http.put(requestUri, params, {credentials: true}).then((response) => {
       // success callback
       responseData = response.data;
       console.log("ResponseData: " + responseData);
@@ -58,7 +58,7 @@ export function requestApi(method, path, params, callback) {
   }
 
   else if (method === 'delete') {
-    return Vue.http.delete(requestUri, {params: params}).then(response => {
+    return Vue.http.delete(requestUri, {params: params, credentials: true}).then(response => {
       // get body data
       responseData = response.body;
       console.log("ResponseData: " + responseData);

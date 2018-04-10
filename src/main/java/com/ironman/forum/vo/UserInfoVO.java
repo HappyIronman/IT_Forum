@@ -10,7 +10,10 @@ public class UserInfoVO {
     private String username;
     //0--> unknown, 1-->male, 2->female
     private int sex;
+    private String phone;
+    private String email;
     private String intro;
+    private String profileUrl;
     private String profile;
     private int followerNum;
     private int followingNum;

@@ -8,10 +8,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class User extends BaseEntity{
-	private String uniqueId;
-	private String username;
-	private String password;
+public class User extends BaseEntity {
+    private String uniqueId;
+    private String username;
+    private String password;
     //0--> unknown, 1-->male, 2->female
     private int sex;
     private String phone;

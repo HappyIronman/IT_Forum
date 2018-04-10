@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 public enum ResponseStatus {
     SUCCESS(1000, HttpStatus.OK, "成功"),
     PARAM_ERROR(2001, HttpStatus.BAD_REQUEST, "参数错误"),
+    DUPLICATE_PHONE(2002, HttpStatus.BAD_REQUEST, "手机号重复"),
     USER_NOT_EXIST(1001, HttpStatus.INTERNAL_SERVER_ERROR, "用户不存在"),
     USERNAME_OR_PASSWORD_INCORRECT(1002, HttpStatus.BAD_REQUEST, "用户名或密码错误"),
     MOMENT_NOT_EXIST(3001, HttpStatus.BAD_REQUEST, "动态不存在"),

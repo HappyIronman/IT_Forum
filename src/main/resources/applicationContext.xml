@@ -24,8 +24,10 @@
         </property>
     </bean>
 
-    <!-- 数据源文件 -->
+    <!-- MySql数据源文件 -->
     <import resource="classpath:db-config.xml"/>
+    <!--es配置文件-->
+    <import resource="classpath:es-config.xml"/>
     <!--aop配置文件-->
     <import resource="classpath:aop-config.xml"/>
 

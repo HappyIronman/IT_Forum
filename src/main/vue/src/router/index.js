@@ -8,12 +8,14 @@ import selfPage from '../pages/SelfPage'
 import loginPage from '../pages/LoginPage'
 import userLoginPage from '../pages/UserLoginPage'
 import registerPage from '../pages/RegisterPage'
+import searchPage from '../pages/SearchPage'
 import friendCircle from '../components/FriendCircle'
 import aboutme from '../components/Aboutme'
 import myMoment from '../components/MyMoment.vue'
 import myBlog from '../components/MyBlog.vue'
 import myFollowing from '../components/MyFollowing.vue'
 import myFollower from '../components/MyFollower.vue'
+import editInfo from '../components/EditInfo.vue'
 import userMoment from '../components/UserMoment.vue'
 import userBlog from '../components/UserBlog.vue'
 import blogDetail from '../components/BlogDetail.vue'
@@ -48,16 +50,7 @@ const router = new Router({
           name: 'aboutme',
           component: aboutme
         },
-        {
-          path: '/my_moment',
-          name: 'myMoment',
-          component: myMoment
-        },
-        {
-          path: '/my_blog',
-          name: 'myBlog',
-          component: myBlog
-        },
+
         {
           path: '/my_blog/:blogId',
           name: 'blogDetail',
@@ -92,6 +85,21 @@ const router = new Router({
       },
       children: [
         {
+          path: '',
+          name: 'myMoment',
+          component: myMoment
+        },
+        {
+          path: 'my_moment',
+          name: 'myMoment',
+          component: myMoment
+        },
+        {
+          path: 'my_blog',
+          name: 'myBlog',
+          component: myBlog
+        },
+        {
           path: 'my_following',
           name: 'myFollowing',
           component: myFollowing,
@@ -100,7 +108,12 @@ const router = new Router({
           path: 'my_follower',
           name: 'myFollower',
           component: myFollower,
-        }
+        },
+        {
+          path: 'edit',
+          name: 'editInfo',
+          component: editInfo,
+        },
       ]
     },
     {
@@ -143,7 +156,13 @@ const router = new Router({
           component: blogDetail
         }
       ]
-    }
+    },
+    {
+      path: '/search',
+      name: 'searchPage',
+      component: searchPage,
+      children: []
+    },
   ]
 })
 

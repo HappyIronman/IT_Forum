@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="uk-card uk-card-default uk-card-large">
+    <div class="uk-card uk-card-default uk-card-large uk-margin-top">
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-text-center">
-          <img class="uk-border-circle" width="160" height="160" src="../assets/logo.png">
+          <img class="uk-border-circle" style="height: 160px;width: 160px" v-bind:src="loginUserInfo.profileUrl">
         </div>
         <div class="uk-padding-small uk-text-center">
           <h3 class="uk-card-title uk-margin-remove-bottom">
@@ -52,15 +52,15 @@
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的动态</span>
-          <router-link to="/my_moment" class="uk-text-bold">{{loginUserInfo.momentNum}}</router-link>
+          <router-link to="/self/my_moment" class="uk-text-bold">{{loginUserInfo.momentNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的博客</span>
-          <router-link to="/my_blog" class="uk-text-bold">{{loginUserInfo.blogNum}}</router-link>
+          <router-link to="/self/my_blog" class="uk-text-bold">{{loginUserInfo.blogNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的提问</span>
-          <router-link to="/my_question" class="uk-text-bold">{{loginUserInfo.questionNum}}</router-link>
+          <router-link to="/self/my_question" class="uk-text-bold">{{loginUserInfo.questionNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">学校</span>

@@ -1,5 +1,7 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.form.RegisterForm;
+import com.ironman.forum.form.UserEditForm;
 import com.ironman.forum.form.UserLoginForm;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.PageRequest;
@@ -46,4 +48,10 @@ public interface UserService {
     List<FollowerVO> pageMyFollowingList(PageRequest pageRequest) throws GlobalException;
 
     List<BaseLogVO> pageAboutMeList(PageRequest pageRequest) throws GlobalException;
+
+    void checkPhone(String phone) throws GlobalException;
+
+    UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException;
+
+    UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException;
 }

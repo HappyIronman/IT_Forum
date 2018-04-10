@@ -1,5 +1,7 @@
 <template>
   <div>
+    <self-page-nav></self-page-nav>
+
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">我的动态</span>
     </div>
@@ -12,10 +14,14 @@
 <script>
   import {mapActions, mapState} from 'vuex'
   import MomentItem from "./MomentItem";
+  import SelfPageNav from "./SelfPageNav";
 
 
   export default {
-    components: {MomentItem},
+    components: {
+      SelfPageNav,
+      MomentItem
+    },
     name: 'MyMoment',
     data() {
       return {}

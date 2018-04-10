@@ -24,4 +24,22 @@
     <select id="getByUsernameAndPassword" resultType="com.ironman.forum.entity.User">
         SELECT * FROM user WHERE username = #{username} AND password = #{password} AND disabled = FALSE ;
     </select>
+
+    <select id="getByPhone" parameterType="java.lang.String" resultType="com.ironman.forum.entity.User">
+        SELECT * FROM user WHERE phone = #{phone} AND disabled = FALSE;
+    </select>
+
+    <insert id="save" parameterType="com.ironman.forum.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user(unique_id,username,password,sex,phone,email,intro,profile,school,follower_num,following_num,
+        moment_num,blog_num,question_num,disabled,create_time)
+        VALUES 
+        (#{uniqueId}, #{username}, #{password}, #{sex}, #{phone}, #{email}, #{intro}, #{profile}, #{school},
+        #{followerNum}, #{followingNum}, #{momentNum}, #{blogNum}, #{questionNum}, #{disabled}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="com.ironman.forum.entity.User">
+        UPDATE user SET profile = #{profile}, phone = #{phone}, email = #{email}, sex = #{sex},
+        school = #{school}, intro = #{intro}
+        WHERE id = #{id}
+    </update>
 </mapper>
