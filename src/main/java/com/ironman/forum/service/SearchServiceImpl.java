@@ -1,7 +1,7 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.dao.es.EsBlogRepository;
-import com.ironman.forum.entity.EntityType;
+import com.ironman.forum.entity.EntityTypeEnum;
 import com.ironman.forum.entity.es.EsBlog;
 import com.ironman.forum.form.SearchForm;
 import com.ironman.forum.util.*;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -59,16 +58,16 @@ public class SearchServiceImpl implements SearchService {
         if (StringUtils.isEmpty(keywords)) {
             return entityVOList;
         }
-        if (type == EntityType.COMMENT.getId()) {
+        if (type == EntityTypeEnum.COMMENT.getId()) {
 
-        } else if (type == EntityType.MOMENT.getId()) {
+        } else if (type == EntityTypeEnum.MOMENT.getId()) {
 
-        } else if (type == EntityType.BLOG.getId()) {
+        } else if (type == EntityTypeEnum.BLOG.getId()) {
             List<SearchBlogVO> blogVOList = this.searchBlog(keywords, new PageRequest(page, size));
             entityVOList = this.convertToObjectList(blogVOList);
-        } else if (type == EntityType.QUESTION.getId()) {
+        } else if (type == EntityTypeEnum.QUESTION.getId()) {
 
-        } else if (type == EntityType.USER.getId()) {
+        } else if (type == EntityTypeEnum.USER.getId()) {
 
         } else {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
@@ -85,7 +84,10 @@ public class SearchServiceImpl implements SearchService {
         }
 
         List<Object> objectList = new ArrayList<>(entityList.size());
-        Collections.addAll(objectList, entityList);
+//        Collections.addAll(objectList, entityList);
+        for (T entity : entityList) {
+            objectList.add(entity);
+        }
 
         return objectList;
     }

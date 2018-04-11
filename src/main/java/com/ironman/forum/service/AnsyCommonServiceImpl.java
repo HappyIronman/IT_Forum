@@ -74,7 +74,7 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
         } else if (baseLog instanceof ViewLog) {
             aboutMe.setType(AboutMe.LogType.VIEW_LOG.getId());
             //只有博客相关的浏览记录会写入aboutMe表
-            if (baseLog.getType() != EntityType.BLOG.getId()) {
+            if (baseLog.getType() != EntityTypeEnum.BLOG.getId()) {
                 return;
             }
         } else if (baseLog instanceof CommentLog) {
@@ -88,23 +88,23 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
 
         int type = baseLog.getType();
 
-        if (type == EntityType.USER.getId()) {
+        if (type == EntityTypeEnum.USER.getId()) {
             aboutMe.setUserId(targetId);
-        } else if (type == EntityType.COMMENT.getId()) {
+        } else if (type == EntityTypeEnum.COMMENT.getId()) {
             //todo
-        } else if (type == EntityType.MOMENT.getId()) {
+        } else if (type == EntityTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getBaseInfoById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             aboutMe.setUserId(moment.getUserId());
-        } else if (type == EntityType.BLOG.getId()) {
+        } else if (type == EntityTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             aboutMe.setUserId(blog.getUserId());
-        } else if (type == EntityType.QUESTION.getId()) {
+        } else if (type == EntityTypeEnum.QUESTION.getId()) {
             //todo
         } else {
             log.error("type类型不合法");
@@ -158,13 +158,13 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
     @Override
     public void increaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException {
         String property = IronConstant.ARTICLE_PROPERTY_VIEW_NUM;
-        if (type == EntityType.COMMENT.getId()) {
+        if (type == EntityTypeEnum.COMMENT.getId()) {
             commonDAO.increasePropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, addNum);
-        } else if (type == EntityType.MOMENT.getId()) {
+        } else if (type == EntityTypeEnum.MOMENT.getId()) {
             commonDAO.increasePropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, addNum);
-        } else if (type == EntityType.BLOG.getId()) {
+        } else if (type == EntityTypeEnum.BLOG.getId()) {
             commonDAO.increasePropertyNumById(IronConstant.TABLE_BLOG, targetId, property, addNum);
-        } else if (type == EntityType.QUESTION.getId()) {
+        } else if (type == EntityTypeEnum.QUESTION.getId()) {
             commonDAO.increasePropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, addNum);
         } else {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);

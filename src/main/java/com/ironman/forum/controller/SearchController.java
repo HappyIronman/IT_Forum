@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController(value = "/data")
+@RestController
+@RequestMapping(value = "/data")
 @Log4j
 public class SearchController {
 

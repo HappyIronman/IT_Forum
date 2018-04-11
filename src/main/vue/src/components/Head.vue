@@ -4,8 +4,8 @@
 
     <div class="uk-navbar-item">
       <form class="uk-form">
-        <input class="uk-input uk-form-width-large" type="text" placeholder="Search...">
-        <a uk-icon="search"></a>
+        <input class="uk-input uk-form-width-large" type="text" placeholder="Search..." v-model="keywords">
+        <a uk-icon="search" v-on:click="search"></a>
       </form>
     </div>
 
@@ -54,13 +54,18 @@
     name: 'Head',
     data() {
       return {
-        msg: 'Welcome to Ironman\'s world haha !'
+        keywords: null
       }
     },
     computed: {
       ...mapState({
         loginUserInfo: state => state.user.loginUserInfo
       })
+    },
+    methods: {
+      search: function () {
+        this.$router.push({path: `/search/` + this.keywords})
+      }
     }
   }
 </script>

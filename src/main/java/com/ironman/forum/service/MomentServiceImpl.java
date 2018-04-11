@@ -69,7 +69,7 @@ public class MomentServiceImpl implements MomentService {
                     image.setName(name);
                     image.setUserId(userId);
                     image.setArticleId(moment.getId());
-                    image.setType(EntityType.MOMENT.getId());
+                    image.setType(EntityTypeEnum.MOMENT.getId());
                     image.setDeleted(false);
                     image.setCreateTime(new Date());
                     imageDAO.save(image);
@@ -89,7 +89,7 @@ public class MomentServiceImpl implements MomentService {
             Share share = new Share();
             share.setArticleId(moment.getId());
             share.setOriginId(originMoment.getId());
-            share.setType(EntityType.MOMENT.getId());
+            share.setType(EntityTypeEnum.MOMENT.getId());
             share.setDeleted(false);
             share.setCreateTime(date);
             shareDAO.save(share);
@@ -104,7 +104,7 @@ public class MomentServiceImpl implements MomentService {
         TimeLine timeLine = new TimeLine();
         timeLine.setUserId(userId);
         timeLine.setArticleId(moment.getId());
-        timeLine.setType(EntityType.MOMENT.getId());
+        timeLine.setType(EntityTypeEnum.MOMENT.getId());
         timeLine.setNew(true);
         timeLine.setSelf(true);
         timeLine.setCreateTime(date);
@@ -164,7 +164,7 @@ public class MomentServiceImpl implements MomentService {
         momentVO.setUsername(user.getUsername());
         momentVO.setProfile(user.getProfile());
         Long userId = UserLoginUtil.getLoginUserId();
-        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, moment.getId(), EntityType.MOMENT.getId());
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, moment.getId(), EntityTypeEnum.MOMENT.getId());
         if (likeLog != null) {
             momentVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
         } else {
@@ -180,7 +180,7 @@ public class MomentServiceImpl implements MomentService {
     }
 
     private void assembleMomentPicInfo(MomentVO momentVO, Moment moment) throws GlobalException {
-        List<Image> imageList = imageDAO.getAllByArticleIdAndType(moment.getId(), EntityType.MOMENT.getId());
+        List<Image> imageList = imageDAO.getAllByArticleIdAndType(moment.getId(), EntityTypeEnum.MOMENT.getId());
         if (imageList != null && imageList.size() != 0) {
             List<String> picUrlList = new ArrayList<>(imageList.size());
             for (Image image : imageList) {
@@ -192,7 +192,7 @@ public class MomentServiceImpl implements MomentService {
     }
 
     private void assembleMomentShareInfo(MomentVO momentVO, Moment moment) throws GlobalException {
-        Share share = shareDAO.getByArticleIdAndType(moment.getId(), EntityType.MOMENT.getId());
+        Share share = shareDAO.getByArticleIdAndType(moment.getId(), EntityTypeEnum.MOMENT.getId());
         if (share == null) {
             log.error(moment.getId() + " 分享信息为空");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);

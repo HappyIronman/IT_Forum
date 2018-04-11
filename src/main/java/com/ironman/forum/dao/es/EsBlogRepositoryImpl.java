@@ -66,6 +66,7 @@ public class EsBlogRepositoryImpl implements CustomBlogRepository {
                     esBlog.setId((int) hitMap.get("id"));
                     esBlog.setUniqueId((String) hitMap.get("unique_id"));
                     esBlog.setUserId((int) hitMap.get("user_id"));
+                    esBlog.setUserUniqueId((String) hitMap.get("user_unique_id"));
                     esBlog.setUsername((String) hitMap.get("username"));
                     esBlog.setTitle((String) hitMap.get("title"));
                     esBlog.setContent((String) hitMap.get("content"));

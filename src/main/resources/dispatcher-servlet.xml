@@ -38,6 +38,7 @@
 						<value>/data/.*/moments</value>
 						<value>/data/.*/blogs</value>
 						<value>/data/blog/.*</value>
+                        <value>/data/search</value>
 					</set>
 				</property>
 				<property name="restrictUrlMap">

@@ -3,7 +3,7 @@ package com.ironman.forum.service;
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.Blog;
-import com.ironman.forum.entity.EntityType;
+import com.ironman.forum.entity.EntityTypeEnum;
 import com.ironman.forum.entity.LikeLog;
 import com.ironman.forum.entity.Moment;
 import com.ironman.forum.util.GlobalException;
@@ -110,22 +110,22 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Long getArticleIdByUniqueIdAndType(String uniqueId, int type) throws GlobalException {
         Long id;
-        if (type == EntityType.COMMENT.getId()) {
+        if (type == EntityTypeEnum.COMMENT.getId()) {
             //todo
             id = null;
-        } else if (type == EntityType.MOMENT.getId()) {
+        } else if (type == EntityTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getBaseInfoByUniqueId(uniqueId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             id = moment.getId();
-        } else if (type == EntityType.BLOG.getId()) {
+        } else if (type == EntityTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoByUniqueId(uniqueId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             id = blog.getId();
-        } else if (type == EntityType.QUESTION.getId()) {
+        } else if (type == EntityTypeEnum.QUESTION.getId()) {
             //todo
             id = null;
         } else {
@@ -182,13 +182,13 @@ public class CommonServiceImpl implements CommonService {
         int type = likeLog.getType();
         long targetId = likeLog.getTargetId();
         String property = likeLog.isLike() ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
-        if (type == EntityType.COMMENT.getId()) {
+        if (type == EntityTypeEnum.COMMENT.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, isIncrement);
-        } else if (type == EntityType.MOMENT.getId()) {
+        } else if (type == EntityTypeEnum.MOMENT.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, isIncrement);
-        } else if (type == EntityType.BLOG.getId()) {
+        } else if (type == EntityTypeEnum.BLOG.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_BLOG, targetId, property, isIncrement);
-        } else if (type == EntityType.QUESTION.getId()) {
+        } else if (type == EntityTypeEnum.QUESTION.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, isIncrement);
         }
     }

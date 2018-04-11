@@ -74,7 +74,7 @@ public class BlogServiceImpl implements BlogService {
             Share share = new Share();
             share.setArticleId(blog.getId());
             share.setOriginId(originBlog.getId());
-            share.setType(EntityType.BLOG.getId());
+            share.setType(EntityTypeEnum.BLOG.getId());
             share.setDeleted(false);
             share.setCreateTime(createTime);
             shareDAO.save(share);
@@ -91,7 +91,7 @@ public class BlogServiceImpl implements BlogService {
         timeLine.setArticleId(blog.getId());
         timeLine.setSelf(true);
         timeLine.setNew(true);
-        timeLine.setType(EntityType.BLOG.getId());
+        timeLine.setType(EntityTypeEnum.BLOG.getId());
         timeLine.setCreateTime(new Date());
         ansyCommonService.ansyAddTimeLine(timeLine);
 
@@ -140,7 +140,7 @@ public class BlogServiceImpl implements BlogService {
         blogAbsVO.setUsername(user.getUsername());
         blogAbsVO.setProfile(user.getProfile());
         Long userId = UserLoginUtil.getLoginUserId();
-        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), EntityType.BLOG.getId());
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), EntityTypeEnum.BLOG.getId());
         if (likeLog != null) {
             blogAbsVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
         } else {
@@ -174,7 +174,7 @@ public class BlogServiceImpl implements BlogService {
         blogDetailVO.setUsername(author.getUsername());
         if (blog.isShare()) {
             blogDetailVO.setShare(true);
-            Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityType.BLOG.getId());
+            Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityTypeEnum.BLOG.getId());
             if (share == null) {
                 log.error(blog.getId() + " 分享信息为空");
                 throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
@@ -198,7 +198,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     private void assembleBlogAbsShareInfo(BlogAbsVO blogAbsVO, Blog blog) throws GlobalException {
-        Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityType.BLOG.getId());
+        Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityTypeEnum.BLOG.getId());
         if (share == null) {
             log.error(blog.getId() + " 分享信息为空");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);

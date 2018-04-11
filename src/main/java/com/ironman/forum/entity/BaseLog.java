@@ -15,7 +15,7 @@ public class BaseLog extends BaseEntity {
     //4--->为user
     // 若为user,即为新增粉丝事件,targetId为被粉人id,否则为对应文章id
 
-    //EntityType
+    //EntityTypeEnum
     private int type;
     private boolean disabled;
 }

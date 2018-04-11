@@ -176,23 +176,23 @@ public class UserServiceImpl implements UserService {
 
         viewLogVO.setArticleType(articleType);
 
-        if (articleType == EntityType.COMMENT.getId()) {
+        if (articleType == EntityTypeEnum.COMMENT.getId()) {
             //todo
-        } else if (articleType == EntityType.MOMENT.getId()) {
+        } else if (articleType == EntityTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             viewLogVO.setArticleId(moment.getUniqueId());
             viewLogVO.setArticleContent(moment.getContent());
-        } else if (articleType == EntityType.BLOG.getId()) {
+        } else if (articleType == EntityTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             viewLogVO.setArticleId(blog.getUniqueId());
             viewLogVO.setArticleTitle(blog.getTitle());
-        } else if (articleType == EntityType.QUESTION.getId()) {
+        } else if (articleType == EntityTypeEnum.QUESTION.getId()) {
             //todo
         } else {
             log.error("type类型不合法");
@@ -228,23 +228,23 @@ public class UserServiceImpl implements UserService {
 
         likeLogVO.setArticleType(articleType);
 
-        if (articleType == EntityType.COMMENT.getId()) {
+        if (articleType == EntityTypeEnum.COMMENT.getId()) {
             //todo
-        } else if (articleType == EntityType.MOMENT.getId()) {
+        } else if (articleType == EntityTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             likeLogVO.setArticleId(moment.getUniqueId());
             likeLogVO.setArticleContent(moment.getContent());
-        } else if (articleType == EntityType.BLOG.getId()) {
+        } else if (articleType == EntityTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             likeLogVO.setArticleId(blog.getUniqueId());
             likeLogVO.setArticleTitle(blog.getTitle());
-        } else if (articleType == EntityType.QUESTION.getId()) {
+        } else if (articleType == EntityTypeEnum.QUESTION.getId()) {
             //todo
         } else {
             log.error("type类型不合法");
@@ -406,7 +406,7 @@ public class UserServiceImpl implements UserService {
         followLog.setUserId(followerId);
         followLog.setTargetId(targetId);
         followLog.setDisabled(false);
-        followLog.setType(EntityType.USER.getId());
+        followLog.setType(EntityTypeEnum.USER.getId());
         followLog.setCreateTime(createTime);
         ansyCommonService.ansySaveAboutMe(followLog);
 

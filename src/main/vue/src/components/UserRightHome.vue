@@ -3,7 +3,7 @@
     <div class="uk-card uk-card-default uk-card-large">
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-text-center">
-          <img class="uk-border-circle" width="160" height="160" v-bind:src="loginUserInfo.profileUrl">
+          <img class="uk-border-circle" width="160" height="160" v-bind:src="userInfo.profileUrl">
         </div>
         <div class="uk-padding-small uk-text-center">
           <h3 class="uk-card-title uk-margin-remove-bottom">{{userInfo.username}}</h3>

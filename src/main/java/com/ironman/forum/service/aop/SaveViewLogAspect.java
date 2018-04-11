@@ -2,7 +2,7 @@ package com.ironman.forum.service.aop;
 
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.ViewLogDAO;
-import com.ironman.forum.entity.EntityType;
+import com.ironman.forum.entity.EntityTypeEnum;
 import com.ironman.forum.entity.ViewLog;
 import com.ironman.forum.service.AnsyCommonService;
 import com.ironman.forum.util.GlobalException;
@@ -36,7 +36,7 @@ public class SaveViewLogAspect {
         ViewLog viewLog = new ViewLog();
         long userId = UserLoginUtil.getLoginUserId();
         viewLog.setUserId(userId);
-        viewLog.setType(EntityType.BLOG.getId());
+        viewLog.setType(EntityTypeEnum.BLOG.getId());
         viewLog.setTargetId(blogDetailVO.getId());
         viewLog.setDisabled(false);
         viewLog.setCreateTime(new Date());
@@ -67,7 +67,7 @@ public class SaveViewLogAspect {
         for (MomentVO momentVO : momentVOList) {
             ViewLog viewLog = new ViewLog();
             viewLog.setUserId(UserLoginUtil.getLoginUserId());
-            viewLog.setType(EntityType.MOMENT.getId());
+            viewLog.setType(EntityTypeEnum.MOMENT.getId());
             viewLog.setTargetId(momentVO.getId());
             viewLog.setDisabled(false);
             viewLog.setCreateTime(new Date());
@@ -96,17 +96,17 @@ public class SaveViewLogAspect {
             int type = timeLineVO.getType();
             //此处blog不需要记录viewLog
             ViewLog viewLog = new ViewLog();
-            if (type == EntityType.MOMENT.getId()) {
+            if (type == EntityTypeEnum.MOMENT.getId()) {
                 MomentVO momentVO = (MomentVO) timeLineVO.getEntity();
                 viewLog.setUserId(UserLoginUtil.getLoginUserId());
-                viewLog.setType(EntityType.MOMENT.getId());
+                viewLog.setType(EntityTypeEnum.MOMENT.getId());
                 viewLog.setTargetId(momentVO.getId());
                 viewLog.setDisabled(false);
                 viewLog.setCreateTime(new Date());
                 viewLogList.add(viewLog);
-            } else if (type == EntityType.QUESTION.getId()) {
+            } else if (type == EntityTypeEnum.QUESTION.getId()) {
                 //todo
-            } else if (type == EntityType.COMMENT.getId()) {
+            } else if (type == EntityTypeEnum.COMMENT.getId()) {
                 //todo
             }
         }

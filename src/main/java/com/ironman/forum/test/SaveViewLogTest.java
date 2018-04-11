@@ -1,6 +1,6 @@
 package com.ironman.forum.test;
 
-import com.ironman.forum.entity.EntityType;
+import com.ironman.forum.entity.EntityTypeEnum;
 import com.ironman.forum.entity.ViewLog;
 import com.ironman.forum.service.AnsyCommonService;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class SaveViewLogTest extends BaseJunit4Test {
         viewLog.setUserId(33);
         viewLog.setLength(5);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityType.MOMENT.getId());
+        viewLog.setType(EntityTypeEnum.MOMENT.getId());
         viewLog.setCreateTime(new Date());
         ansyCommonService.ansySaveViewLog(viewLog);
         System.out.println("viewlog1 异步保存");
@@ -31,7 +31,7 @@ public class SaveViewLogTest extends BaseJunit4Test {
         viewLog.setUserId(34);
         viewLog.setLength(6);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityType.BLOG.getId());
+        viewLog.setType(EntityTypeEnum.BLOG.getId());
         viewLog.setCreateTime(new Date());
         ansyCommonService.ansySaveViewLog(viewLog);
         System.out.println("viewlog2 异步保存");
@@ -41,7 +41,7 @@ public class SaveViewLogTest extends BaseJunit4Test {
         viewLog.setUserId(35);
         viewLog.setLength(7);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityType.BLOG.getId());
+        viewLog.setType(EntityTypeEnum.BLOG.getId());
         viewLog.setCreateTime(new Date());
         ansyCommonService.ansySaveViewLog(viewLog);
         System.out.println("viewlog3 异步保存");

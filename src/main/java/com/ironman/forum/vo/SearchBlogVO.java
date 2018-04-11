@@ -12,7 +12,7 @@ public class SearchBlogVO {
     @JsonIgnore
     protected long id;
     private String uniqueId;
-    private long userId;
+    private String userUniqueId;
     private String username;
     private String title;
     private String content;
@@ -21,8 +21,6 @@ public class SearchBlogVO {
     private int shareNum;
     private int commentNum;
     private int viewNum;
-    private boolean isPrivate;
     private boolean isShare;
-    private boolean deleted;
     protected Date createTime;
 }

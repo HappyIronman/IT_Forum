@@ -151,14 +151,14 @@ const router = new Router({
           component: userBlog
         },
         {
-          path: '/blog/:blogId',
+          path: 'blog/:blogId',
           name: 'blogDetail',
           component: blogDetail
         }
       ]
     },
     {
-      path: '/search',
+      path: '/search/:keywords',
       name: 'searchPage',
       component: searchPage,
       children: []

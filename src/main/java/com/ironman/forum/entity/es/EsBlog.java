@@ -19,6 +19,7 @@ public class EsBlog {
     protected long id;
     private String uniqueId;
     private long userId;
+    private String userUniqueId;
     private String username;
     private String title;
     private String titleHighlight;
