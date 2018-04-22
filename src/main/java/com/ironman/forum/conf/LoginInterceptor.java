@@ -3,8 +3,7 @@ package com.ironman.forum.conf;
 import com.ironman.forum.entity.User;
 import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.IronUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -25,9 +24,8 @@ import java.util.Set;
  * @Date: Created in 11:14 2017/12/31 0031
  **/
 @Component
+@Log4j
 public class LoginInterceptor implements HandlerInterceptor {
-
-    private static Log logger = LogFactory.getLog(LoginInterceptor.class);
 
     @Value("#{prop.permitted_origin_host}")
     private String permittedOriginHost;
@@ -60,7 +58,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String requestUri = httpServletRequest.getRequestURI();
 
         if (publicUrlSet.contains(requestUri)) {
-            logger.info("访问公开url:" + requestUri);
+            log.info("访问公开url:" + requestUri);
             HttpSession session = httpServletRequest.getSession();
             User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
             if (user != null) {
@@ -69,35 +67,35 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        logger.info("当前访问url:" + requestUri);
+        log.info("当前访问url:" + requestUri);
         HttpSession session = httpServletRequest.getSession();
         User user = (User) session.getAttribute(IronConstant.SESSION_USER_KEY);
         if (user != null) {
             List<String> userRoles = (List<String>) session.getAttribute(IronConstant.SESSION_ROLE_KEY);
             if (userRoles == null) {
-                logger.error(user.getId() + "权限为空");
+                log.error(user.getId() + "权限为空");
                 return false;
             }
-            logger.info("用户权限: " + IronUtil.toJson(userRoles));
+            log.info("用户权限: " + IronUtil.toJson(userRoles));
             Set<String> permittedRoles = this.restrictUrlMap.get(requestUri);
             //默认为用户权限
             if (permittedRoles == null) {
                 permittedRoles = new HashSet<>();
                 permittedRoles.add("ROLE_USER");
             }
-            logger.info("所需权限: " + IronUtil.toJson(permittedRoles));
+            log.info("所需权限: " + IronUtil.toJson(permittedRoles));
             for (String role : userRoles) {
                 if (permittedRoles.contains(role)) {
                     LoginContext.saveLoginInfo(user);
                     return true;
                 }
             }
-            logger.error(user.getId() + "无权限");
+            log.error(user.getId() + "无权限");
             httpServletResponse.setStatus(HttpStatus.BAD_GATEWAY.value());
             httpServletResponse.getWriter().write("403无权限");
             return false;
         } else {
-            logger.error("session中用户信息为空");
+            log.error("session中用户信息为空");
             httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
