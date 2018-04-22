@@ -1,7 +1,7 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.dao.es.EsBlogRepository;
-import com.ironman.forum.entity.EntityTypeEnum;
+import com.ironman.forum.entity.ArticleTypeEnum;
 import com.ironman.forum.entity.es.EsBlog;
 import com.ironman.forum.form.SearchForm;
 import com.ironman.forum.util.*;
@@ -33,11 +33,11 @@ public class SearchServiceImpl implements SearchService {
         for (EsBlog esBlog : esBlogList) {
             SearchBlogVO searchBlogVO = BeanUtils.copy(esBlog, SearchBlogVO.class);
 
-            //»ñÈ¡°üº¬keywordsµÄÉÏÏÂÎÄ
+            //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½keywordsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             String content = StringUtils.isEmpty(esBlog.getContentHighlight()) ? esBlog.getContent() : esBlog.getContentHighlight();
-            //È¥³ýÄÚÈÝhtml±êÇ©
+            //È¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½htmlï¿½ï¿½Ç©
             content = IronUtil.removeHtmlTags(content);
-            //½ØÈ¡Ö¸¶¨³¤¶È
+            //ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             content = IronUtil.getSearchAbsContent(content);
             searchBlogVO.setContent(content);
 
@@ -48,7 +48,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<Object> searchEntity(SearchForm form) throws GlobalException {
-        //Ãô¸Ð´Ê¹ýÂË
+        //ï¿½ï¿½ï¿½Ð´Ê¹ï¿½ï¿½ï¿½
 
         List<Object> entityVOList = new ArrayList<>();
         int type = form.getType();
@@ -58,23 +58,23 @@ public class SearchServiceImpl implements SearchService {
         if (StringUtils.isEmpty(keywords)) {
             return entityVOList;
         }
-        if (type == EntityTypeEnum.COMMENT.getId()) {
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
 
-        } else if (type == EntityTypeEnum.MOMENT.getId()) {
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
 
-        } else if (type == EntityTypeEnum.BLOG.getId()) {
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
             List<SearchBlogVO> blogVOList = this.searchBlog(keywords, new PageRequest(page, size));
             entityVOList = this.convertToObjectList(blogVOList);
-        } else if (type == EntityTypeEnum.QUESTION.getId()) {
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
 
-        } else if (type == EntityTypeEnum.USER.getId()) {
+        } else if (type == ArticleTypeEnum.USER.getId()) {
 
         } else {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
         }
 
 
-        //Òì²½²åÈësearchLog
+        //ï¿½ì²½ï¿½ï¿½ï¿½ï¿½searchLog
         return entityVOList;
     }
 

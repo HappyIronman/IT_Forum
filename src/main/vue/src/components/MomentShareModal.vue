@@ -43,6 +43,7 @@
           content: '',
           isPrivate: false,
           isShare: true,
+          isContainPic: false,
           originId: ''
         }
       }
@@ -60,8 +61,9 @@
         this.publishMomentAction(this.moment).then(res => {
           console.log(res)
           if (res) {
+            UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>转发成功', status: 'success'})
             UIkit.modal('#m' + this.momentInfo.uniqueId).hide()
-            alert("success")
+            this.moment.content = ''
           }
         })
       }

@@ -6,16 +6,21 @@
     <div v-for="moment in userMomentList">
       <moment-item v-bind:moment="moment"></moment-item>
     </div>
+    <pageable v-bind:fetch-data-func="fetchUserMomentList" size="5"></pageable>
   </div>
 </template>
 
 <script>
   import {mapActions, mapState} from 'vuex'
   import MomentItem from "./MomentItem";
+  import Pageable from "./Pageable.vue";
 
 
   export default {
-    components: {MomentItem},
+    components: {
+      Pageable,
+      MomentItem
+    },
     name: 'UserMoment',
     data() {
       return {}
@@ -25,14 +30,13 @@
         userMomentList: state => state.moment.userMomentList
       })
     },
-    created: function () {
-      console.log(this.$route.params.uniqueId)
-      this.fetchUserMomentListAction({uniqueId: this.$route.params.uniqueId, pageParam: {page: 0, size: 10}})
-    },
     methods: {
       ...mapActions([
         'fetchUserMomentListAction'
-      ])
+      ]),
+      fetchUserMomentList: function (pageParam) {
+        return this.fetchUserMomentListAction({uniqueId: this.$route.params.uniqueId, pageParam: pageParam})
+      }
     }
   }
 </script>

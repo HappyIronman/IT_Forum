@@ -21,6 +21,8 @@ export function requestApi(method, path, params, callback) {
     }).catch(response => {
       if (response.status === 401) {
         alert("请先登录")
+      } else {
+        alert(response.body.msg)
       }
       // error callback
       console.error("request ERROR! " + JSON.stringify(response));

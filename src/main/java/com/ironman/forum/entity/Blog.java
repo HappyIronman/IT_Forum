@@ -5,17 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Blog extends BaseEntity {
-    private String uniqueId;
-    private long userId;
+public class Blog extends Article {
     private String title;
-    private String content;
-    private int likeNum;
-    private int dislikeNum;
     private int shareNum;
     private int commentNum;
     private int viewNum;
     private boolean isPrivate;
     private boolean isShare;
-    private boolean deleted;
 }

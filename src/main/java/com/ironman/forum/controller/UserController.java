@@ -70,7 +70,7 @@ public class UserController {
 
 
     /**
-     * 获取我的粉丝
+     * 锟斤拷取锟揭的凤拷丝
      *
      * @param pageRequest
      * @return
@@ -90,7 +90,7 @@ public class UserController {
     }
 
     /**
-     * 获取我关注的人
+     * 锟斤拷取锟揭癸拷注锟斤拷锟斤拷
      *
      * @param pageRequest
      * @return
@@ -171,5 +171,10 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/user/logout", method = RequestMethod.GET)
+    public IronResponseEntity logout(HttpSession session) {
+        userService.logout(session);
+        return new IronResponseEntity(ResponseStatus.SUCCESS);
+    }
 
 }

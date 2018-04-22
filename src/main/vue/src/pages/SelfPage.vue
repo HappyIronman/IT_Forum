@@ -5,10 +5,10 @@
       class="uk-background-fixed uk-background-center-center uk-width-1-1 uk-text-center uk-padding uk-margin-small-bottom"
       style="background-image: url(../../static/img/3.jpg); height: 330px">
       <div>
-        <img class="uk-border-circle" style="border:4px solid darkgrey" width="120" height="120"
-             src="../assets/logo.png">
-        <p class="uk-margin-small uk-text-bold uk-text-large">卡拉什尼科夫</p>
-        <p class="uk-margin-small uk-text-muted uk-text-small">我就是钢铁侠</p>
+        <img class="uk-border-circle" style="border:4px solid darkgrey; width: 120px; height: 120px"
+             v-bind:src="loginUserInfo.profileUrl">
+        <p class="uk-margin-small uk-text-bold uk-text-large">{{loginUserInfo.username}}</p>
+        <p class="uk-margin-small uk-text-muted uk-text-small">{{loginUserInfo.intro}}</p>
       </div>
     </div>
 
@@ -20,21 +20,17 @@
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
             <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
-              <router-link to="/self/my_following">35</router-link>
+              <router-link to="/self/my_following">{{loginUserInfo.followingNum}}</router-link>
             </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">关注</p>
           </div>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
             <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
-              <router-link to="/self/my_follower">35</router-link>
+              <router-link to="/self/my_follower">{{loginUserInfo.followerNum}}</router-link>
             </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">粉丝</p>
           </div>
-          <!--<div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top">-->
-          <!--<p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>-->
-          <!--<p class="uk-margin-remove-top uk-text-small uk-text-muted">关注</p>-->
-          <!--</div>-->
         </div>
 
         <div class="uk-margin-small-bottom uk-margin-remove-left uk-padding-small uk-margin-remove-top
@@ -42,18 +38,22 @@
              uk-grid>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
-            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>
+            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+              <router-link to="/self/my_moment">{{loginUserInfo.momentNum}}</router-link>
+            </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">动态</p>
           </div>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom"
                style="border-right: 1px solid gray ">
-            <a class="uk-button-text">
-              <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>
-              <p class="uk-margin-remove-top uk-text-small uk-text-muted">博客</p>
-            </a>
+            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+              <router-link to="/self/my_blog">{{loginUserInfo.blogNum}}</router-link>
+            </p>
+            <p class="uk-margin-remove-top uk-text-small uk-text-muted">博客</p>
           </div>
           <div class="uk-padding-remove uk-width-1-3 uk-text-center uk-margin-small-top uk-margin-small-bottom">
-            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">35</p>
+            <p class="uk-margin-remove-bottom uk-text-bold uk-text-large">
+              <router-link to="/self/my_question">{{loginUserInfo.questionNum}}</router-link>
+            </p>
             <p class="uk-margin-remove-top uk-text-small uk-text-muted">提问</p>
           </div>
         </div>
@@ -132,13 +132,20 @@
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex'
+
   export default {
     name: 'selfPage',
     data() {
       return {
         msg: 'Welcome to Ironman\'s world haha !'
       }
-    }
+    },
+    computed: {
+      ...mapState({
+        loginUserInfo: state => state.user.loginUserInfo
+      })
+    },
   }
 </script>
 

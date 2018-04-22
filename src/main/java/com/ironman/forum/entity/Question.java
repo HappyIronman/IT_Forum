@@ -5,10 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Question extends BaseEntity {
-    private String uniqueId;
-    private String content;
-    private long userId;
+public class Question extends Article {
     private int answerNum;
     private int viewNum;
     private boolean closed;

@@ -44,11 +44,11 @@
 
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的粉丝</span>
-          <span class="uk-text-bold">{{loginUserInfo.followerNum}}</span>
+          <router-link to="/self/my_follower" class="uk-text-bold">{{loginUserInfo.followerNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">关注的人</span>
-          <span class="uk-text-bold">{{loginUserInfo.followingNum}}</span>
+          <router-link to="self/my_following" class="uk-text-bold">{{loginUserInfo.followingNum}}</router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的动态</span>
@@ -56,7 +56,9 @@
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的博客</span>
-          <router-link to="/self/my_blog" class="uk-text-bold">{{loginUserInfo.blogNum}}</router-link>
+          <router-link to="/self/my_blog" class="uk-text-bold">
+            {{loginUserInfo.blogNum}}
+          </router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">我的提问</span>

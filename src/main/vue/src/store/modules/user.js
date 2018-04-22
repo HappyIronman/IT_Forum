@@ -25,6 +25,11 @@ const actions = {
       return true
     })
   },
+  userLogoutAction({commit}) {
+    requestApi('get', 'user/logout', null, () => {
+      commit(types.USER_LOGOUT)
+    })
+  },
   editInfoAction({commit}, payload) {
     return requestApi('put', 'my/edit', payload, (res) => {
       commit(types.LOGIN_USER_INFO, res)
@@ -54,8 +59,12 @@ const actions = {
 const mutations = {
   [types.LOGIN_USER_INFO](state, data) {
     state.loginUserInfo = data.responseVO
-    storage.setStorage("loginUserInfo", state.loginUserInfo, 1000 * 60 * 20)
+    storage.setStorage("loginUserInfo", state.loginUserInfo, 1000 * 60 * 180)
     console.log('个人信息存储成功' + JSON.stringify(state.loginUserInfo))
+  },
+  [types.USER_LOGOUT](state) {
+    state.loginUserInfo = {}
+    storage.removeStorage("loginUserInfo")
   },
   [types.USER_INFO](state, data) {
     state.userInfo = data.responseVO

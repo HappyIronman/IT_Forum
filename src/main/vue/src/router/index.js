@@ -4,20 +4,23 @@ import state from '../store/modules/user'
 import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
 import shareBlogPage from '../pages/ShareBlogPage.vue'
-import selfPage from '../pages/SelfPage'
-import loginPage from '../pages/LoginPage'
-import userLoginPage from '../pages/UserLoginPage'
-import registerPage from '../pages/RegisterPage'
-import searchPage from '../pages/SearchPage'
-import friendCircle from '../components/FriendCircle'
-import aboutme from '../components/Aboutme'
+import selfPage from '../pages/SelfPage.vue'
+import loginPage from '../pages/LoginPage.vue'
+import userLoginPage from '../pages/UserLoginPage.vue'
+import registerPage from '../pages/RegisterPage.vue'
+import searchPage from '../pages/SearchPage.vue'
+import friendCircle from '../components/FriendCircle.vue'
+import recommend from '../components/Recommend.vue'
+import aboutme from '../components/Aboutme.vue'
 import myMoment from '../components/MyMoment.vue'
 import myBlog from '../components/MyBlog.vue'
+import myQuestion from '../components/MyQuestion.vue'
 import myFollowing from '../components/MyFollowing.vue'
 import myFollower from '../components/MyFollower.vue'
 import editInfo from '../components/EditInfo.vue'
 import userMoment from '../components/UserMoment.vue'
 import userBlog from '../components/UserBlog.vue'
+import userQuestion from '../components/UserQuestion.vue'
 import blogDetail from '../components/BlogDetail.vue'
 
 import userpage from '../pages/Userpage.vue'
@@ -26,6 +29,7 @@ import storage from '../storage'
 Vue.use(Router)
 
 const router = new Router({
+  // mode: 'history',
   routes: [
     {
       path: '/',
@@ -46,15 +50,14 @@ const router = new Router({
           component: friendCircle
         },
         {
+          path: '/recommend',
+          name: 'recommend',
+          component: recommend
+        },
+        {
           path: '/aboutme',
           name: 'aboutme',
           component: aboutme
-        },
-
-        {
-          path: '/my_blog/:blogId',
-          name: 'blogDetail',
-          component: blogDetail
         }
       ]
     },
@@ -100,6 +103,11 @@ const router = new Router({
           component: myBlog
         },
         {
+          path: 'my_question',
+          name: 'myQuestion',
+          component: myQuestion
+        },
+        {
           path: 'my_following',
           name: 'myFollowing',
           component: myFollowing,
@@ -114,6 +122,11 @@ const router = new Router({
           name: 'editInfo',
           component: editInfo,
         },
+        {
+          path: 'my_blog/:blogId',
+          name: 'blogDetail',
+          component: blogDetail
+        }
       ]
     },
     {
@@ -141,6 +154,11 @@ const router = new Router({
       props: true,
       children: [
         {
+          path: '',
+          name: 'userMoment',
+          component: userMoment
+        },
+        {
           path: 'moment',
           name: 'userMoment',
           component: userMoment
@@ -149,6 +167,11 @@ const router = new Router({
           path: 'blog',
           name: 'userBlog',
           component: userBlog
+        },
+        {
+          path: 'question',
+          name: 'userQuestion',
+          component: userQuestion
         },
         {
           path: 'blog/:blogId',

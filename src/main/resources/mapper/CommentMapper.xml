@@ -3,5 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ironman.forum.dao.CommentDAO">
+    <insert id="save" parameterType="com.ironman.forum.entity.Comment"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment(unique_id,content,user_id,like_num,dislike_num,deleted,reply_id,type,comment_num,create_time)
+        VALUES 
+        (#{uniqueId},#{content},#{userId},#{likeNum},#{dislikeNum},#{deleted},#{replyId},#{type},#{commentNum},#{createTime})
+    </insert>
+
+    <select id="pageByReplyIdAndType" resultType="com.ironman.forum.entity.Comment">
+        SELECT * FROM comment WHERE reply_id = #{replyId} AND type = #{type} AND deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
+
+    <select id="getBaseInfoByUniqueId" parameterType="java.lang.String" resultType="com.ironman.forum.entity.Comment">
+        SELECT id, unique_id, user_id, like_num, dislike_num, reply_id, type, comment_num, create_time
+        FROM comment WHERE unique_id = #{uniqueId} AND deleted = FALSE
+    </select>
+
+    <select id="getBaseInfoById" parameterType="java.lang.Long" resultType="com.ironman.forum.entity.Comment">
+        SELECT id, unique_id, user_id, like_num, dislike_num, reply_id, type, comment_num, create_time
+        FROM comment WHERE id = #{id} AND deleted = FALSE
+    </select>
 
 </mapper>

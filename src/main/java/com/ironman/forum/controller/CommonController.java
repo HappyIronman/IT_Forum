@@ -1,12 +1,12 @@
 package com.ironman.forum.controller;
 
+import com.ironman.forum.form.LikeArticleFormBean;
 import com.ironman.forum.service.CommonService;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.IronResponseEntity;
 import com.ironman.forum.util.IronUtil;
 import com.ironman.forum.util.ResponseStatus;
 import com.ironman.forum.vo.ImageVO;
-import com.ironman.forum.vo.LikeArticleFormBean;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;

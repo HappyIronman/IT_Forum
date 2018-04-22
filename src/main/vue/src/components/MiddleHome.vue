@@ -1,6 +1,6 @@
 <template>
   <div class="uk-container">
-    <div class=" uk-margin-top uk-flex">
+    <div class="uk-margin-top uk-flex">
       <ul uk-tab class=" uk-margin-remove uk-width-2-3">
         <li class="uk-active">
           <router-link to="/friend_circle">朋友圈</router-link>
@@ -88,9 +88,11 @@
       ]),
       publishMoment: function () {
         this.publishMomentAction(this.moment).then(res => {
-          console.log(res)
           if (res) {
-            alert("hahaha")
+            UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>发表成功', status: 'success'})
+            this.moment.content = ''
+            this.isShowPublishMomentCompAction(false)
+            this.$router.push('/self/my_moment')
           }
         })
       }

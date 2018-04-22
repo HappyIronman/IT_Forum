@@ -43,16 +43,17 @@ public class UserServiceImpl implements UserService {
     private FollowDAO followDAO;
 
     @Autowired
-    private CommentDAO commentDAO;
-
-    @Autowired
     private MomentDAO momentDAO;
 
     @Autowired
     private BlogDAO blogDAO;
 
     @Autowired
+    private CommonService commonService;
+
+    @Autowired
     private AnsyCommonService ansyCommonService;
+
 
     @Value("#{prop.host}")
     private String host;
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<BaseLogVO> pageAboutMeList(PageRequest pageRequest) throws GlobalException {
-        //Ð£Ñé
+        //Ð£ï¿½ï¿½
         long userId = UserLoginUtil.getLoginUserId();
         List<AboutMe> aboutMeList = aboutMeDAO.getAllLimitByUserId(userId, pageRequest);
 
@@ -176,31 +177,32 @@ public class UserServiceImpl implements UserService {
 
         viewLogVO.setArticleType(articleType);
 
-        if (articleType == EntityTypeEnum.COMMENT.getId()) {
+
+        if (articleType == ArticleTypeEnum.COMMENT.getId()) {
             //todo
-        } else if (articleType == EntityTypeEnum.MOMENT.getId()) {
+        } else if (articleType == ArticleTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             viewLogVO.setArticleId(moment.getUniqueId());
             viewLogVO.setArticleContent(moment.getContent());
-        } else if (articleType == EntityTypeEnum.BLOG.getId()) {
+        } else if (articleType == ArticleTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             viewLogVO.setArticleId(blog.getUniqueId());
             viewLogVO.setArticleTitle(blog.getTitle());
-        } else if (articleType == EntityTypeEnum.QUESTION.getId()) {
+        } else if (articleType == ArticleTypeEnum.QUESTION.getId()) {
             //todo
         } else {
-            log.error("typeÀàÐÍ²»ºÏ·¨");
+            log.error("typeï¿½ï¿½ï¿½Í²ï¿½ï¿½Ï·ï¿½");
             throw new GlobalException();
         }
 
 
-        //ÄäÃû·ÃÎÊ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (viewLog.getUserId() == IronConstant.ANONYMOUS_USER_ID) {
             viewLogVO.setUserId(IronConstant.ANONYMOUS_USER_UNIQUE_ID);
             viewLogVO.setUsername(IronConstant.ANONYMOUS_USER_NAME);
@@ -228,26 +230,26 @@ public class UserServiceImpl implements UserService {
 
         likeLogVO.setArticleType(articleType);
 
-        if (articleType == EntityTypeEnum.COMMENT.getId()) {
+        if (articleType == ArticleTypeEnum.COMMENT.getId()) {
             //todo
-        } else if (articleType == EntityTypeEnum.MOMENT.getId()) {
+        } else if (articleType == ArticleTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getById(targetId);
             if (moment == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
             likeLogVO.setArticleId(moment.getUniqueId());
             likeLogVO.setArticleContent(moment.getContent());
-        } else if (articleType == EntityTypeEnum.BLOG.getId()) {
+        } else if (articleType == ArticleTypeEnum.BLOG.getId()) {
             Blog blog = blogDAO.getBaseInfoById(targetId);
             if (blog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             likeLogVO.setArticleId(blog.getUniqueId());
             likeLogVO.setArticleTitle(blog.getTitle());
-        } else if (articleType == EntityTypeEnum.QUESTION.getId()) {
+        } else if (articleType == ArticleTypeEnum.QUESTION.getId()) {
             //todo
         } else {
-            log.error("typeÀàÐÍ²»ºÏ·¨");
+            log.error("typeï¿½ï¿½ï¿½Í²ï¿½ï¿½Ï·ï¿½");
             throw new GlobalException();
         }
 
@@ -262,7 +264,8 @@ public class UserServiceImpl implements UserService {
         return likeLogVO;
     }
 
-    private List<FollowerVO> getFollowerListByUserId(Long userId, PageRequest pageRequest) throws GlobalException {
+    @Override
+    public List<FollowerVO> getFollowerListByUserId(Long userId, PageRequest pageRequest) throws GlobalException {
         List<Follow> followList = followDAO.getAllLimitByUserId(userId, pageRequest);
         List<FollowerVO> followerList = new ArrayList<>();
         if (followList == null || followList.size() == 0) {
@@ -276,7 +279,7 @@ public class UserServiceImpl implements UserService {
             FollowerVO followerVO = BeanUtils.copy(user, FollowerVO.class);
             followerVO.setFollowDate(follow.getCreateTime());
 
-            //ÎÒÊÇ·ñÊÇËûµÄ·ÛË¿
+            //ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ë¿
             if (followDAO.getByFollowerIdAndUserId(userId, follow.getFollowerId()) == null) {
                 followerVO.setRelation(UserInfoVO.Relation.HIS_IS_MY_FANS.getId());
             } else {
@@ -303,7 +306,7 @@ public class UserServiceImpl implements UserService {
             FollowerVO followerVO = BeanUtils.copy(user, FollowerVO.class);
             followerVO.setFollowDate(follow.getCreateTime());
 
-            //ËûÊÇ·ñÊÇÎÒµÄ·ÛË¿
+            //ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ÒµÄ·ï¿½Ë¿
             if (followDAO.getByFollowerIdAndUserId(follow.getUserId(), followerId) == null) {
                 followerVO.setRelation(UserInfoVO.Relation.I_AM_HIS_FANS.getId());
             } else {
@@ -321,26 +324,26 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
         }
-        UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
-        //»ñÈ¡ÎÒºÍËûµÄ¹ØÏµ
+        UserInfoVO userInfoVO = this.assembleUserInfoVO(user);
+
         Long selfId = UserLoginUtil.getLoginUserId();
         userInfoVO.setRelation(this.judgeUserRelation(selfId, user.getId()));
         return userInfoVO;
     }
 
     private int judgeUserRelation(long selfId, long userId) {
-        //ÓÃ»§Î´µÇÂ¼£¬Ö±½Ó·µ»ØÄ°ÉúÈË
+        //ï¿½Ã»ï¿½Î´ï¿½ï¿½Â¼ï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½Ä°ï¿½ï¿½ï¿½ï¿½
         if (selfId == IronConstant.ANONYMOUS_USER_ID) {
             return UserInfoVO.Relation.STRANGER.getId();
         }
-        //Èç¹ûselfIdºÍuserIdÏàµÈ£¬Ö±½Ó·µ»Ø»¥·Û¹ØÏµ
+        //ï¿½ï¿½ï¿½selfIdï¿½ï¿½userIdï¿½ï¿½È£ï¿½Ö±ï¿½Ó·ï¿½ï¿½Ø»ï¿½ï¿½Û¹ï¿½Ïµ
         if (selfId == userId) {
             return UserInfoVO.Relation.FANS_TO_EACH_OTHER.getId();
         }
 
-        //ÎÒÊÇ·ñÊÇËûµÄ·ÛË¿
+        //ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ë¿
         Follow selfFollow = followDAO.getByFollowerIdAndUserId(selfId, userId);
-        //ËûÊÇ·ñÊÇÎÒµÄ·ÛË¿
+        //ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ÒµÄ·ï¿½Ë¿
         Follow userFollow = followDAO.getByFollowerIdAndUserId(userId, selfId);
         if (selfFollow == null) {
             if (userFollow == null) {
@@ -378,11 +381,11 @@ public class UserServiceImpl implements UserService {
         long targetId = user.getId();
 
         Follow existFollow = followDAO.getByFollowerIdAndUserId(followerId, targetId);
-        //²»ÄÜÖØ¸´¹Ø×¢
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½×¢
         if (existFollow != null) {
             throw new GlobalException(ResponseStatus.DUPLICATE_FOLLOW_LOG);
         }
-        //²åÈëfollow±í
+        //ï¿½ï¿½ï¿½ï¿½followï¿½ï¿½
         Follow follow = new Follow();
         follow.setFollowerId(followerId);
         follow.setUserId(targetId);
@@ -392,31 +395,31 @@ public class UserServiceImpl implements UserService {
 
         followDAO.save(follow);
 
-        //Òì²½Ôö¼Ó±»·ÛÈË·ÛË¿Êý
+        //ï¿½ì²½ï¿½ï¿½ï¿½Ó±ï¿½ï¿½ï¿½ï¿½Ë·ï¿½Ë¿ï¿½ï¿½
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, targetId,
                 IronConstant.USER_PROPERTY_FOLLOWER_NUM, true);
-        //Òì²½Ôö¼Ó·ÛË¿¹Ø×¢Êý
+        //ï¿½ì²½ï¿½ï¿½ï¿½Ó·ï¿½Ë¿ï¿½ï¿½×¢ï¿½ï¿½
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, followerId,
                 IronConstant.USER_PROPERTY_FOLLOWING_NUM, true);
 
 
-        //Òì²½²åÈëaboutMe
+        //ï¿½ì²½ï¿½ï¿½ï¿½ï¿½aboutMe
         FollowLog followLog = new FollowLog();
         followLog.setId(follow.getId());
         followLog.setUserId(followerId);
         followLog.setTargetId(targetId);
         followLog.setDisabled(false);
-        followLog.setType(EntityTypeEnum.USER.getId());
+        followLog.setType(ArticleTypeEnum.USER.getId());
         followLog.setCreateTime(createTime);
-        ansyCommonService.ansySaveAboutMe(followLog);
+        commonService.ansySaveAboutMe(followLog);
 
 
-        //ËûÊÇ·ñÊÇÎÒµÄ·ÛË¿
+        //ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ÒµÄ·ï¿½Ë¿
         if (followDAO.getByFollowerIdAndUserId(targetId, followerId) == null) {
-            //Ëû²»ÊÇ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             return UserInfoVO.Relation.I_AM_HIS_FANS.getId();
         } else {
-            //ËûÊÇ£¬Ôò¹ØÏµÎª»¥·Û
+            //ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ÏµÎªï¿½ï¿½ï¿½ï¿½
             return UserInfoVO.Relation.FANS_TO_EACH_OTHER.getId();
         }
     }
@@ -433,7 +436,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException {
-        //ºóÌ¨Ð£ÑéÂß¼­
+        //æ ¡éªŒé€»è¾‘
         User user = new User();
         user.setUniqueId(form.getUsername());
         user.setPhone(form.getPhone());
@@ -447,6 +450,11 @@ public class UserServiceImpl implements UserService {
         return this.assembleUserInfoVO(user);
     }
 
+    @Override
+    public void logout(HttpSession session) {
+        session.removeAttribute(IronConstant.SESSION_USER_KEY);
+        session.removeAttribute(IronConstant.SESSION_ROLE_KEY);
+    }
 
     private void saveUserSession(HttpSession session, User user) {
         session.setAttribute(IronConstant.SESSION_USER_KEY, user);
@@ -455,7 +463,7 @@ public class UserServiceImpl implements UserService {
 
     private UserInfoVO assembleUserInfoVO(User user) throws GlobalException {
         UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
-        userInfoVO.setProfileUrl(IronUtil.concatImageUrl(this.host, userInfoVO.getProfile()));
+        userInfoVO.setProfileUrl(IronUtil.concatImageUrl(this.host, user.getProfile()));
         return userInfoVO;
     }
 }

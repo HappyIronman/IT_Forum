@@ -8,14 +8,14 @@ import lombok.Setter;
 public class BaseLog extends BaseEntity {
     private long userId;
     private long targetId;
-    //0--->为评论
+    //0--->为锟斤拷锟斤拷
     //1--->为moment
     //2--->为blog
     //3--->为question
     //4--->为user
-    // 若为user,即为新增粉丝事件,targetId为被粉人id,否则为对应文章id
+    // 锟斤拷为user,锟斤拷为锟斤拷锟斤拷锟斤拷丝锟铰硷拷,targetId为锟斤拷锟斤拷锟斤拷id,锟斤拷锟斤拷为锟斤拷应锟斤拷锟斤拷id
 
-    //EntityTypeEnum
+    //ArticleTypeEnum
     private int type;
     private boolean disabled;
 }

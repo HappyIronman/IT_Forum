@@ -2,10 +2,12 @@ package com.ironman.forum.service;
 
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
-import com.ironman.forum.dao.LikeLogDAO;
 import com.ironman.forum.dao.ShareDAO;
 import com.ironman.forum.dao.UserDAO;
-import com.ironman.forum.entity.*;
+import com.ironman.forum.entity.ArticleTypeEnum;
+import com.ironman.forum.entity.Blog;
+import com.ironman.forum.entity.Share;
+import com.ironman.forum.entity.User;
 import com.ironman.forum.form.BlogPublishForm;
 import com.ironman.forum.util.*;
 import com.ironman.forum.vo.BlogAbsVO;
@@ -32,8 +34,9 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private ShareDAO shareDAO;
 
+
     @Autowired
-    private LikeLogDAO likeLogDAO;
+    private CommonService commonService;
 
     @Autowired
     private AnsyCommonService ansyCommonService;
@@ -47,9 +50,8 @@ public class BlogServiceImpl implements BlogService {
         String content = form.getContent();
         Boolean isPrivate = form.getIsPrivate();
         Date createTime = new Date();
-        //校验逻辑
 
-        //落库 1.blog表 2.异步增加日志数 3.异步插入时间轴表
+        //??? 1.blog?? 2.??????????? 3.????????????
         Blog blog = new Blog();
         blog.setUserId(userId);
         String uniqueId = IronUtil.generateUniqueId();
@@ -74,7 +76,7 @@ public class BlogServiceImpl implements BlogService {
             Share share = new Share();
             share.setArticleId(blog.getId());
             share.setOriginId(originBlog.getId());
-            share.setType(EntityTypeEnum.BLOG.getId());
+            share.setType(ArticleTypeEnum.BLOG.getId());
             share.setDeleted(false);
             share.setCreateTime(createTime);
             shareDAO.save(share);
@@ -86,14 +88,8 @@ public class BlogServiceImpl implements BlogService {
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
 
-        TimeLine timeLine = new TimeLine();
-        timeLine.setUserId(userId);
-        timeLine.setArticleId(blog.getId());
-        timeLine.setSelf(true);
-        timeLine.setNew(true);
-        timeLine.setType(EntityTypeEnum.BLOG.getId());
-        timeLine.setCreateTime(new Date());
-        ansyCommonService.ansyAddTimeLine(timeLine);
+
+        commonService.ansyAddTimeLine(userId, blog.getId(), ArticleTypeEnum.BLOG.getId());
 
         return uniqueId;
     }
@@ -124,6 +120,7 @@ public class BlogServiceImpl implements BlogService {
             for (Blog blog : blogList) {
                 if (!blog.isPrivate()) {
                     BlogAbsVO blogAbsVO = BeanUtils.copy(blog, BlogAbsVO.class);
+                    blogAbsVO.setUserId(user.getUniqueId());
                     blogAbsVOList.add(blogAbsVO);
                 }
             }
@@ -137,15 +134,11 @@ public class BlogServiceImpl implements BlogService {
         AbstractContent absContent = IronUtil.getAbstractContent(blogAbsVO.getContent(), IronConstant.BLOG_MAX_LENGTH);
         blogAbsVO.setAbstract(absContent.isAbstract());
         blogAbsVO.setContent(absContent.getContent());
+        blogAbsVO.setUserId(user.getUniqueId());
         blogAbsVO.setUsername(user.getUsername());
         blogAbsVO.setProfile(user.getProfile());
-        Long userId = UserLoginUtil.getLoginUserId();
-        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, blog.getId(), EntityTypeEnum.BLOG.getId());
-        if (likeLog != null) {
-            blogAbsVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
-        } else {
-            blogAbsVO.setLikeCondition(IronConstant.LIKE_CONDITION_DEFAULT);
-        }
+        blogAbsVO.setLikeCondition(commonService.judgeLikeCondition(blog));
+
         if (blog.isShare()) {
             this.assembleBlogAbsShareInfo(blogAbsVO, blog);
         }
@@ -172,11 +165,12 @@ public class BlogServiceImpl implements BlogService {
         User author = userDAO.getArticleBaseInfoById(blog.getUserId());
         blogDetailVO.setUserId(author.getUniqueId());
         blogDetailVO.setUsername(author.getUsername());
+        blogDetailVO.setLikeCondition(commonService.judgeLikeCondition(blog));
         if (blog.isShare()) {
             blogDetailVO.setShare(true);
-            Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityTypeEnum.BLOG.getId());
+            Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleTypeEnum.BLOG.getId());
             if (share == null) {
-                log.error(blog.getId() + " 分享信息为空");
+                log.error(blog.getId() + " ??????????");
                 throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
             }
             Blog originBlog = blogDAO.getById(share.getOriginId());
@@ -193,14 +187,14 @@ public class BlogServiceImpl implements BlogService {
         }
 
 
-        //执行代理异步添加访问日志
+        //??写??????????????
         return blogDetailVO;
     }
 
     private void assembleBlogAbsShareInfo(BlogAbsVO blogAbsVO, Blog blog) throws GlobalException {
-        Share share = shareDAO.getByArticleIdAndType(blog.getId(), EntityTypeEnum.BLOG.getId());
+        Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleTypeEnum.BLOG.getId());
         if (share == null) {
-            log.error(blog.getId() + " 分享信息为空");
+            log.error(blog.getId() + " ??????????");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
         }
         Blog originBlog = blogDAO.getBaseInfoById(share.getOriginId());
@@ -209,6 +203,7 @@ public class BlogServiceImpl implements BlogService {
         } else {
             blogAbsVO.setExist(true);
             User originUser = userDAO.getArticleBaseInfoById(originBlog.getUserId());
+            blogAbsVO.setOriginUserId(originUser.getUniqueId());
             blogAbsVO.setOriginUsername(originUser.getUsername());
             blogAbsVO.setOriginUserId(originUser.getUniqueId());
             blogAbsVO.setOriginTitle(originBlog.getTitle());

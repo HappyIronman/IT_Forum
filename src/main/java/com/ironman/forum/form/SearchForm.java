@@ -10,17 +10,17 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 public class SearchForm {
-    @Min(value = 0, message = "ËÑË÷ÀàĞÍ²»ºÏ·¨")
-    @Max(value = 4, message = "ËÑË÷ÀàĞÍ²»ºÏ·¨")
+    @Min(value = 0, message = "ç±»å‹ä¸åˆæ³•")
+    @Max(value = 4, message = "ç±»å‹ä¸åˆæ³•")
     private int type;
 
-    @Length(max = 20, message = "¼ìË÷ÄÚÈİÌ«ËûÂè³¤ÁË°É")
+    @Length(max = 20, message = "å…³é”®å­—é•¿åº¦ä¸åˆæ³•")
     private String keywords;
 
-    @Min(value = 0, message = "Ò³Êı²»ºÏ·¨")
+    @Min(value = 0, message = "é¡µæ•°ä¸åˆæ³•")
     private int page = 0;
 
-    @Min(value = 1, message = "Ò³´óĞ¡²»ºÏ·¨")
-    @Max(value = 50, message = "Ò³´óĞ¡²»ºÏ·¨")
+    @Min(value = 1, message = "åˆ†é¡µå®¹é‡ä¸åˆæ³•")
+    @Max(value = 50, message = "åˆ†é¡µå®¹é‡ä¸åˆæ³•")
     private int size = 10;
 }

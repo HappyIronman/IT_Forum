@@ -21,30 +21,31 @@ public class IronConstant {
     public static final String ARTICLE_PROPERTY_LIKE_NUM = "like_num";
     public static final String ARTICLE_PROPERTY_DISLIKE_NUM = "dislike_num";
     public static final String ARTICLE_PROPERTY_SHARE_NUM = "share_num";
+    public static final String ARTICLE_PROPERTY_COMMENT_NUM = "comment_num";
     public static final String ARTICLE_PROPERTY_VIEW_NUM = "view_num";
     public static final int MOMENT_MAX_LENGTH = 80;
     public static final int BLOG_MAX_LENGTH = 100;
-    //ÎÄÕÂÎ´±»ÔÞ»òÕß²È¹ý
+    //ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½Þ»ï¿½ï¿½ß²È¹ï¿½
     public static final int LIKE_CONDITION_DEFAULT = 1;
-    //ÎÄÕÂÒÑ±»ÔÞ¹ý
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½Þ¹ï¿½
     public static final int LIKE_CONDITION_LIKED = 2;
-    //ÎÄÕÂÒÑ±»²È¹ý
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½È¹ï¿½
     public static final int LIKE_CONDITION_DISLIKED = 3;
 
 
     /**
-     * ×Ô¶¨ÒåÏß³Ì³Ø³õÊ¼Ïß³ÌÊýÁ¿
+     * ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ß³Ì³Ø³ï¿½Ê¼ï¿½ß³ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     public static final int DEFAULT_POOL_SIZE = 5;
 
     /**
-     * viewLog´¥·¢Âä¿â¶¯×÷»º´æ×î¶àÊýÁ¿
+     * viewLogï¿½ï¿½ï¿½ï¿½ï¿½ï¿½â¶¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
-    public static final int VIEW_LOG_MAX_CACHE_SIZE = 2;
+    public static final int VIEW_LOG_MAX_CACHE_SIZE = 20;
 
     public static final long ANONYMOUS_USER_ID = -1L;
     public static final String ANONYMOUS_USER_UNIQUE_ID = "-1";
-    public static final String ANONYMOUS_USER_NAME = "ÄäÃûÓÃ»§";
+    public static final String ANONYMOUS_USER_NAME = "ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½";
     public static final String ANONYMOUS_USER_PROFILE = "ironman";
 
 

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="uk-card uk-card-default uk-card-large">
+    <div class="uk-card uk-card-default uk-card-large uk-margin-top">
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-text-center">
-          <img class="uk-border-circle" width="160" height="160" v-bind:src="userInfo.profileUrl">
+          <img class="uk-border-circle" style="height: 160px;width: 160px" v-bind:src="userInfo.profileUrl">
         </div>
         <div class="uk-padding-small uk-text-center">
           <h3 class="uk-card-title uk-margin-remove-bottom">{{userInfo.username}}</h3>
@@ -39,7 +39,6 @@
 
       <div class="uk-card-body uk-padding-remove uk-text-center">
 
-
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的粉丝</span>
           <span class="uk-text-bold">{{userInfo.followerNum}}</span>
@@ -50,15 +49,21 @@
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的动态</span>
-          <span to="/moment" class="uk-text-bold">{{userInfo.momentNum}}</span>
+          <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/moment'" class="uk-text-bold">
+            {{userInfo.momentNum}}
+          </router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的博客</span>
-          <span to="/blog" class="uk-text-bold">{{userInfo.blogNum}}</span>
+          <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/blog'" class="uk-text-bold">
+            {{userInfo.blogNum}}
+          </router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">他的提问</span>
-          <span to="/question" class="uk-text-bold">{{userInfo.questionNum}}</span>
+          <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/question'" class="uk-text-bold">
+            {{userInfo.questionNum}}
+          </router-link>
         </div>
         <div class="uk-margin-small-top">
           <span class="uk-text-small">学校</span>

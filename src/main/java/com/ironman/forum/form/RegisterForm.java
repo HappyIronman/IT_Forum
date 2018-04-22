@@ -11,12 +11,12 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 public class RegisterForm {
-    @NotBlank(message = "ÓÃ»§Ãû²»ÄÜÎª¿Õ")
-    @Length(max = 12, message = "ÓÃ»§Ãû×î³¤²»ÄÜ³¬¹ı12¸ö×Ö·û")
+    @NotBlank(message = "ç”¨æˆ·åä¸èƒ½ä¸ºç©º")
+    @Length(max = 12, message = "ç”¨æˆ·åæœ€é•¿12ä¸ªå­—ç¬¦")
     private String username;
-    @Pattern(regexp = "^1[3,4,5,6,7,8,9]\\d{9}$", message = "ÊÖ»úºÅ²»ºÏ·¨")
+    @Pattern(regexp = "^1[3,4,5,6,7,8,9]\\d{9}$", message = "æ‰‹æœºå·ä¸åˆæ³•")
     private String phone;
-    @NotBlank(message = "ÃÜÂë²»ÄÜÎª¿Õ")
+    @NotBlank(message = "å¯†ç ä¸èƒ½ä¸ºç©º")
     private String password;
 
 

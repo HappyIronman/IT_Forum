@@ -1,8 +1,8 @@
 package com.ironman.forum.test;
 
-import com.ironman.forum.entity.EntityTypeEnum;
+import com.ironman.forum.entity.ArticleTypeEnum;
 import com.ironman.forum.entity.ViewLog;
-import com.ironman.forum.service.AnsyCommonService;
+import com.ironman.forum.service.CommonService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,42 +11,42 @@ import java.util.Date;
 public class SaveViewLogTest extends BaseJunit4Test {
 
     @Autowired
-    private AnsyCommonService ansyCommonService;
+    private CommonService commonService;
 
     @Test
     public void test() throws Exception {
-        System.out.println("²âÊÔSpringÕûºÏJunit4½øÐÐµ¥Ôª²âÊÔ");
+        System.out.println("ï¿½ï¿½ï¿½ï¿½Springï¿½ï¿½ï¿½ï¿½Junit4ï¿½ï¿½ï¿½Ðµï¿½Ôªï¿½ï¿½ï¿½ï¿½");
 
         ViewLog viewLog = new ViewLog();
         viewLog.setUserId(33);
         viewLog.setLength(5);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityTypeEnum.MOMENT.getId());
+        viewLog.setType(ArticleTypeEnum.MOMENT.getId());
         viewLog.setCreateTime(new Date());
-        ansyCommonService.ansySaveViewLog(viewLog);
-        System.out.println("viewlog1 Òì²½±£´æ");
+        commonService.ansySaveViewLog(viewLog);
+        System.out.println("viewlog1 ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
 
         Thread.sleep(2000);
         viewLog = new ViewLog();
         viewLog.setUserId(34);
         viewLog.setLength(6);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityTypeEnum.BLOG.getId());
+        viewLog.setType(ArticleTypeEnum.BLOG.getId());
         viewLog.setCreateTime(new Date());
-        ansyCommonService.ansySaveViewLog(viewLog);
-        System.out.println("viewlog2 Òì²½±£´æ");
+        commonService.ansySaveViewLog(viewLog);
+        System.out.println("viewlog2 ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
         Thread.sleep(2000);
 
         viewLog = new ViewLog();
         viewLog.setUserId(35);
         viewLog.setLength(7);
         viewLog.setTargetId(1L);
-        viewLog.setType(EntityTypeEnum.BLOG.getId());
+        viewLog.setType(ArticleTypeEnum.BLOG.getId());
         viewLog.setCreateTime(new Date());
-        ansyCommonService.ansySaveViewLog(viewLog);
-        System.out.println("viewlog3 Òì²½±£´æ");
+        commonService.ansySaveViewLog(viewLog);
+        System.out.println("viewlog3 ï¿½ì²½ï¿½ï¿½ï¿½ï¿½");
 
         Thread.sleep(6000);
-        System.out.println("ÍË³ö");
+        System.out.println("ï¿½Ë³ï¿½");
     }
 }

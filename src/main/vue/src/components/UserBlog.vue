@@ -5,7 +5,7 @@
     </div>
     <ul class="uk-list uk-list-divider">
       <li v-for="blog in userBlogList">
-        <router-link v-bind:to="'/blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
+        <router-link v-bind:to="'/user/'+blog.userId+'/blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
         <span class="uk-align-right uk-text-small uk-text-muted uk-margin-remove">
           （{{blog.commentNum}}／{{blog.viewNum}}）
         </span>
@@ -14,14 +14,17 @@
         </span>
       </li>
     </ul>
+    <pageable v-bind:fetch-data-func="fetchUserBlogList" size="10"></pageable>
   </div>
 
 </template>
 
 <script>
   import {mapActions, mapState} from 'vuex'
+  import Pageable from "./Pageable.vue";
 
   export default {
+    components: {Pageable},
     name: 'UserBlog',
     data() {
       return {}
@@ -31,13 +34,13 @@
         userBlogList: state => state.blog.userBlogList
       })
     },
-    created: function () {
-      this.fetchUserBlogListAction({uniqueId: this.$route.params.uniqueId, pageParam: {page: 0, size: 10}})
-    },
     methods: {
       ...mapActions([
         'fetchUserBlogListAction'
-      ])
+      ]),
+      fetchUserBlogList: function (pageParam) {
+        return this.fetchUserBlogListAction({uniqueId: this.$route.params.uniqueId, pageParam: pageParam})
+      }
     }
   }
 </script>

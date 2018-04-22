@@ -1,8 +1,8 @@
-<template xmlns:uk-icon="http://www.w3.org/1999/xhtml">
+<template>
   <div class="uk-container">
     <div class=" uk-margin-top uk-flex">
       <ul uk-tab class=" uk-margin-remove uk-width-2-3">
-        <li class="uk-active">
+        <li>
           <router-link v-bind:to="'/user/'+uniqueId+'/moment'">他的动态</router-link>
         </li>
         <li>

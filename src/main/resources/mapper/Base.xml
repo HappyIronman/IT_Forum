@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ironman.baseSql">
     <sql id="page">
-      ORDER BY ${pageRequest.orderBy} DESC
+      ORDER BY ${pageRequest.orderBy} ${pageRequest.sort}
         LIMIT ${pageRequest.page * pageRequest.size} , ${pageRequest.size}
     </sql>
 </mapper>

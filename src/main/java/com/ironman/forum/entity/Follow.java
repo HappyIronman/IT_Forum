@@ -6,9 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Follow extends BaseEntity {
-    //·ÛË¿
+    //ç²‰ä¸
     private long followerId;
-    //±»·ÛÈË
+    //è¢«ç²‰äºº
     private long userId;
     private boolean disabled;
 }

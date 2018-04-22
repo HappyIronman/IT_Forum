@@ -10,7 +10,6 @@
       </div>
       <!--<div style="padding: 5px 0; color: #ccc">中间隔离带</div>-->
       <div id="editor" style="border: 1px solid #ccc; min-height: 800px"> <!--可使用 min-height 实现编辑区域自动增加高度-->
-        <p>请输入内容</p>
       </div>
       <div class="uk-grid uk-width-1-1 uk-margin-remove-left uk-margin-small-top">
         <div class="uk-card uk-padding-remove">
@@ -71,7 +70,7 @@
         this.publishBlogAction(this.blog).then(uniqueId => {
           console.log(uniqueId)
           if (uniqueId) {
-            this.$router.push({path: `/my_blog/${uniqueId}`}) // -> /blog/123
+            this.$router.push({path: `/self/my_blog/${uniqueId}`}) // -> /blog/123
           }
         })
       }

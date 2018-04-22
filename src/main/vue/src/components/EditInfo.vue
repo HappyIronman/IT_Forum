@@ -106,7 +106,7 @@
     name: 'EditInfo',
     data() {
       return {
-        profilePath: "",
+        profileUrl: "",
         profile: "",
         phone: "",
         email: "",
@@ -148,14 +148,14 @@
             this.editInfoAction(payload).then(
               res => {
                 if (res) {
-                  alert("修改成功")
+                  UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>修改成功', status: 'success'})
                   this.$router.push({path: `/self/`})
                 }
               }
             )
             return;
           }
-          alert('格式有误哦!');
+          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>格式有误哦!', status: 'danger'})
         });
       }
     },
@@ -197,9 +197,8 @@
           console.log(profileInfo)
           self.profileUrl = profileInfo.url
           self.profile = profileInfo.name
-          alert('Upload Completed');
+          UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>上传成功', status: 'success'})
         }
-
       });
     }
   }

@@ -9,6 +9,15 @@
         (#{userId}, #{articleId}, #{type}, #{isSelf}, #{isNew}, #{createTime})
     </insert>
 
+
+    <insert id="batchSave">
+        INSERT INTO time_line(user_id, article_id, type, is_self, is_new, create_time)
+        VALUES
+        <foreach collection="timeLineList" item="item" separator=",">
+            (#{item.userId},#{item.targetId},#{item.type},#{item.isSelf},#{item.isNew},#{log.createTime})
+        </foreach>
+    </insert>
+
     <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.TimeLine">
         SELECT * FROM time_line where user_id = #{userId} AND deleted = FALSE
         <include refid="com.ironman.baseSql.page">

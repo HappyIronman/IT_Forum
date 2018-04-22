@@ -8,11 +8,8 @@
       <blog-item v-if="item.type===2" v-bind:blog="item.entity"></blog-item>
     </div>
 
-    <div v-show="!isBottom" class="uk-text-center uk-margin-left uk-margin-right" v-on:click="this.fetchMyCircleList">
-      <button class="uk-button uk-button-text uk-width-1-1">
-        <span class="uk-text-success">点击加载更多...</span>
-      </button>
-    </div>
+    <pageable v-bind:fetch-data-func="fetchMyCircleListAction" size="5"></pageable>
+
   </div>
 </template>
 
@@ -20,46 +17,33 @@
   import {mapActions, mapState} from 'vuex'
   import MomentItem from './MomentItem'
   import BlogItem from "./BlogItem";
+  import Pageable from "./Pageable.vue";
 
   export default {
     components: {
+      Pageable,
       BlogItem,
       MomentItem
     },
     name: 'FriendCircle',
     data() {
-      return {
-        page: 0,
-        size: 5,
-        isBottom: true
-      }
+      return {}
     },
     computed: {
       ...mapState({
         circleList: state => state.moment.circleList,
       })
     },
-    created: function () {
-      if (this.circleList == null || this.circleList.length === 0) {
-        this.fetchMyCircleList()
-      }
-    },
+//    created: function () {
+//        this.fetchMyCircleList()
+//    },
     methods: {
       ...mapActions([
         'fetchMyCircleListAction'// �� `this.increment()` ӳ��Ϊ `this.$store.dispatch('increment')`
       ]),
-      fetchMyCircleList: function () {
-        this.fetchMyCircleListAction({page: this.page, size: this.size}).then(res => {
-            console.log(res)
-            if (res) {
-              this.page++
-              this.isBottom = false
-            } else {
-              this.isBottom = true
-            }
-          }
-        )
-      }
+//      fetchMyCircleList: function () {
+//        this.fetchMyCircleListAction()
+//      }
     }
   }
 </script>

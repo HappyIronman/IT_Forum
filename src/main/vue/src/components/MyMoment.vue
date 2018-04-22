@@ -1,6 +1,6 @@
 <template>
   <div>
-    <self-page-nav></self-page-nav>
+    <self-page-nav index="0"></self-page-nav>
 
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">我的动态</span>
@@ -8,6 +8,8 @@
     <div v-for="myMoment in myMomentList">
       <moment-item v-bind:moment="myMoment"></moment-item>
     </div>
+
+    <pageable v-bind:fetch-data-func="fetchMyMomentListAction" size="5"></pageable>
   </div>
 </template>
 
@@ -15,10 +17,12 @@
   import {mapActions, mapState} from 'vuex'
   import MomentItem from "./MomentItem";
   import SelfPageNav from "./SelfPageNav";
+  import Pageable from "./Pageable.vue";
 
 
   export default {
     components: {
+      Pageable,
       SelfPageNav,
       MomentItem
     },
@@ -30,9 +34,6 @@
       ...mapState({
         myMomentList: state => state.moment.myMomentList
       })
-    },
-    created: function () {
-      this.fetchMyMomentListAction({page: 0, size: 10})
     },
     methods: {
       ...mapActions([

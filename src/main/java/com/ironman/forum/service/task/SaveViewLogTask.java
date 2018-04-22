@@ -2,7 +2,7 @@ package com.ironman.forum.service.task;
 
 import com.ironman.forum.dao.ViewLogDAO;
 import com.ironman.forum.entity.ViewLog;
-import com.ironman.forum.service.AnsyCommonService;
+import com.ironman.forum.service.CommonService;
 import com.ironman.forum.util.IronCache;
 import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.IronUtil;
@@ -18,26 +18,26 @@ import java.util.Map;
 @Log4j
 public class SaveViewLogTask {
     @Autowired
-    private AnsyCommonService ansyCommonService;
+    private CommonService commonService;
     @Autowired
     private ViewLogDAO viewLogDAO;
 
     @Scheduled(cron = "0 0 0/2  * * ? ")
     public void saveViewLog() {
-        log.info("ºó±¸viewLog¶¨Ê±ÈÎÎñÆô¶¯");
+        log.info("ï¿½ï¿½viewLogï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         int size = IronCache.getViewLogCacheSize();
         if (size > 0 && size < IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
-            log.info("´¦Àí²ÐÁô»º´æ: " + size);
+            log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " + size);
             List<ViewLog> viewLogList = IronCache.batchGetViewLogs(size);
             this.saveViewLogListToDB(viewLogList);
         }
-        log.info("ºó±¸viewLog¶¨Ê±ÈÎÎñ½áÊø");
+        log.info("ï¿½ï¿½viewLogï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
     }
 
 
     public void saveViewLogListToDB(List<ViewLog> viewLogList) {
         if (viewLogList != null && !viewLogList.isEmpty()) {
-            log.info("Ö´ÐÐÅúÁ¿logÂä¿âÈÎÎñ");
+            log.info("Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½logï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             try {
                 Map<String, Integer> viewNumMap = IronUtil.constructViewNumMap(viewLogList);
                 for (Map.Entry entry : viewNumMap.entrySet()) {
@@ -45,14 +45,14 @@ public class SaveViewLogTask {
                     Long targetId = IronUtil.getTargetIdByViewNumMapKey(key);
                     int type = IronUtil.getTypeByViewNumMapKey(key);
                     int addNum = (int) entry.getValue();
-                    //²»ÊÇÒì²½·½·¨
-                    ansyCommonService.increaseArticleViewLog(targetId, type, addNum);
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ì²½ï¿½ï¿½ï¿½ï¿½
+                    commonService.ansyIncreaseArticleViewLog(targetId, type, addNum);
                 }
                 viewLogDAO.batchSave(viewLogList);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
-            log.info("ÅúÁ¿logÂä¿âÈÎÎñÍê³É");
+            log.info("ï¿½ï¿½ï¿½ï¿½logï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.conf.UserLoginUtil;
-import com.ironman.forum.dao.*;
+import com.ironman.forum.dao.ImageDAO;
+import com.ironman.forum.dao.MomentDAO;
+import com.ironman.forum.dao.ShareDAO;
+import com.ironman.forum.dao.UserDAO;
 import com.ironman.forum.entity.*;
 import com.ironman.forum.form.MomentPublishForm;
 import com.ironman.forum.util.*;
@@ -31,10 +34,10 @@ public class MomentServiceImpl implements MomentService {
     private UserDAO userDAO;
 
     @Autowired
-    private LikeLogDAO likeLogDAO;
+    private ImageDAO imageDAO;
 
     @Autowired
-    private ImageDAO imageDAO;
+    private CommonService commonService;
 
     @Autowired
     private AnsyCommonService ansyCommonService;
@@ -69,7 +72,7 @@ public class MomentServiceImpl implements MomentService {
                     image.setName(name);
                     image.setUserId(userId);
                     image.setArticleId(moment.getId());
-                    image.setType(EntityTypeEnum.MOMENT.getId());
+                    image.setType(ArticleTypeEnum.MOMENT.getId());
                     image.setDeleted(false);
                     image.setCreateTime(new Date());
                     imageDAO.save(image);
@@ -89,7 +92,7 @@ public class MomentServiceImpl implements MomentService {
             Share share = new Share();
             share.setArticleId(moment.getId());
             share.setOriginId(originMoment.getId());
-            share.setType(EntityTypeEnum.MOMENT.getId());
+            share.setType(ArticleTypeEnum.MOMENT.getId());
             share.setDeleted(false);
             share.setCreateTime(date);
             shareDAO.save(share);
@@ -101,14 +104,8 @@ public class MomentServiceImpl implements MomentService {
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
-        TimeLine timeLine = new TimeLine();
-        timeLine.setUserId(userId);
-        timeLine.setArticleId(moment.getId());
-        timeLine.setType(EntityTypeEnum.MOMENT.getId());
-        timeLine.setNew(true);
-        timeLine.setSelf(true);
-        timeLine.setCreateTime(date);
-        ansyCommonService.ansyAddTimeLine(timeLine);
+        //异步插入时间轴
+        commonService.ansyAddTimeLine(userId, moment.getId(), ArticleTypeEnum.MOMENT.getId());
     }
 
 
@@ -161,15 +158,13 @@ public class MomentServiceImpl implements MomentService {
         } else {
             momentVO.setAbstract(false);
         }
+
+        momentVO.setUserId(user.getUniqueId());
         momentVO.setUsername(user.getUsername());
         momentVO.setProfile(user.getProfile());
-        Long userId = UserLoginUtil.getLoginUserId();
-        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, moment.getId(), EntityTypeEnum.MOMENT.getId());
-        if (likeLog != null) {
-            momentVO.setLikeCondition(likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
-        } else {
-            momentVO.setLikeCondition(IronConstant.LIKE_CONDITION_DEFAULT);
-        }
+
+        momentVO.setLikeCondition(commonService.judgeLikeCondition(moment));
+
         if (moment.isShare()) {
             this.assembleMomentShareInfo(momentVO, moment);
         }
@@ -180,7 +175,7 @@ public class MomentServiceImpl implements MomentService {
     }
 
     private void assembleMomentPicInfo(MomentVO momentVO, Moment moment) throws GlobalException {
-        List<Image> imageList = imageDAO.getAllByArticleIdAndType(moment.getId(), EntityTypeEnum.MOMENT.getId());
+        List<Image> imageList = imageDAO.getAllByArticleIdAndType(moment.getId(), ArticleTypeEnum.MOMENT.getId());
         if (imageList != null && imageList.size() != 0) {
             List<String> picUrlList = new ArrayList<>(imageList.size());
             for (Image image : imageList) {
@@ -192,7 +187,7 @@ public class MomentServiceImpl implements MomentService {
     }
 
     private void assembleMomentShareInfo(MomentVO momentVO, Moment moment) throws GlobalException {
-        Share share = shareDAO.getByArticleIdAndType(moment.getId(), EntityTypeEnum.MOMENT.getId());
+        Share share = shareDAO.getByArticleIdAndType(moment.getId(), ArticleTypeEnum.MOMENT.getId());
         if (share == null) {
             log.error(moment.getId() + " 分享信息为空");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
@@ -203,9 +198,12 @@ public class MomentServiceImpl implements MomentService {
         } else {
             momentVO.setExist(true);
             User originUser = userDAO.getArticleBaseInfoById(originMoment.getUserId());
+            momentVO.setOriginUserId(originUser.getUniqueId());
             momentVO.setOriginUsername(originUser.getUsername());
             momentVO.setOriginUserId(originUser.getUniqueId());
-            momentVO.setOriginContent(originMoment.getContent());
+            momentVO.setOriginContent(
+                    IronUtil.getAbstractContent(originMoment.getContent(), IronConstant.MOMENT_MAX_LENGTH)
+                            .getContent());
             momentVO.setOriginCreateTime(originMoment.getCreateTime());
         }
     }

@@ -2,9 +2,9 @@ package com.ironman.forum.service.aop;
 
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.ViewLogDAO;
-import com.ironman.forum.entity.EntityTypeEnum;
+import com.ironman.forum.entity.ArticleTypeEnum;
 import com.ironman.forum.entity.ViewLog;
-import com.ironman.forum.service.AnsyCommonService;
+import com.ironman.forum.service.CommonService;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.PageRequest;
@@ -22,8 +22,9 @@ import java.util.List;
 @Component
 @Log4j
 public class SaveViewLogAspect {
+
     @Autowired
-    private AnsyCommonService ansyCommonService;
+    private CommonService commonService;
 
     @Autowired
     private ViewLogDAO viewLogDAO;
@@ -32,27 +33,27 @@ public class SaveViewLogAspect {
         if (blogDetailVO == null) {
             return;
         }
-        log.info("Ö´ÐÐ·½·¨getBlogDetail·µ»ØºóÔËÐÐ£¬²ÎÊýÎª:" + blogDetailVO);
+        log.info("Ö´ï¿½Ð·ï¿½ï¿½ï¿½getBlogDetailï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Îª:" + blogDetailVO);
         ViewLog viewLog = new ViewLog();
         long userId = UserLoginUtil.getLoginUserId();
         viewLog.setUserId(userId);
-        viewLog.setType(EntityTypeEnum.BLOG.getId());
+        viewLog.setType(ArticleTypeEnum.BLOG.getId());
         viewLog.setTargetId(blogDetailVO.getId());
         viewLog.setDisabled(false);
         viewLog.setCreateTime(new Date());
         try {
-            //×¢Òâ£¬´Ë´¦±ØÐëÍ¬²½²åÈëdb£¬ÒòÎªºóÃæÒªÓÃµ½id£¬ËùÒÔ²»ÄÜ¼ÓÈë»º´æ
-            ansyCommonService.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            //×¢ï¿½â£¬ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½dbï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Òªï¿½Ãµï¿½idï¿½ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½Ü¼ï¿½ï¿½ë»ºï¿½ï¿½
+            commonService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
             viewLogDAO.save(viewLog);
-            //ÄäÃûÓÃ»§·ÃÎÊ²»Ð´aboutMe±í
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ê²ï¿½Ð´aboutMeï¿½ï¿½
             if (userId == IronConstant.ANONYMOUS_USER_ID) {
                 return;
             }
-            //Èç¹û²»ÊÇ×Ô¼º¿´×Ô¼ºµÄÎÄÕÂ£¬ÐèÒªÐ´Èëaboutme±í
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â£ï¿½ï¿½ï¿½ÒªÐ´ï¿½ï¿½aboutmeï¿½ï¿½
             if (!blogDetailVO.getUserId().equals(UserLoginUtil.getLoginUserUniqueId())) {
-                ansyCommonService.ansySaveAboutMe(viewLog);
+                commonService.ansySaveAboutMe(viewLog);
             }
-        } catch (GlobalException e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
@@ -61,21 +62,21 @@ public class SaveViewLogAspect {
         if (momentVOList == null || momentVOList.size() == 0) {
             return;
         }
-        System.out.println("Ö´ÐÐ·½·¨returningPageMoments·µ»ØºóÔËÐÐ£¬²ÎÊýÎª:" + momentVOList);
+        System.out.println("Ö´ï¿½Ð·ï¿½ï¿½ï¿½returningPageMomentsï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Îª:" + momentVOList);
 
         List<ViewLog> viewLogList = new ArrayList<>();
         for (MomentVO momentVO : momentVOList) {
             ViewLog viewLog = new ViewLog();
             viewLog.setUserId(UserLoginUtil.getLoginUserId());
-            viewLog.setType(EntityTypeEnum.MOMENT.getId());
+            viewLog.setType(ArticleTypeEnum.MOMENT.getId());
             viewLog.setTargetId(momentVO.getId());
             viewLog.setDisabled(false);
             viewLog.setCreateTime(new Date());
             viewLogList.add(viewLog);
         }
         try {
-            ansyCommonService.ansySaveViewLogList(viewLogList);
-        } catch (GlobalException e) {
+            commonService.ansySaveViewLogList(viewLogList);
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }
@@ -89,29 +90,29 @@ public class SaveViewLogAspect {
         if (timeLineVOList == null || timeLineVOList.size() == 0) {
             return;
         }
-        System.out.println("Ö´ÐÐ·½·¨pageMyFriendCircle·µ»ØºóÔËÐÐ£¬²ÎÊýÎª:" + timeLineVOList);
+        System.out.println("Ö´ï¿½Ð·ï¿½ï¿½ï¿½pageMyFriendCircleï¿½ï¿½ï¿½Øºï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Îª:" + timeLineVOList);
 
         List<ViewLog> viewLogList = new ArrayList<>();
         for (TimeLineVO timeLineVO : timeLineVOList) {
             int type = timeLineVO.getType();
-            //´Ë´¦blog²»ÐèÒª¼ÇÂ¼viewLog
+            //ï¿½Ë´ï¿½blogï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Â¼viewLog
             ViewLog viewLog = new ViewLog();
-            if (type == EntityTypeEnum.MOMENT.getId()) {
+            if (type == ArticleTypeEnum.MOMENT.getId()) {
                 MomentVO momentVO = (MomentVO) timeLineVO.getEntity();
                 viewLog.setUserId(UserLoginUtil.getLoginUserId());
-                viewLog.setType(EntityTypeEnum.MOMENT.getId());
+                viewLog.setType(ArticleTypeEnum.MOMENT.getId());
                 viewLog.setTargetId(momentVO.getId());
                 viewLog.setDisabled(false);
                 viewLog.setCreateTime(new Date());
                 viewLogList.add(viewLog);
-            } else if (type == EntityTypeEnum.QUESTION.getId()) {
+            } else if (type == ArticleTypeEnum.QUESTION.getId()) {
                 //todo
-            } else if (type == EntityTypeEnum.COMMENT.getId()) {
+            } else if (type == ArticleTypeEnum.COMMENT.getId()) {
                 //todo
             }
         }
         try {
-            ansyCommonService.ansySaveViewLogList(viewLogList);
+            commonService.ansySaveViewLogList(viewLogList);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);
         }

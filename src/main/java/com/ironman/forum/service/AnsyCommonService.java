@@ -1,27 +1,16 @@
 package com.ironman.forum.service;
 
-import com.ironman.forum.entity.BaseLog;
-import com.ironman.forum.entity.TimeLine;
-import com.ironman.forum.entity.ViewLog;
+import com.ironman.forum.entity.AboutMe;
 import com.ironman.forum.util.GlobalException;
 import org.springframework.scheduling.annotation.Async;
 
-import java.util.List;
-
 /**
- * Òì²½ÊÂ¼ş´¦Àí·şÎñ
+ * å¼‚æ­¥daoåŠ¨ä½œå°è£…ç±»
  */
 public interface AnsyCommonService {
-    /**
-     * Òì²½Ôö¼ÓÊ±¼äÖáÊÂ¼ş
-     *
-     * @param timeLine the time line
-     */
-    @Async
-    void ansyAddTimeLine(TimeLine timeLine);
 
     /**
-     * Òì²½Ôö¼Ó»ò¼õÉÙ±íÖĞÄ³Ò»ÏîµÄÖµ
+     * å¼‚æ­¥æ›´æ”¹å±æ€§æ•°é‡
      *
      * @param table
      * @param id
@@ -31,28 +20,22 @@ public interface AnsyCommonService {
     @Async
     void ansyChangeEntityPropertyNumById(String table, long id, String property, boolean isIncrement);
 
+
     /**
-     * Òì²½±£´æ¹ØÓÚÎÒµÄ¼ÇÂ¼
+     * å¼‚æ­¥ä¿å­˜aboutme
      *
-     * @param baseLog
+     * @param aboutMe
      * @throws GlobalException
      */
     @Async
-    void ansySaveAboutMe(BaseLog baseLog) throws GlobalException;
+    void ansySaveAboutMe(AboutMe aboutMe) throws GlobalException;
 
     /**
-     * Òì²½É¾³ı¹ØÓÚÎÒµÄ¼ÇÂ¼
-     *
-     * @param baseLog
-     * @throws GlobalException
+     * å¼‚æ­¥åˆ é™¤aboutMe
      */
     @Async
-    void ansyDeleteAboutMe(BaseLog baseLog) throws GlobalException;
+    void ansyDeleteAboutMe(long id, int type) throws GlobalException;
 
     @Async
-    void ansySaveViewLog(ViewLog viewLog) throws GlobalException;
-
-    void ansySaveViewLogList(List<ViewLog> viewLogList) throws GlobalException;
-
-    void increaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException;
+    void ansyIncreasePropertyNumById(String table, long id, String property, int addNum);
 }

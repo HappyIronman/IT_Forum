@@ -2,63 +2,79 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<context:component-scan base-package="com.ironman.forum.controller"/>
+    <context:component-scan base-package="com.ironman.forum.controller"/>
 
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="1548576000"/>
-		<property name="maxInMemorySize" value="40960000"/>
-		<property name="defaultEncoding" value="UTF-8"/>
-	</bean>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="1548576000"/>
+        <property name="maxInMemorySize" value="40960000"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
 
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/pages/"/>
-		<property name="suffix" value=".jsp"/>
-	</bean>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <mvc:annotation-driven/>
 
     <mvc:resources location="/images/" mapping="/img/**"/>
 
     <!--配置拦截器, 多个拦截器,顺序执行 -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
-			<mvc:mapping path="/**"/>
-			<bean class="com.ironman.forum.conf.LoginInterceptor">
-				<property name="publicUrlSet">
-					<set>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->
+            <mvc:mapping path="/**"/>
+            <bean class="com.ironman.forum.conf.LoginInterceptor">
+                <property name="publicUrlSet">
+                    <set>
                         <value>/data/user/login</value>
                         <value>/data/user/checkPhone</value>
                         <value>/data/register</value>
-						<value>/data/user/.*</value>
-						<value>/data/.*/moments</value>
-						<value>/data/.*/blogs</value>
-						<value>/data/blog/.*</value>
+                        <value>/data/comments</value>
+                        <value>/data/user/.*</value>
+                        <value>/data/.*/moments</value>
+                        <value>/data/.*/blogs</value>
+                        <value>/data/blog/.*</value>
                         <value>/data/search</value>
-					</set>
-				</property>
-				<property name="restrictUrlMap">
-					<map>
-						<entry key="/homepage/.*">
-							<set>
-								<value>ROLE_USER</value>
-								<value>ROLE_ADMIN</value>
-							</set>
-						</entry>
+                    </set>
+                </property>
+                <property name="restrictUrlMap">
+                    <map>
+                        <entry key="/homepage/.*">
+                            <set>
+                                <value>ROLE_USER</value>
+                                <value>ROLE_ADMIN</value>
+                            </set>
+                        </entry>
 
-						<!--默认其余都为受限url-->
-					</map>
-				</property>
-			</bean>
-		</mvc:interceptor>
-		<!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
-	</mvc:interceptors>
+                        <!--默认其余都为受限url-->
+                    </map>
+                </property>
+            </bean>
+        </mvc:interceptor>
+        <!-- 当设置多个拦截器时，先按顺序调用preHandle方法，然后逆序调用每个拦截器的postHandle和afterCompletion方法 -->
+    </mvc:interceptors>
 
-	<mvc:annotation-driven/>
+
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    <aop:config>
+        <aop:aspect id="aspect" ref="webExceptionAspect">
+            <aop:pointcut id="handleThrowingException"
+                          expression="@annotation(org.springframework.web.bind.annotation.RequestMapping)"/>
+
+            <aop:after-throwing pointcut-ref="handleThrowingException" method="handleThrowing"
+                                throwing="e"/>
+        </aop:aspect>
+    </aop:config>
 
 
 </beans>

@@ -7,52 +7,56 @@
             <img class="uk-border-circle" width="40" height="40" src="../assets/logo.png">
           </div>
           <div class="uk-width-auto">
-            <h5 class="uk-card-title uk-margin-remove-bottom">{{moment.username}}</h5>
+            <h5 class="uk-card-title uk-margin-remove-bottom">
+              <router-link v-bind:to="'/user/'+moment.userId">{{moment.username}}</router-link>
+            </h5>
             <p class="uk-text-meta uk-margin-remove-top">
               {{moment.createTime | formatDate('yyyy-MM-dd hh:mm')}}
             </p>
           </div>
           <div class="uk-width-expand uk-text-right uk-text-small">
             <p v-if="moment.share" class="uk-margin-right">转发了
-              <span class="uk-text-success">{{moment.originUsername}}</span> 的动态
+              <router-link v-bind:to="'/user/'+moment.originUserId">
+                <span class="uk-text-success">{{moment.originUsername}}</span>
+              </router-link>
+              的动态
             </p>
             <p v-if="!moment.share" class="uk-margin-right">发表了新动态</p>
           </div>
         </div>
       </div>
       <div class="uk-card-body uk-padding-small">
-        <p v-if="!moment.share">{{moment.content}}</p>
+        <p v-if="!moment.abstract">{{moment.content}}</p>
+        <div v-if="moment.abstract">
+          <p class="uk-margin-small-bottom">
+            {{isDisplayAbstractContent ? (absContent + '  ...' ) : moment.content}}
+          </p>
+          <div class="uk-text-right">
+            <button class="uk-button uk-button-text uk-text-muted"
+                    v-on:click="isDisplayAbstractContent=!isDisplayAbstractContent">
+              <span v-if="isDisplayAbstractContent">展开全文</span>
+              <span v-if="!isDisplayAbstractContent">收起</span>
+            </button>
+          </div>
+
+        </div>
         <div v-if="moment.containPic" class="uk-grid" uk-lightbox="animation: fade">
           <a v-for="url in moment.picUrlList" v-bind:href="url" class="uk-width-1-3" style="height: 200px">
             <img v-bind:src="url" style="height: 100%;width: 100%"/>
           </a>
         </div>
         <div v-if="moment.share">
-          <p class="uk-margin-remove">{{moment.content}}</p>
           <hr class="uk-divider-icon uk-margin-small">
           <p class="uk-margin-small uk-text-small uk-text-bold">原文:</p>
-          <p class="uk-margin-remove">{{moment.originContent}}</p>
+          <p class="uk-margin-remove">{{moment.originContent}}&nbsp;&nbsp;...</p>
           <p class="uk-margin-remove uk-text-small  uk-text-muted uk-text-right">
             发表于{{moment.originCreateTime | formatDate('yyyy-MM-dd hh:mm')}}
           </p>
         </div>
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
-        <button class="uk-button uk-button-text uk-margin-small-right"
-                v-bind:style="likeBtnStyle" v-on:click="likeMoment(moment, true)"
-                v-bind:disabled="moment.likeCondition===3">
-          <span v-show="moment.likeCondition!==2">赞</span>
-          <span v-show="moment.likeCondition===2">已赞</span>
-          <span>({{moment.likeNum}})</span>
-        </button>
-        <button class="uk-button uk-button-text uk-margin-small-right"
-                v-bind:style="dislikeBtnStyle" v-on:click="likeMoment(moment, false)"
-                v-bind:disabled="moment.likeCondition===2">
-          <span v-show="moment.likeCondition!==3">踩</span>
-          <span v-show="moment.likeCondition===3">已踩</span>
-          <span>({{moment.dislikeNum}})</span>
-        </button>
-        <button class="uk-button uk-button-text uk-margin-small-right">
+        <moment-like-btn v-bind:article="moment" type="1"></moment-like-btn>
+        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="fetchCommentList">
           <span>评论</span>
           <span>({{moment.commentNum}})</span>
         </button>
@@ -66,6 +70,13 @@
         </button>
       </div>
     </div>
+    <comment-list v-if="isShowComment" class="uk-width-2-3 uk-align-center uk-margin-right"
+                  v-bind:type="1"
+                  v-bind:comment-list="commentList"
+                  v-bind:article="moment"
+                  v-on:refresh-comment-list="refreshCommentList">
+    </comment-list>
+
     <moment-share-modal v-bind:id="'m'+ moment.uniqueId" v-bind:moment-info="moment"></moment-share-modal>
   </div>
 </template>
@@ -73,58 +84,66 @@
 <script>
   import {mapActions} from 'vuex'
   import MomentShareModal from "./MomentShareModal";
+  import CommentList from "./CommentList.vue";
+  import {requestApi} from '../api/requestUtils'
+  import MomentLikeBtn from "./MomentLikeBtn.vue";
 
   export default {
-    components: {MomentShareModal},
+    components: {
+      MomentLikeBtn,
+      CommentList,
+      MomentShareModal
+    },
     name: 'MomentItem',
     props: ['moment'],
     comments: {
       MomentShareModal
     },
     data() {
-      return {}
-    },
-    computed: {
-      //赞或者踩的状态，1-->未赞或踩过， 2--->已赞，3--->已踩
-      likeBtnStyle: function () {
-        return {color: this.moment.likeCondition === 2 ? 'blue' : 'black'}
-      },
-      dislikeBtnStyle: function () {
-        return {color: this.moment.likeCondition === 3 ? 'blue' : 'black'}
+      return {
+        isShowComment: false,
+        commentList: [],
+        //是否显得的是简略信息
+        isDisplayAbstractContent: true
       }
     },
+    computed: {
+      absContent: function () {
+        if (this.moment.abstract) {
+          return this.moment.content.slice(0, 80)
+        }
+        return this.moment.content
+      }
+    },
+
     methods: {
-      ...mapActions([
-        'likeArticleAction',
-        'cancelLikeArticleAction'
-      ]),
+
       onclickShareMoment: function () {
         UIkit.modal('#m' + this.moment.uniqueId).show();
       },
-      likeMoment: function (moment, isLike) {
-        var params = {
-          targetId: moment.uniqueId,
-          type: 1,
-          like: isLike
-        }
-        if (moment.likeCondition !== 1) {
-          this.cancelLikeArticleAction(params)
-          moment.likeCondition = 1
-          if (isLike) {
-            moment.likeNum -= 1
-          } else {
-            moment.dislikeNum -= 1
+      onclickShowFullContent: function () {
+
+      },
+      fetchCommentList: function () {
+        if (this.commentList.length === 0) {
+          var payload = {
+            'replyId': this.moment.uniqueId,
+            'type': 1
           }
-        } else {
-          this.likeArticleAction(params)
-          if (isLike) {
-            moment.likeCondition = 2
-            moment.likeNum += 1
-          } else {
-            moment.likeCondition = 3
-            moment.dislikeNum += 1
-          }
+          requestApi('get', 'comments', payload, (res) => {
+            this.commentList = this.commentList.concat(res.responseVO)
+          })
         }
+        this.isShowComment = !this.isShowComment
+      },
+      refreshCommentList: function () {
+        var payload = {
+          'replyId': this.moment.uniqueId,
+          'type': 1
+        }
+        requestApi('get', 'comments', payload, (res) => {
+          this.commentList = res.responseVO
+        })
       }
     }
   }

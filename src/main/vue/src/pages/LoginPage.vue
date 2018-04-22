@@ -84,7 +84,7 @@
         this.userLoginAction({'username': this.username, 'password': this.password}).then(
           (result) => {
             if (result) {
-              this.$router.push('/friend_circle')
+              this.$router.push(this.$route.query.referrer ? this.$route.query.referrer : '/')
             } else {
               this.username = ""
               this.password = ""

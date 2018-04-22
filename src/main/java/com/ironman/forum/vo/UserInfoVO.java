@@ -13,18 +13,18 @@ public class UserInfoVO {
     private String phone;
     private String email;
     private String intro;
-    private String profileUrl;
     private String profile;
+    private String profileUrl;
     private int followerNum;
     private int followingNum;
     private int momentNum;
     private int blogNum;
     private int questionNum;
     private String school;
-    //0-->Ä¬ÈÏ×´Ì¬»òÕß»¥ÎªÄ°ÉúÈË
-    //1-->ÎÒÊÇËûµÄ·ÛË¿
-    //2-->ËûÊÇÎÒµÄ·ÛË¿
-    //3-->»¥Îª·ÛË¿
+    //0-->Ä¬ï¿½ï¿½×´Ì¬ï¿½ï¿½ï¿½ß»ï¿½ÎªÄ°ï¿½ï¿½ï¿½ï¿½
+    //1-->ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Ë¿
+    //2-->ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ·ï¿½Ë¿
+    //3-->ï¿½ï¿½Îªï¿½ï¿½Ë¿
     private int relation = 0;
 
     public enum Relation {

@@ -18,19 +18,21 @@ import java.util.List;
 public interface UserService {
     UserInfoVO getMyBaseInfo() throws GlobalException;
 
+    List<FollowerVO> getFollowerListByUserId(Long userId, PageRequest pageRequest) throws GlobalException;
+
     UserInfoVO getUserBaseInfo(String uniqueId) throws GlobalException;
 
     UserInfoVO userLogin(UserLoginForm form, HttpSession session) throws GlobalException;
 
     /**
      * @param userUniqueId
-     * @return ±¾ÈËÓë¹Ø×¢ÈËµÄ¹ØÏµ, ²Î¼ûUserBaseVo.relationÃ¶¾ÙÀà
+     * @return ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ËµÄ¹ï¿½Ïµ, ï¿½Î¼ï¿½UserBaseVo.relationÃ¶ï¿½ï¿½ï¿½ï¿½
      * @throws GlobalException
      */
     int followUser(String userUniqueId) throws GlobalException;
 
     /**
-     * »ñÈ¡ÎÒµÄ·ÛË¿ÁÐ±í
+     * ï¿½ï¿½È¡ï¿½ÒµÄ·ï¿½Ë¿ï¿½Ð±ï¿½
      *
      * @param pageRequest
      * @return
@@ -39,7 +41,7 @@ public interface UserService {
     List<FollowerVO> pageMyFollowerList(PageRequest pageRequest) throws GlobalException;
 
     /**
-     * »ñÈ¡ÎÒ¹Ø×¢µÄÈËÁÐ±í
+     * ï¿½ï¿½È¡ï¿½Ò¹ï¿½×¢ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½
      *
      * @param pageRequest
      * @return
@@ -54,4 +56,6 @@ public interface UserService {
     UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException;
 
     UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException;
+
+    void logout(HttpSession session);
 }

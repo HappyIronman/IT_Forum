@@ -1,25 +1,15 @@
 package com.ironman.forum.service;
 
-import com.ironman.forum.dao.*;
-import com.ironman.forum.entity.*;
+import com.ironman.forum.dao.AboutMeDAO;
+import com.ironman.forum.dao.CommonDAO;
+import com.ironman.forum.dao.TimeLineDAO;
+import com.ironman.forum.entity.AboutMe;
 import com.ironman.forum.util.GlobalException;
-import com.ironman.forum.util.IronCache;
-import com.ironman.forum.util.IronConstant;
-import com.ironman.forum.util.ResponseStatus;
-import com.ironman.forum.vo.CommentLog;
-import com.ironman.forum.vo.FollowLog;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-
-/**
- * Òì²½²Ù×÷Àà
- * ÐèÒª¼ÓÈëÈ·±£³É¹¦´ëÊ©
- */
 @Service
 @Log4j
 public class AnsyCommonServiceImpl implements AnsyCommonService {
@@ -30,22 +20,7 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
     private CommonDAO commonDAO;
 
     @Autowired
-    private MomentDAO momentDAO;
-
-    @Autowired
-    private BlogDAO blogDAO;
-
-    @Autowired
     private AboutMeDAO aboutMeDAO;
-
-    @Autowired
-    private ViewLogDAO viewLogDAO;
-
-    @Override
-    @Async
-    public void ansyAddTimeLine(TimeLine timeLine) {
-        timeLineDAO.save(timeLine);
-    }
 
     @Override
     @Async
@@ -54,120 +29,21 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
     }
 
     /**
-     * ¸ù¾ÝlogÐÅÏ¢Ð´Èëabout_me±íÖÐ
-     *
-     * @param baseLog
-     * @throws GlobalException
+     * å¼‚æ­¥å†™å…¥aboutmeè¡¨
      */
     @Async
     @Override
-    public void ansySaveAboutMe(BaseLog baseLog) throws GlobalException {
-        AboutMe aboutMe = new AboutMe();
-        long targetId = baseLog.getTargetId();
-        aboutMe.setLogId(baseLog.getId());
-        aboutMe.setDeleted(false);
-        aboutMe.setNew(true);
-        aboutMe.setDeleted(false);
-        aboutMe.setCreateTime(new Date());
-        if (baseLog instanceof LikeLog) {
-            aboutMe.setType(AboutMe.LogType.LIKE_LOG.getId());
-        } else if (baseLog instanceof ViewLog) {
-            aboutMe.setType(AboutMe.LogType.VIEW_LOG.getId());
-            //Ö»ÓÐ²©¿ÍÏà¹ØµÄä¯ÀÀ¼ÇÂ¼»áÐ´ÈëaboutMe±í
-            if (baseLog.getType() != EntityTypeEnum.BLOG.getId()) {
-                return;
-            }
-        } else if (baseLog instanceof CommentLog) {
-            aboutMe.setType(AboutMe.LogType.COMMENT.getId());
-        } else if (baseLog instanceof FollowLog) {
-            aboutMe.setType(AboutMe.LogType.FOLLOW.getId());
-        } else {
-            log.error("baseLogÀàÐÍ²»ºÏ·¨");
-            throw new GlobalException();
-        }
-
-        int type = baseLog.getType();
-
-        if (type == EntityTypeEnum.USER.getId()) {
-            aboutMe.setUserId(targetId);
-        } else if (type == EntityTypeEnum.COMMENT.getId()) {
-            //todo
-        } else if (type == EntityTypeEnum.MOMENT.getId()) {
-            Moment moment = momentDAO.getBaseInfoById(targetId);
-            if (moment == null) {
-                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
-            }
-            aboutMe.setUserId(moment.getUserId());
-        } else if (type == EntityTypeEnum.BLOG.getId()) {
-            Blog blog = blogDAO.getBaseInfoById(targetId);
-            if (blog == null) {
-                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
-            }
-            aboutMe.setUserId(blog.getUserId());
-        } else if (type == EntityTypeEnum.QUESTION.getId()) {
-            //todo
-        } else {
-            log.error("typeÀàÐÍ²»ºÏ·¨");
-            throw new GlobalException();
-        }
+    public void ansySaveAboutMe(AboutMe aboutMe) throws GlobalException {
         aboutMeDAO.save(aboutMe);
     }
 
     @Override
-    public void ansyDeleteAboutMe(BaseLog baseLog) throws GlobalException {
-        int type;
-        if (baseLog instanceof LikeLog) {
-            type = AboutMe.LogType.LIKE_LOG.getId();
-        } else if (baseLog instanceof ViewLog) {
-            type = AboutMe.LogType.VIEW_LOG.getId();
-        } else if (baseLog instanceof CommentLog) {
-            type = AboutMe.LogType.COMMENT.getId();
-        } else {
-            log.error("baseLogÀàÐÍ²»ºÏ·¨");
-            throw new GlobalException();
-        }
-        aboutMeDAO.deleteByLogIdAndType(baseLog.getId(), type);
+    public void ansyDeleteAboutMe(long id, int type) throws GlobalException {
+        aboutMeDAO.deleteByLogIdAndType(id, type);
     }
 
     @Override
-    public void ansySaveViewLog(ViewLog viewLog) throws GlobalException {
-        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
-            log.info("»º´æÒÑÂú,Ö±½ÓÂä¿â");
-            this.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
-            viewLogDAO.save(viewLog);
-        } else {
-            IronCache.addViewLog(viewLog);
-        }
-    }
-
-    @Override
-    public void ansySaveViewLogList(List<ViewLog> viewLogList) throws GlobalException {
-        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
-            log.info("»º´æÒÑÂú,Ö±½ÓÂä¿â");
-            for (ViewLog viewLog : viewLogList) {
-                this.increaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
-                viewLogDAO.save(viewLog);
-            }
-        } else {
-            for (ViewLog viewLog : viewLogList) {
-                IronCache.addViewLog(viewLog);
-            }
-        }
-    }
-
-    @Override
-    public void increaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException {
-        String property = IronConstant.ARTICLE_PROPERTY_VIEW_NUM;
-        if (type == EntityTypeEnum.COMMENT.getId()) {
-            commonDAO.increasePropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, addNum);
-        } else if (type == EntityTypeEnum.MOMENT.getId()) {
-            commonDAO.increasePropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, addNum);
-        } else if (type == EntityTypeEnum.BLOG.getId()) {
-            commonDAO.increasePropertyNumById(IronConstant.TABLE_BLOG, targetId, property, addNum);
-        } else if (type == EntityTypeEnum.QUESTION.getId()) {
-            commonDAO.increasePropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, addNum);
-        } else {
-            throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
-        }
+    public void ansyIncreasePropertyNumById(String table, long id, String property, int addNum) {
+        commonDAO.increasePropertyNumById(table, id, property, addNum);
     }
 }

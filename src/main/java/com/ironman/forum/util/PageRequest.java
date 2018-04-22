@@ -8,8 +8,9 @@ public class PageRequest {
     private int page = 0;
     @Min(value = 1, message = "页大小不合法")
     @Max(value = 50, message = "页大小不合法")
-    private int size = 10;
+    private int size = 5;
     private String orderBy = "create_time";
+    private String sort = Sort.DESC.name;
 
     public PageRequest() {
     }
@@ -24,6 +25,20 @@ public class PageRequest {
         this.size = size;
         this.orderBy = orderBy;
     }
+
+    public PageRequest(int page, int size, String orderBy, Sort sort) {
+        this.page = page;
+        this.size = size;
+        this.orderBy = orderBy;
+        this.sort = sort.name;
+    }
+
+    public PageRequest(int page, int size, Sort sort) {
+        this.page = page;
+        this.size = size;
+        this.sort = sort.name;
+    }
+
 
     public int getPage() {
         return page;
@@ -47,5 +62,31 @@ public class PageRequest {
 
     public void setOrderBy(String orderBy) {
         this.orderBy = orderBy;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(Sort sort) {
+        this.sort = sort.name;
+    }
+
+    public void nextPage() {
+        this.page++;
+    }
+
+    public enum Sort {
+        ASC("ASC"),
+        DESC("DESC");
+        private String name;
+
+        Sort(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

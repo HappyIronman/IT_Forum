@@ -2,21 +2,18 @@ package com.ironman.forum.service;
 
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.*;
-import com.ironman.forum.entity.Blog;
-import com.ironman.forum.entity.EntityTypeEnum;
-import com.ironman.forum.entity.LikeLog;
-import com.ironman.forum.entity.Moment;
-import com.ironman.forum.util.GlobalException;
-import com.ironman.forum.util.IronConstant;
-import com.ironman.forum.util.IronUtil;
-import com.ironman.forum.util.ResponseStatus;
+import com.ironman.forum.entity.*;
+import com.ironman.forum.form.LikeArticleFormBean;
+import com.ironman.forum.util.*;
+import com.ironman.forum.vo.CommentLog;
+import com.ironman.forum.vo.FollowLog;
 import com.ironman.forum.vo.ImageVO;
-import com.ironman.forum.vo.LikeArticleFormBean;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,10 +41,16 @@ public class CommonServiceImpl implements CommonService {
     private BlogDAO blogDAO;
 
     @Autowired
+    private CommentDAO commentDAO;
+
+    @Autowired
     private ViewLogDAO viewLogDAO;
 
     @Autowired
-    private CommonDAO commonDAO;
+    private FollowDAO followDAO;
+
+    @Autowired
+    private TimeLineDAO timeLineDAO;
 
     @Value("#{prop.user_pic_path}")
     private String userPicPath;
@@ -60,16 +63,15 @@ public class CommonServiceImpl implements CommonService {
     public void likeArticle(LikeArticleFormBean formBean) throws GlobalException {
         Long userId = UserLoginUtil.getLoginUserId();
         int type = formBean.getType();
-        Long targetId = this.getArticleIdByUniqueIdAndType(formBean.getTargetId(), type);
+        Long targetId = this.getArticleBaseInfoByUniqueIdAndType(formBean.getTargetId(), type).getId();
         boolean isLike = formBean.isLike();
 
         LikeLog existLikeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
         if (existLikeLog != null) {
-            //≤ªƒ‹÷ÿ∏¥‘ﬁªÚ’ﬂ≤»
             throw new GlobalException(ResponseStatus.DUPLICATE_LIKE_LOG);
         }
 
-        //‘ˆº”‘ﬁªÚ≤»º«¬º
+
         LikeLog likeLog = new LikeLog();
         likeLog.setUserId(userId);
         likeLog.setTargetId(targetId);
@@ -80,11 +82,12 @@ public class CommonServiceImpl implements CommonService {
 
         likeLogDAO.save(likeLog);
 
-        //“Ï≤Ω‘ˆº”∂‘”¶Œƒ’¬‘ﬁªÚ≤» ˝¡ø
-        this.changeArticleLikeNum(likeLog, true);
+        //Â¢ûÂä†ËµûÊï∞Èáè
+        String property = isLike ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
+        this.ansyChangeArticlePropertyNum(type, targetId, property, true);
 
-        //“Ï≤Ω–¥»ÎaboutMe±Ì
-        ansyCommonService.ansySaveAboutMe(likeLog);
+        //ÂºÇÊ≠•ÂÜôÂÖ•aboutme
+        this.ansySaveAboutMe(likeLog);
     }
 
     @Override
@@ -92,54 +95,121 @@ public class CommonServiceImpl implements CommonService {
     public void cancelLikeArticle(LikeArticleFormBean formBean) throws GlobalException {
         Long userId = UserLoginUtil.getLoginUserId();
         int type = formBean.getType();
-        Long targetId = this.getArticleIdByUniqueIdAndType(formBean.getTargetId(), type);
+        Long targetId = this.getArticleBaseInfoByUniqueIdAndType(formBean.getTargetId(), type).getId();
         boolean isLike = formBean.isLike();
         LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
         if (null == likeLog) {
-            //÷§√˜±Ì÷–Œﬁ∆•≈‰º«¬º£¨±®¥Ì
+            //ËµûÊàñË∏©ËÆ∞ÂΩï‰∏çÂ≠òÂú®
             throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
         }
         likeLogDAO.updateDisabledByUserIdAndTargetIdAndTypeAndIsLike(userId, targetId, type, isLike);
-        //“Ï≤Ωºı…Ÿ∂‘”¶Œƒ’¬‘ﬁªÚ≤» ˝¡ø
-        this.changeArticleLikeNum(likeLog, false);
-        //“Ï≤Ω…æ≥˝aboutMe±Ìº«¬º
-        ansyCommonService.ansyDeleteAboutMe(likeLog);
+        //ÂºÇÊ≠•ÂáèÂ∞ëËµûÊàñË∏©Êï∞Èáè
+        String property = isLike ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
+        this.ansyChangeArticlePropertyNum(type, targetId, property, false);
+        //ÂºÇÊ≠•ÂÜôÂÖ•aboutme
+        this.ansyDeleteAboutMe(likeLog);
     }
 
 
     @Override
-    public Long getArticleIdByUniqueIdAndType(String uniqueId, int type) throws GlobalException {
-        Long id;
-        if (type == EntityTypeEnum.COMMENT.getId()) {
-            //todo
-            id = null;
-        } else if (type == EntityTypeEnum.MOMENT.getId()) {
-            Moment moment = momentDAO.getBaseInfoByUniqueId(uniqueId);
-            if (moment == null) {
+    public Article getArticleBaseInfoByUniqueIdAndType(String uniqueId, int type) throws GlobalException {
+        Article article;
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
+            article = commentDAO.getBaseInfoByUniqueId(uniqueId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.COMMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
+            article = momentDAO.getBaseInfoByUniqueId(uniqueId);
+            if (article == null) {
                 throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
             }
-            id = moment.getId();
-        } else if (type == EntityTypeEnum.BLOG.getId()) {
-            Blog blog = blogDAO.getBaseInfoByUniqueId(uniqueId);
-            if (blog == null) {
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
+            article = blogDAO.getBaseInfoByUniqueId(uniqueId);
+            if (article == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
-            id = blog.getId();
-        } else if (type == EntityTypeEnum.QUESTION.getId()) {
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
+            article = null;
             //todo
-            id = null;
         } else {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
         }
-        return id;
+        return article;
     }
 
+    @Override
+    public Article getArticleBaseInfoByIdAndType(long id, int type) throws GlobalException {
+        Article article;
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
+            article = commentDAO.getBaseInfoById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.COMMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
+            article = momentDAO.getBaseInfoById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
+            article = blogDAO.getBaseInfoById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
+            //todo
+            article = null;
+        } else {
+            log.error("type‰∏çÂ≠òÂú®");
+            throw new GlobalException();
+        }
+        return article;
+    }
+
+    @Override
+    public int judgeLikeCondition(Article article) throws GlobalException {
+        Long userId = UserLoginUtil.getLoginUserId();
+        int type;
+        if (article instanceof Comment) {
+            type = ArticleTypeEnum.COMMENT.getId();
+        } else if (article instanceof Moment) {
+            type = ArticleTypeEnum.MOMENT.getId();
+        } else if (article instanceof Blog) {
+            type = ArticleTypeEnum.BLOG.getId();
+        } else if (article instanceof Question) {
+            type = ArticleTypeEnum.QUESTION.getId();
+        } else {
+            throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
+        }
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, article.getId(), type);
+        if (likeLog != null) {
+            return (likeLog.isLike() ? IronConstant.LIKE_CONDITION_LIKED : IronConstant.LIKE_CONDITION_DISLIKED);
+        } else {
+            return IronConstant.LIKE_CONDITION_DEFAULT;
+        }
+    }
+
+    @Override
+    public void ansyIncreaseArticleViewLog(long targetId, int type, int addNum) throws GlobalException {
+        String property = IronConstant.ARTICLE_PROPERTY_VIEW_NUM;
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
+            ansyCommonService.ansyIncreasePropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, addNum);
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
+            ansyCommonService.ansyIncreasePropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, addNum);
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
+            ansyCommonService.ansyIncreasePropertyNumById(IronConstant.TABLE_BLOG, targetId, property, addNum);
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
+            ansyCommonService.ansyIncreasePropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, addNum);
+        } else {
+            throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
+        }
+    }
 
     @Override
     @Transactional
     public List<ImageVO> saveImages(MultipartFile[] images) throws GlobalException {
         if (images == null || images.length == 0) {
-            log.error("Œƒº˛Œ™ø’");
+            log.error("ÂõæÁâáÊñá‰ª∂‰∏∫Á©∫");
             throw new GlobalException(ResponseStatus.PARAM_ERROR);
         }
         List<ImageVO> imageVOList = new ArrayList<>();
@@ -151,7 +221,7 @@ public class CommonServiceImpl implements CommonService {
             log.info("newName:" + newName);
             String path;
             if (StringUtils.isEmpty(this.userPicPath)) {
-                throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "Õº∆¨¥Ê¥¢¬∑æ∂Œ™ø’");
+                throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "Â≠òÂÇ®Ë∑ØÂæÑ‰∏∫Á©∫");
             }
             if (this.userPicPath.endsWith("/")) {
                 path = this.userPicPath + newName;
@@ -162,7 +232,7 @@ public class CommonServiceImpl implements CommonService {
                 multipartFile.transferTo(new File(path));
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "Õº∆¨¥Ê¥¢“Ï≥£");
+                throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "Õº∆¨ÔøΩÊ¥¢ÔøΩÏ≥£");
             }
             String picUrl = IronUtil.concatImageUrl(this.host, newName);
             ImageVO imageVO = new ImageVO();
@@ -173,23 +243,152 @@ public class CommonServiceImpl implements CommonService {
         return imageVOList;
     }
 
-    /**
-     * “Ï≤Ω∏ƒ±‰∂‘”¶Œƒ’¬‘ﬁªÚ≤» ˝¡ø
-     *
-     * @param likeLog
-     */
-    private void changeArticleLikeNum(LikeLog likeLog, boolean isIncrement) {
-        int type = likeLog.getType();
-        long targetId = likeLog.getTargetId();
-        String property = likeLog.isLike() ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
-        if (type == EntityTypeEnum.COMMENT.getId()) {
+    @Override
+    public void ansySaveAboutMe(BaseLog baseLog) throws GlobalException {
+        AboutMe aboutMe = new AboutMe();
+        long targetId = baseLog.getTargetId();
+        aboutMe.setLogId(baseLog.getId());
+        aboutMe.setDeleted(false);
+        aboutMe.setNew(true);
+        aboutMe.setDeleted(false);
+        aboutMe.setCreateTime(new Date());
+        if (baseLog instanceof LikeLog) {
+            aboutMe.setType(AboutMe.LogType.LIKE_LOG.getId());
+        } else if (baseLog instanceof ViewLog) {
+            aboutMe.setType(AboutMe.LogType.VIEW_LOG.getId());
+            //Âè™ÊúâÊµèËßàÂçöÂÆ¢ÈúÄË¶ÅÂÜôÂÖ•aboutmeË°®
+            if (baseLog.getType() != ArticleTypeEnum.BLOG.getId()) {
+                return;
+            }
+        } else if (baseLog instanceof CommentLog) {
+            aboutMe.setType(AboutMe.LogType.COMMENT.getId());
+        } else if (baseLog instanceof FollowLog) {
+            aboutMe.setType(AboutMe.LogType.FOLLOW.getId());
+        } else {
+            log.error("baseLogÁ±ªÂûã‰∏çÂêàÊ≥ï");
+            throw new GlobalException();
+        }
+
+        int type = baseLog.getType();
+        if (type == ArticleTypeEnum.USER.getId()) {
+            aboutMe.setUserId(targetId);
+        } else {
+            Article article = this.getArticleBaseInfoByIdAndType(targetId, type);
+            aboutMe.setUserId(article.getUserId());
+        }
+
+
+        ansyCommonService.ansySaveAboutMe(aboutMe);
+    }
+
+
+    @Override
+    public void ansyDeleteAboutMe(BaseLog baseLog) throws GlobalException {
+        int type;
+        if (baseLog instanceof LikeLog) {
+            type = AboutMe.LogType.LIKE_LOG.getId();
+        } else if (baseLog instanceof ViewLog) {
+            type = AboutMe.LogType.VIEW_LOG.getId();
+        } else if (baseLog instanceof CommentLog) {
+            type = AboutMe.LogType.COMMENT.getId();
+        } else {
+            log.error("baseLogÔøΩÔøΩÔøΩÕ≤ÔøΩÔøΩœ∑ÔøΩ");
+            throw new GlobalException();
+        }
+        ansyCommonService.ansyDeleteAboutMe(baseLog.getId(), type);
+    }
+
+    @Override
+    public void ansySaveViewLog(ViewLog viewLog) throws GlobalException {
+        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
+            log.info("cacheÊï∞ÈáèË∂ÖÈôê,Áõ¥Êé•ËêΩÂ∫ì");
+            this.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            viewLogDAO.save(viewLog);
+        } else {
+            IronCache.addViewLog(viewLog);
+        }
+    }
+
+    @Override
+    public void ansySaveViewLogList(List<ViewLog> viewLogList) throws GlobalException {
+        if (IronCache.getViewLogCacheSize() > IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
+            log.info("cacheÊï∞ÈáèË∂ÖÈôê,Áõ¥Êé•ËêΩÂ∫ì");
+            for (ViewLog viewLog : viewLogList) {
+                this.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+                viewLogDAO.save(viewLog);
+            }
+        } else {
+            for (ViewLog viewLog : viewLogList) {
+                IronCache.addViewLog(viewLog);
+            }
+        }
+    }
+
+    @Override
+    public void ansyIncreaseCommentNum(Comment comment) {
+        int type = comment.getType();
+        long targetId = comment.getReplyId();
+
+        this.ansyChangeArticlePropertyNum(type, targetId, IronConstant.ARTICLE_PROPERTY_COMMENT_NUM, true);
+        if (type != ArticleTypeEnum.COMMENT.getId()) {
+            return;
+        }
+        Comment parent = commentDAO.getBaseInfoById(targetId);
+        this.ansyIncreaseCommentNum(parent);
+    }
+
+    @Override
+    public void ansyChangeArticlePropertyNum(int type, long targetId, String property, boolean isIncrement) {
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_COMMENT, targetId, property, isIncrement);
-        } else if (type == EntityTypeEnum.MOMENT.getId()) {
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_MOMENT, targetId, property, isIncrement);
-        } else if (type == EntityTypeEnum.BLOG.getId()) {
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_BLOG, targetId, property, isIncrement);
-        } else if (type == EntityTypeEnum.QUESTION.getId()) {
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
             ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_QUESTION, targetId, property, isIncrement);
+        }
+    }
+
+
+    @Override
+    public void ansyAddTimeLine(Long userId, long articleId, int type) {
+
+        Date createTime = new Date();
+        //ÊèíÂÖ•ÊàëËá™Â∑±ÁöÑÊó∂Èó¥ËΩ¥
+        TimeLine timeLine = new TimeLine();
+        timeLine.setUserId(userId);
+        timeLine.setArticleId(articleId);
+        timeLine.setType(type);
+        timeLine.setNew(true);
+        timeLine.setSelf(true);
+        timeLine.setCreateTime(createTime);
+        timeLineDAO.save(timeLine);
+
+        //ÂàÜÊâπÊèíÂÖ•Á≤â‰∏ùÁöÑÊó∂Èó¥ËΩ¥
+        int batchSize = 200;
+        PageRequest pageRequest = new PageRequest(0, batchSize);
+        List<Follow> followList = new ArrayList<>(batchSize);
+        while (followList.size() == batchSize) {
+            followList = followDAO.getAllLimitByUserId(userId, pageRequest);
+            if (CollectionUtils.isEmpty(followList)) {
+                break;
+            }
+            List<TimeLine> timeLineList = new ArrayList<>();
+            for (Follow follow : followList) {
+                timeLine = new TimeLine();
+                timeLine.setUserId(follow.getFollowerId());
+                timeLine.setArticleId(articleId);
+                timeLine.setType(type);
+                timeLine.setNew(true);
+                timeLine.setSelf(true);
+                timeLine.setCreateTime(createTime);
+                timeLineList.add(timeLine);
+            }
+            //ÊâπÈáèÊèíÂÖ•
+            timeLineDAO.batchSave(timeLineList);
+
+            pageRequest.nextPage();
         }
     }
 

@@ -25,20 +25,50 @@ const actions = {
       return true
     })
   },
-  //获取我的动态朋友圈列表
+  //获取朋友圈动态列表
   fetchMyCircleListAction({commit}, payload) {
+    if (payload.page === 0) {
+      if (state.circleList.length === parseInt(payload.size)) {
+        return true;
+      }
+      if (state.circleList.length > 0) {
+        return false;
+      }
+    }
     return requestApi('get', 'mycircle', payload, (res) => {
       commit(types.MY_CIRCLE_LIST, res)
-      return (res.responseVO != null && res.responseVO.length !== 0)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
     })
   },
   //获取我的动态列表
   fetchMyMomentListAction({commit}, payload) {
-    requestApi('get', 'mymoments', payload, (res) => commit(types.MY_MOMENT_LIST, res))
+    if (payload.page === 0) {
+      if (state.myMomentList.length === parseInt(payload.size)) {
+        return true;
+      }
+      if (state.myMomentList.length > 0) {
+        return false;
+      }
+    }
+    return requestApi('get', 'mymoments', payload, (res) => {
+      commit(types.MY_MOMENT_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   },
   //获取用户的动态列表
   fetchUserMomentListAction({commit}, payload) {
-    requestApi('get', payload.uniqueId + '/moments', payload.pageParam, (res) => commit(types.USER_MOMENT_LIST, res))
+    if (payload.pageParam.page === 0) {
+      if (state.userMomentList.length === parseInt(payload.pageParam.size)) {
+        return true;
+      }
+      if (state.userMomentList.length > 0) {
+        return false;
+      }
+    }
+    return requestApi('get', payload.uniqueId + '/moments', payload.pageParam, (res) => {
+      commit(types.USER_MOMENT_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.pageParam.size))
+    })
   }
 }
 

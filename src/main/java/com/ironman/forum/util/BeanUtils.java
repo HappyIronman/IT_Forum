@@ -14,19 +14,19 @@ public class BeanUtils {
         Set<Field> sourceFieldSet = new HashSet<>();
         Map<String, Field> destFieldMap = new HashMap<>();
 
-        while (sourceClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+        while (sourceClass != null) {
             List<Field> fieldList = Arrays.asList(sourceClass.getDeclaredFields());
             sourceFieldSet.addAll(fieldList);
-            sourceClass = sourceClass.getSuperclass(); //得到父类,然后赋给自己
+            sourceClass = sourceClass.getSuperclass();
         }
         sourceClass = destClass;
 
-        while (sourceClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+        while (sourceClass != null) {
             List<Field> fieldList = Arrays.asList(sourceClass.getDeclaredFields());
             for (Field field : fieldList) {
                 destFieldMap.put(field.getName(), field);
             }
-            sourceClass = sourceClass.getSuperclass(); //得到父类,然后赋给自己
+            sourceClass = sourceClass.getSuperclass();
         }
 
         T target = null;

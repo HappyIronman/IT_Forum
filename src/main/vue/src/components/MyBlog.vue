@@ -1,6 +1,6 @@
 <template>
   <div>
-    <self-page-nav></self-page-nav>
+    <self-page-nav index="1"></self-page-nav>
 
     <div class="uk-padding uk-padding-remove-top">
       <div class="uk-text-center">
@@ -8,7 +8,7 @@
       </div>
       <ul class="uk-list uk-list-divider">
         <li v-for="blog in myBlogList">
-          <router-link v-bind:to="'/my_blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
+          <router-link v-bind:to="'/self/my_blog/' + blog.uniqueId"><span>{{blog.title}}</span></router-link>
           <span class="uk-align-right uk-text-small uk-text-muted uk-margin-remove">
           （{{blog.commentNum}}／{{blog.viewNum}}）
         </span>
@@ -17,6 +17,7 @@
         </span>
         </li>
       </ul>
+      <pageable v-bind:fetch-data-func="fetchMyBlogListAction" size=10></pageable>
     </div>
   </div>
 </template>
@@ -24,9 +25,13 @@
 <script>
   import {mapActions, mapState} from 'vuex'
   import SelfPageNav from "./SelfPageNav";
+  import Pageable from "./Pageable.vue";
 
   export default {
-    components: {SelfPageNav},
+    components: {
+      Pageable,
+      SelfPageNav
+    },
     name: 'MyBlog',
     data() {
       return {}
@@ -36,9 +41,7 @@
         myBlogList: state => state.blog.myBlogList
       })
     },
-    created: function () {
-      this.fetchMyBlogListAction({page: 0, size: 10})
-    },
+
     methods: {
       ...mapActions([
         'fetchMyBlogListAction'

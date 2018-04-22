@@ -19,10 +19,32 @@ const actions = {
     })
   },
   fetchMyBlogListAction({commit}, payload) {
-    requestApi('get', 'myblogs', payload, (res) => commit(types.MY_BLOG_LIST, res))
+    if (payload.page === 0) {
+      if (state.myBlogList.length === parseInt(payload.size)) {
+        return true;
+      }
+      if (state.myBlogList.length > 0) {
+        return false;
+      }
+    }
+    return requestApi('get', 'myblogs', payload, (res) => {
+      commit(types.MY_BLOG_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   },
   fetchUserBlogListAction({commit}, payload) {
-    requestApi('get', payload.uniqueId + '/blogs', payload.pageParam, (res) => commit(types.USER_BLOG_LIST, res))
+    if (payload.pageParam.page === 0) {
+      if (state.userBlogList.length === parseInt(payload.pageParam.size)) {
+        return true;
+      }
+      if (state.userBlogList.length > 0) {
+        return false;
+      }
+    }
+    return requestApi('get', payload.uniqueId + '/blogs', payload.pageParam, (res) => {
+      commit(types.USER_BLOG_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.pageParam.size))
+    })
   },
   fetchBlogDetailAction({commit}, uniqueId) {
     requestApi('get', 'blog/' + uniqueId, null, (res) => commit(types.BLOG_DETAIL, res))
