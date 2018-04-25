@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 公有接口控制器
+ */
 @RestController
 @RequestMapping("/data")
 @Log4j
@@ -24,6 +27,13 @@ public class CommonController {
     @Autowired
     private CommonService commonService;
 
+    /**
+     * 给文章点赞
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/article/like", method = RequestMethod.POST)
     public IronResponseEntity likeArticle(@RequestBody @Valid LikeArticleFormBean form, BindingResult result) {
         if (result.hasErrors()) {
@@ -38,6 +48,13 @@ public class CommonController {
         }
     }
 
+    /**
+     * 取消赞
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/article/cancel_like", method = RequestMethod.POST)
     public IronResponseEntity cancelLikeArticle(@RequestBody @Valid LikeArticleFormBean form, BindingResult result) {
         if (result.hasErrors()) {
@@ -52,6 +69,12 @@ public class CommonController {
         }
     }
 
+    /**
+     * 上传图片
+     *
+     * @param images
+     * @return
+     */
     @RequestMapping(value = "/upload/pic")
     @ResponseBody
     public List<ImageVO> uploadPics(@RequestParam("pics") MultipartFile[] images) {

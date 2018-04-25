@@ -19,6 +19,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 用户相关控制器
+ */
 @RestController
 @RequestMapping(value = "/data")
 @Log4j
@@ -27,150 +30,178 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 获取登录用户个人信息
+     *
+     * @return
+     */
     @RequestMapping(value = "/my/info", method = RequestMethod.GET)
-    public IronResponseEntity getMyInfo() {
-        try {
-            UserInfoVO userInfoVO = userService.getMyBaseInfo();
-            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+    public IronResponseEntity getMyInfo() throws GlobalException {
+        UserInfoVO userInfoVO = userService.getMyBaseInfo();
+        return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
     }
 
+    /**
+     * 编辑个人信息
+     *
+     * @param form
+     * @param result
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/my/edit", method = RequestMethod.PUT)
-    public ResponseEntity editInfo(@RequestBody @Valid UserEditForm form, BindingResult result, HttpSession session) {
+    public ResponseEntity editInfo(@RequestBody @Valid UserEditForm form, BindingResult result, HttpSession session)
+            throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            UserInfoVO userInfoVO = userService.editInfo(form, session);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
-
-    }
-
-
-    @RequestMapping(value = "my/aboutmes", method = RequestMethod.GET)
-    public IronResponseEntity getAboutmeList(@Valid PageRequest pageRequest, BindingResult result) {
-        if (result.hasErrors()) {
-            return IronUtil.processResult(result);
-        }
-        try {
-            List<BaseLogVO> baseLogVOList = userService.pageAboutMeList(pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, baseLogVOList);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        UserInfoVO userInfoVO = userService.editInfo(form, session);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
     }
 
 
     /**
-     * ��ȡ�ҵķ�˿
+     * 分页获取“关于我”列表
      *
      * @param pageRequest
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "my/aboutmes", method = RequestMethod.GET)
+    public IronResponseEntity getAboutmeList(@Valid PageRequest pageRequest, BindingResult result)
+            throws GlobalException {
+        if (result.hasErrors()) {
+            return IronUtil.processResult(result);
+        }
+        List<BaseLogVO> baseLogVOList = userService.pageAboutMeList(pageRequest);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, baseLogVOList);
+    }
+
+
+    /**
+     * 分页获取我的粉丝列表
+     *
+     * @param pageRequest
+     * @param result
      * @return
      */
     @RequestMapping(value = "/my/followers", method = RequestMethod.GET)
-    public IronResponseEntity getMyFollowerList(@Valid PageRequest pageRequest, BindingResult result) {
+    public IronResponseEntity getMyFollowerList(@Valid PageRequest pageRequest, BindingResult result) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            List<FollowerVO> followerList = userService.pageMyFollowerList(pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, followerList);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        List<FollowerVO> followerList = userService.pageMyFollowerList(pageRequest);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, followerList);
     }
 
+
     /**
-     * ��ȡ�ҹ�ע����
+     * 分页获取我关注的人列表
      *
      * @param pageRequest
+     * @param result
      * @return
      */
     @RequestMapping(value = "/my/followings", method = RequestMethod.GET)
-    public IronResponseEntity getMyFollowingList(@Valid PageRequest pageRequest, BindingResult result) {
+    public IronResponseEntity getMyFollowingList(@Valid PageRequest pageRequest, BindingResult result) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            List<FollowerVO> followingList = userService.pageMyFollowingList(pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, followingList);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        List<FollowerVO> followingList = userService.pageMyFollowingList(pageRequest);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, followingList);
+
     }
 
+    /**
+     * 获取用户基本信息
+     *
+     * @param uniqueId
+     * @return
+     */
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
-    public IronResponseEntity getUserBaseInfo(@PathVariable("userId") String uniqueId) {
-        try {
-            UserInfoVO userInfoVO = userService.getUserBaseInfo(uniqueId);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+    public IronResponseEntity getUserBaseInfo(@PathVariable("userId") String uniqueId) throws GlobalException {
+        UserInfoVO userInfoVO = userService.getUserBaseInfo(uniqueId);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
     }
 
+    /**
+     * 用户登录接口
+     *
+     * @param form
+     * @param result
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
-    public IronResponseEntity userLogin(@RequestBody @Valid UserLoginForm form, BindingResult result, HttpSession session) {
+    public IronResponseEntity userLogin(@RequestBody @Valid UserLoginForm form, BindingResult result, HttpSession session)
+            throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            UserInfoVO userInfoVO = userService.userLogin(form, session);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        UserInfoVO userInfoVO = userService.userLogin(form, session);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
     }
 
+    /**
+     * 关注某人接口
+     *
+     * @param userUniqueId
+     * @return
+     */
     @RequestMapping(value = "/my/follow/{userId}", method = RequestMethod.POST)
-    public IronResponseEntity userFollow(@PathVariable("userId") String userUniqueId) {
-        try {
-            int relation = userService.followUser(userUniqueId);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, relation);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+    public IronResponseEntity userFollow(@PathVariable("userId") String userUniqueId) throws GlobalException {
+        int relation = userService.followUser(userUniqueId);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, relation);
     }
 
 
+    /**
+     * 检查手机号是否重复接口
+     *
+     * @param phone
+     * @return
+     */
     @RequestMapping(value = "/user/checkPhone", method = RequestMethod.POST)
-    public IronResponseEntity checkPhone(String phone) {
-        try {
-            userService.checkPhone(phone);
-            return new IronResponseEntity(ResponseStatus.SUCCESS);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+    public IronResponseEntity checkPhone(String phone) throws GlobalException {
+        userService.checkPhone(phone);
+        return new IronResponseEntity(ResponseStatus.SUCCESS);
     }
 
+    /**
+     * 检查用户名是否重复接口
+     *
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "/user/checkUsername", method = RequestMethod.POST)
+    public IronResponseEntity checkUsername(String username) throws GlobalException {
+        userService.checkUsername(username);
+        return new IronResponseEntity(ResponseStatus.SUCCESS);
+    }
+
+    /**
+     * 用户注册接口
+     *
+     * @param form
+     * @param result
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/user/register", method = RequestMethod.POST)
-    public IronResponseEntity register(@RequestBody @Valid RegisterForm form, BindingResult result, HttpSession session) {
+    public IronResponseEntity register(@RequestBody @Valid RegisterForm form, BindingResult result, HttpSession session) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            UserInfoVO userInfoVO = userService.register(form, session);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        UserInfoVO userInfoVO = userService.register(form, session);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, userInfoVO);
     }
 
+    /**
+     * 用户登出接口
+     *
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/user/logout", method = RequestMethod.GET)
     public IronResponseEntity logout(HttpSession session) {
         userService.logout(session);

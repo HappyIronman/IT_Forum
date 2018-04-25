@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 博客相关控制器
+ */
 @Log4j
 @RestController
 @RequestMapping("/data")
@@ -22,6 +25,13 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
 
+    /**
+     * 发表博客
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/blog", method = RequestMethod.POST)
     public IronResponseEntity publishBlog(@RequestBody @Valid BlogPublishForm form, BindingResult result) {
         if (result.hasErrors()) {
@@ -36,6 +46,13 @@ public class BlogController {
         }
     }
 
+    /**
+     * 分页获取个人博客列表
+     *
+     * @param pageRequest
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/myblogs", method = RequestMethod.GET)
     public IronResponseEntity pageMyBlogs(@Valid PageRequest pageRequest, BindingResult result) {
         if (result.hasErrors()) {
@@ -50,6 +67,14 @@ public class BlogController {
         }
     }
 
+    /**
+     * 分页获取用户博客列表
+     *
+     * @param userUniqueId
+     * @param pageRequest
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/{userId}/blogs", method = RequestMethod.GET)
     public IronResponseEntity pageUserBlogs(@PathVariable("userId") String userUniqueId,
                                             @Valid PageRequest pageRequest, BindingResult result) {
@@ -65,6 +90,12 @@ public class BlogController {
         }
     }
 
+    /**
+     * 获取博客内容详情
+     *
+     * @param uniqueId
+     * @return
+     */
     @RequestMapping(value = "/blog/{uniqueId}", method = RequestMethod.GET)
     public IronResponseEntity getBlogDetail(@PathVariable("uniqueId") String uniqueId) {
 

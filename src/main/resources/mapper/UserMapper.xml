@@ -29,6 +29,10 @@
         SELECT * FROM user WHERE phone = #{phone} AND disabled = FALSE;
     </select>
 
+    <select id="getByUsername" parameterType="java.lang.String" resultType="com.ironman.forum.entity.User">
+        SELECT * FROM user WHERE username = #{username} AND disabled = FALSE;
+    </select>
+
     <insert id="save" parameterType="com.ironman.forum.entity.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user(unique_id,username,password,sex,phone,email,intro,profile,school,follower_num,following_num,
         moment_num,blog_num,question_num,disabled,create_time)

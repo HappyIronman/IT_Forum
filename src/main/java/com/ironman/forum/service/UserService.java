@@ -53,6 +53,8 @@ public interface UserService {
 
     void checkPhone(String phone) throws GlobalException;
 
+    void checkUsername(String username) throws GlobalException;
+
     UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException;
 
     UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException;

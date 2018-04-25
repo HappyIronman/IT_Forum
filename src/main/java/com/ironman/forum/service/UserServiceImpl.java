@@ -465,6 +465,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void checkUsername(String username) throws GlobalException {
+        User user = userDAO.getByUsername(username);
+        if (user != null) {
+            throw new GlobalException(ResponseStatus.DUPLICATE_USERNAME);
+        }
+    }
 
     @Override
     public UserInfoVO register(RegisterForm form, HttpSession session) throws GlobalException {

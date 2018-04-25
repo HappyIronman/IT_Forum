@@ -78,7 +78,7 @@ function Jlogin() {
             ldata.code = code;
           }
           $.ajax({
-            url: 'http://localhost:8081/data/user/login',
+            url: global.HOST + '/data/user/login',
             type: 'post',
             contentType: "application/json",
             dataType: 'json',
@@ -297,11 +297,29 @@ function checkUsername(username) {
     $('.username-err').removeClass('hide').text('用户名长度在12字符以内');
     return false
   }
-  return true
+  var status = false
+  $.ajax({
+    url: global.HOST + '/data/user/checkUsername',
+    type: 'post',
+    dataType: 'json',
+    async: false,
+    data: {username: username},
+    success: function (data) {
+      $('.username-err').removeClass('hide').text("用户名可用");
+      status = true;
+    },
+    error: function (data) {
+      console.log(JSON.stringify(data))
+      var msg = data.status === 400 ? "用户名重复" : "系统错误"
+      $('.username-err').removeClass('hide').text(msg);
+      status = false;
+    }
+  });
+  return status;
 }
 
 function checkPhone(phone) {
-  var status = true;
+  // var status = true;
   if (phone == '') {
     $('.num2-err').removeClass('hide').find("em").text('请输入手机号');
     return false;
@@ -312,25 +330,26 @@ function checkPhone(phone) {
     $('.num2-err').removeClass('hide').text('手机号不合法，请重新输入');
     return false;
   }
-  $.ajax({
-    url: 'http://localhost:8081/data/user/checkPhone',
-    type: 'post',
-    dataType: 'json',
-    // contentType: "application/json",
-    async: false,
-    data: {phone: phone},
-    success: function (data) {
-      $('.num2-err').removeClass('hide').text("手机号可用");
-      status = true;
-    },
-    error: function (data) {
-      console.log(JSON.stringify(data))
-      var msg = data.status === 400 ? "手机号重复" : "系统错误"
-      $('.num2-err').removeClass('hide').text(msg);
-      status = false;
-    }
-  });
-  return status;
+  return true
+  // $.ajax({
+  //   url: global.HOST + '/data/user/checkPhone',
+  //   type: 'post',
+  //   dataType: 'json',
+  //   // contentType: "application/json",
+  //   async: false,
+  //   data: {phone: phone},
+  //   success: function (data) {
+  //     $('.num2-err').removeClass('hide').text("手机号可用");
+  //     status = true;
+  //   },
+  //   error: function (data) {
+  //     console.log(JSON.stringify(data))
+  //     var msg = data.status === 400 ? "手机号重复" : "系统错误"
+  //     $('.num2-err').removeClass('hide').text(msg);
+  //     status = false;
+  //   }
+  // });
+  // return status;
 }
 
 function checkPhoneCode(pCode) {

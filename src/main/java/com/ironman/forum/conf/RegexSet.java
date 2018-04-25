@@ -3,6 +3,9 @@ package com.ironman.forum.conf;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 
+/**
+ * 正则集合类
+ */
 public class RegexSet<E> extends HashSet<E> {
 
     @Override

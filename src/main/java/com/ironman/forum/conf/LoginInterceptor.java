@@ -20,19 +20,27 @@ import java.util.Set;
 
 /**
  * @Author: Ironman
- * @Description:
+ * @Description: 用户登录及其权限校验拦截器
  * @Date: Created in 11:14 2017/12/31 0031
  **/
 @Component
 @Log4j
 public class LoginInterceptor implements HandlerInterceptor {
 
+    /**
+     * 允许发起跨域请求的域名
+     */
     @Value("#{prop.permitted_origin_host}")
     private String permittedOriginHost;
 
-    //url和权限对应表
+    /**
+     * 受限url和权限对应map，默认为用户权限
+     */
     private RegexHashMap<String, Set<String>> restrictUrlMap;
 
+    /**
+     * 可公开访问url集合，若添加新的公开接口，必须在此配置
+     */
     private RegexSet<String> publicUrlSet;
 
     @Override
@@ -50,10 +58,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        //测试环境直接放行
-//        if (true) {
-//            return true;
-//        }
 
         String requestUri = httpServletRequest.getRequestURI();
 

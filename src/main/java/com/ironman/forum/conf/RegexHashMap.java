@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * @Author: Ironman
- * @Description:
+ * @Description: 正则map类
  * @Date: Created in 11:29 2017/12/31 0031
  **/
 public class RegexHashMap<K, V> extends HashMap {

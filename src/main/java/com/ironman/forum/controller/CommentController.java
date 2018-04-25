@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 评论相关控制器
+ */
 @RestController
 @RequestMapping("/data")
 @Log4j
@@ -27,6 +30,13 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 发表评论(原创或转载都走此接口)
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     IronResponseEntity publishComment(@RequestBody @Valid CommentPublishForm form, BindingResult result) {
         if (result.hasErrors()) {
@@ -41,6 +51,13 @@ public class CommentController {
         }
     }
 
+    /**
+     * 分页获取文章评论列表
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/comments", method = RequestMethod.GET)
     IronResponseEntity pageCommentList(@Valid CommentListForm form, BindingResult result) {
         if (result.hasErrors()) {

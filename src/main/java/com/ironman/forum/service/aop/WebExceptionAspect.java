@@ -1,5 +1,6 @@
 package com.ironman.forum.service.aop;
 
+import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.IronUtil;
 import com.ironman.forum.util.ResponseBean;
 import com.ironman.forum.util.ResponseStatus;
@@ -23,13 +24,18 @@ public class WebExceptionAspect {
 
     public void handleThrowing(Exception e) {
         log.error(e.getMessage(), e);
-        writeContent();
+        if (e instanceof GlobalException) {
+            GlobalException globalException = (GlobalException) e;
+            writeContent(new ResponseBean(globalException.getResponseStatus()));
+        } else {
+            writeContent(new ResponseBean(ResponseStatus.SYSTEM_ERROR));
+        }
     }
 
     /**
      * 将内容输出到浏览器
      */
-    private void writeContent() {
+    private void writeContent(ResponseBean responseBean) {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.reset();
         response.setCharacterEncoding("UTF-8");
@@ -44,7 +50,7 @@ public class WebExceptionAspect {
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
-            writer.print(IronUtil.toJson(new ResponseBean(ResponseStatus.SYSTEM_ERROR)));
+            writer.print(IronUtil.toJson(responseBean));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         } finally {

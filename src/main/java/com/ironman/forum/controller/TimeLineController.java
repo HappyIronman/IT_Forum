@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 朋友圈相关控制器
+ */
 @RestController
 @Log4j
 @RequestMapping(value = "/data")
@@ -21,6 +24,13 @@ public class TimeLineController {
     @Autowired
     private TimeLineService timeLineService;
 
+    /**
+     * 分页获取我的朋友圈
+     *
+     * @param pageRequest
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/mycircle", method = RequestMethod.GET)
     public IronResponseEntity myFriendCircle(@Valid PageRequest pageRequest, BindingResult result) {
         if (result.hasErrors()) {

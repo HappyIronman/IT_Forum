@@ -5,7 +5,7 @@ import com.ironman.forum.util.IronConstant;
 
 /**
  * @Author: Ironman
- * @Description:
+ * @Description: 获取上下文用户登录信息封装类
  * @Date: Created in 12:16 2017/12/31 0031
  **/
 public class UserLoginUtil {

@@ -18,6 +18,8 @@ public interface UserDAO {
 
     User getByPhone(String phone);
 
+    User getByUsername(String username);
+
     void save(User user);
 
     void update(User user);

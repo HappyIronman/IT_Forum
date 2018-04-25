@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 搜索相关控制器
+ */
 @RestController
 @RequestMapping(value = "/data")
 @Log4j
@@ -25,6 +28,13 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    /**
+     * 分页搜索接口
+     *
+     * @param form
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public IronResponseEntity searchEntity(@RequestBody @Valid SearchForm form, BindingResult result) {
         if (result.hasErrors()) {
