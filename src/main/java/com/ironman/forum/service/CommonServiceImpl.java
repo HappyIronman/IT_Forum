@@ -106,7 +106,7 @@ public class CommonServiceImpl implements CommonService {
         //异步减少赞或踩数量
         String property = isLike ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
         this.ansyChangeArticlePropertyNum(type, targetId, property, false);
-        //异步写入aboutme
+        //异步删除aboutme
         this.ansyDeleteAboutMe(likeLog);
     }
 
@@ -153,6 +153,34 @@ public class CommonServiceImpl implements CommonService {
             }
         } else if (type == ArticleTypeEnum.BLOG.getId()) {
             article = blogDAO.getBaseInfoById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
+            //todo
+            article = null;
+        } else {
+            log.error("type不存在");
+            throw new GlobalException();
+        }
+        return article;
+    }
+
+    @Override
+    public Article getArticleDetailInfoByIdAndType(long id, int type) throws GlobalException {
+        Article article;
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
+            article = commentDAO.getById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.COMMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
+            article = momentDAO.getById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
+            article = blogDAO.getById(id);
             if (article == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
@@ -234,7 +262,7 @@ public class CommonServiceImpl implements CommonService {
                 log.error(e.getMessage(), e);
                 throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "ͼƬ�洢�쳣");
             }
-            String picUrl = IronUtil.concatImageUrl(this.host, newName);
+            String picUrl = this.concatImageUrl(newName);
             ImageVO imageVO = new ImageVO();
             imageVO.setName(newName);
             imageVO.setUrl(picUrl);
@@ -390,6 +418,20 @@ public class CommonServiceImpl implements CommonService {
 
             pageRequest.nextPage();
         }
+    }
+
+    @Override
+    public String concatImageUrl(String imgName) throws GlobalException {
+        String picUrl;
+        if (StringUtils.isEmpty(host)) {
+            throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "hostΪ��");
+        }
+        if (host.endsWith("/")) {
+            picUrl = host + "img/" + imgName;
+        } else {
+            picUrl = host + "/img/" + imgName;
+        }
+        return picUrl;
     }
 
     public String getUserPicPath() {

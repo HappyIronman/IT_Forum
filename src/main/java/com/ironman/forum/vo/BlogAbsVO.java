@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * ²©¿Í¼òÂÔÐÅÏ¢£¨ÓÃÀ´Õ¹Ê¾ÔÚÊ±¼äÖáµÈ´¦£©
+ * ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½
  */
 @Getter
 @Setter
@@ -14,30 +14,30 @@ public class BlogAbsVO {
     private String uniqueId;
     private String userId;
     private String username;
-    private String profile;
+    private String profileUrl;
     private String title;
     private String content;
     private int likeNum;
     private int dislikeNum;
-    //ÔÞ»òÕß²ÈµÄ×´Ì¬£¬1-->Î´ÔÞ»ò²È¹ý£¬ 2--->ÒÑÔÞ£¬3--->ÒÑ²È
+    //ï¿½Þ»ï¿½ï¿½ß²Èµï¿½×´Ì¬ï¿½ï¿½1-->Î´ï¿½Þ»ï¿½È¹ï¿½ï¿½ï¿½ 2--->ï¿½ï¿½ï¿½Þ£ï¿½3--->ï¿½Ñ²ï¿½
     private int likeCondition;
     private int commentNum;
     private int shareNum;
     private int viewNum;
     private boolean isAbstract;
     private Date createTime;
-    //ÊÇ·ñÎªË½ÓÐ
+    //ï¿½Ç·ï¿½ÎªË½ï¿½ï¿½
     private boolean isPrivate;
-    //ÊÇ·ñÎª×ªÔØ
+    //ï¿½Ç·ï¿½Îª×ªï¿½ï¿½
     private boolean isShare;
-    //ÈôÎª×ªÔØ,ÊÇ·ñÔ­²©¿Í´æÔÚ
+    //ï¿½ï¿½Îª×ªï¿½ï¿½,ï¿½Ç·ï¿½Ô­ï¿½ï¿½ï¿½Í´ï¿½ï¿½ï¿½
     private boolean isExist = true;
-    //ÈôÎª×ªÔØ£¬Ô­²©¿Í×÷ÕßêÇ³Æ
+    //ï¿½ï¿½Îª×ªï¿½Ø£ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç³ï¿½
     private String originUsername;
-    //ÈôÎª×ªÔØ£¬Ô­²©¿Í×÷ÕßuniqueId
+    //ï¿½ï¿½Îª×ªï¿½Ø£ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uniqueId
     private String originUserId;
-    //ÈôÎª×ªÔØ£¬Ô­²©¿ÍÌâÄ¿
+    //ï¿½ï¿½Îª×ªï¿½Ø£ï¿½Ô­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿
     private String originTitle;
-    //ÈôÎª×ªÔØ£¬Ô­²©¿Í·¢²¼Ê±¼ä
+    //ï¿½ï¿½Îª×ªï¿½Ø£ï¿½Ô­ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
     private Date originCreateTime;
 }

@@ -4,7 +4,7 @@
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-grid-small uk-flex-middle uk-margin-remove" uk-grid>
           <div>
-            <img class="uk-border-circle" width="40" height="40" src="../assets/logo.png">
+            <img class="uk-border-circle" style="width: 40px;height: 40px" v-bind:src="moment.profileUrl">
           </div>
           <div class="uk-width-auto">
             <h5 class="uk-card-title uk-margin-remove-bottom">
@@ -26,8 +26,8 @@
         </div>
       </div>
       <div class="uk-card-body uk-padding-small">
-        <p v-if="!moment.abstract">{{moment.content}}</p>
-        <div v-if="moment.abstract">
+        <p v-if="moment.content.length <= 80">{{moment.content}}</p>
+        <div v-if="moment.content.length > 80">
           <p class="uk-margin-small-bottom">
             {{isDisplayAbstractContent ? (absContent + '  ...' ) : moment.content}}
           </p>
@@ -103,16 +103,13 @@
       return {
         isShowComment: false,
         commentList: [],
-        //是否显得的是简略信息
+        //是否显示的是简略信息
         isDisplayAbstractContent: true
       }
     },
     computed: {
       absContent: function () {
-        if (this.moment.abstract) {
-          return this.moment.content.slice(0, 80)
-        }
-        return this.moment.content
+        return this.moment.content.slice(0, 80)
       }
     },
 

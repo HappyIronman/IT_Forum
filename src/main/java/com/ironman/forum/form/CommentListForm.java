@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class CommentListForm {
-    @NotBlank(message = "回复主体不能为空")
+    @NotBlank(message = "replyId不能为空")
     private String replyId;
     @NotNull(message = "类型不能为空")
     @Min(value = 0, message = "类型不合法")

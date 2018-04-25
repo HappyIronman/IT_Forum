@@ -11,7 +11,6 @@ import com.ironman.forum.vo.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +42,9 @@ public class UserServiceImpl implements UserService {
     private FollowDAO followDAO;
 
     @Autowired
+    private CommentDAO commentDAO;
+
+    @Autowired
     private MomentDAO momentDAO;
 
     @Autowired
@@ -53,10 +55,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AnsyCommonService ansyCommonService;
-
-
-    @Value("#{prop.host}")
-    private String host;
 
     @Override
     public UserInfoVO getMyBaseInfo() throws GlobalException {
@@ -130,8 +128,8 @@ public class UserServiceImpl implements UserService {
                 }
                 baseLogVO = this.assembleViewLogVO(viewLog);
             } else if (aboutmeType == AboutMe.LogType.COMMENT.getId()) {
-                //todo
-                baseLogVO = new BaseLogVO();
+                Comment comment = commentDAO.getById(logId);
+                baseLogVO = this.assembleCommentLogVo(comment);
             } else if (aboutmeType == AboutMe.LogType.FOLLOW.getId()) {
                 Follow follow = followDAO.getById(logId);
                 if (follow == null) {
@@ -150,18 +148,52 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private BaseLogVO assembleCommentLogVo(Comment comment) {
-        return null;
+    private BaseLogVO assembleCommentLogVo(Comment comment) throws GlobalException {
+        CommentLogVO commentLogVO = new CommentLogVO();
+        commentLogVO.setLogType(AboutMe.LogType.COMMENT.getId());
+        User user = userDAO.getById(comment.getUserId());
+        commentLogVO.setUserId(user.getUniqueId());
+        commentLogVO.setUsername(user.getUsername());
+        commentLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
+        commentLogVO.setUniqueId(comment.getUniqueId());
+        commentLogVO.setContent(comment.getContent());
+        Article article = commonService.getArticleDetailInfoByIdAndType(comment.getReplyId(), comment.getType());
+        commentLogVO.setReplyId(article.getUniqueId());
+        commentLogVO.setType(comment.getType());
+        commentLogVO.setReplyTitle(this.getCommentReplyTitle(article));
+        return commentLogVO;
     }
 
-    private FollowLogVO assembleFollowLogVo(Follow follow) {
+    private String getCommentReplyTitle(Article article) throws GlobalException {
+        if (article instanceof Comment) {
+            Comment comment = (Comment) article;
+            return IronUtil.getAbstractContentStr(comment.getContent(), IronConstant.TITLE_MAX_LENGTH);
+        }
+        if (article instanceof Moment) {
+            Moment moment = (Moment) article;
+            return IronUtil.getAbstractContentStr(moment.getContent(), IronConstant.TITLE_MAX_LENGTH);
+        }
+
+        if (article instanceof Blog) {
+            Blog blog = (Blog) article;
+            return blog.getTitle();
+        }
+
+        if (article instanceof Question) {
+            Question question = (Question) article;
+            return question.getTitle();
+        }
+        throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
+    }
+
+    private FollowLogVO assembleFollowLogVo(Follow follow) throws GlobalException {
         FollowLogVO followLogVO = new FollowLogVO();
-        followLogVO.setType(AboutMe.LogType.FOLLOW.getId());
+        followLogVO.setLogType(AboutMe.LogType.FOLLOW.getId());
 
         User user = userDAO.getById(follow.getFollowerId());
         followLogVO.setUserId(user.getUniqueId());
         followLogVO.setUsername(user.getUsername());
-        followLogVO.setProfile(user.getProfile());
+        followLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
 
         followLogVO.setCreateTime(follow.getCreateTime());
 
@@ -170,7 +202,7 @@ public class UserServiceImpl implements UserService {
 
     private ViewLogVO assembleViewLogVO(ViewLog viewLog) throws GlobalException {
         ViewLogVO viewLogVO = new ViewLogVO();
-        viewLogVO.setType(AboutMe.LogType.VIEW_LOG.getId());
+        viewLogVO.setLogType(AboutMe.LogType.VIEW_LOG.getId());
 
         int articleType = viewLog.getType();
         long targetId = viewLog.getTargetId();
@@ -206,12 +238,12 @@ public class UserServiceImpl implements UserService {
         if (viewLog.getUserId() == IronConstant.ANONYMOUS_USER_ID) {
             viewLogVO.setUserId(IronConstant.ANONYMOUS_USER_UNIQUE_ID);
             viewLogVO.setUsername(IronConstant.ANONYMOUS_USER_NAME);
-            viewLogVO.setProfile(IronConstant.ANONYMOUS_USER_PROFILE);
+            viewLogVO.setProfileUrl(IronConstant.ANONYMOUS_USER_PROFILE_URL);
         } else {
             User user = userDAO.getById(viewLog.getUserId());
             viewLogVO.setUserId(user.getUniqueId());
             viewLogVO.setUsername(user.getUsername());
-            viewLogVO.setProfile(user.getProfile());
+            viewLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
         }
 
         viewLogVO.setCreateTime(viewLog.getCreateTime());
@@ -222,7 +254,7 @@ public class UserServiceImpl implements UserService {
     private LikeLogVO assembleLikeLogVO(LikeLog likeLog) throws GlobalException {
 
         LikeLogVO likeLogVO = new LikeLogVO();
-        likeLogVO.setType(AboutMe.LogType.LIKE_LOG.getId());
+        likeLogVO.setLogType(AboutMe.LogType.LIKE_LOG.getId());
         likeLogVO.setLike(likeLog.isLike());
 
         int articleType = likeLog.getType();
@@ -257,7 +289,7 @@ public class UserServiceImpl implements UserService {
         User user = userDAO.getById(likeLog.getUserId());
         likeLogVO.setUserId(user.getUniqueId());
         likeLogVO.setUsername(user.getUsername());
-        likeLogVO.setProfile(user.getProfile());
+        likeLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
 
         likeLogVO.setCreateTime(likeLog.getCreateTime());
 
@@ -463,7 +495,7 @@ public class UserServiceImpl implements UserService {
 
     private UserInfoVO assembleUserInfoVO(User user) throws GlobalException {
         UserInfoVO userInfoVO = BeanUtils.copy(user, UserInfoVO.class);
-        userInfoVO.setProfileUrl(IronUtil.concatImageUrl(this.host, user.getProfile()));
+        userInfoVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
         return userInfoVO;
     }
 }

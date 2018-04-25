@@ -21,7 +21,7 @@
           </div>
           <div class="uk-position-right">
             <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove">
-              <li><a href="javascript:void(0);" v-on:click="fetchConversationList">对话列表{{comment.replyNum}}</a></li>
+              <li><a href="javascript:void(0);" v-on:click="fetchConversationList">对话列表{{comment.commentNum}}</a></li>
               <li><a class="uk-link-muted" href="#">赞{{comment.likeNum}}</a></li>
               <li><a class="uk-link-muted" href="#">踩{{comment.dislikeNum}}</a></li>
             </ul>
@@ -81,6 +81,7 @@
         requestApi('get', 'comments', payload, (res) => {
           this.conversationList = res.responseVO
           this.isShowConversationList = true
+          this.isShowReplyComp = false
         })
       },
       showReplyComp: function () {

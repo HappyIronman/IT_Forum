@@ -9,8 +9,6 @@ import java.util.List;
 public interface BlogDAO {
     void save(Blog blog);
 
-    List<Blog> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
-
     Blog getById(long id);
 
     Blog getBaseInfoById(long id);
@@ -18,4 +16,8 @@ public interface BlogDAO {
     Blog getBaseInfoByUniqueId(String uniqueId);
 
     Blog getByUniqueId(String uniqueId);
+
+    List<Blog> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
+
+    List<Blog> getPublicLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
 }

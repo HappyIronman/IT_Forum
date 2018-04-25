@@ -46,7 +46,18 @@ const actions = {
     requestApi('post', 'my/follow/' + uniqueId, null, (res) => commit(types.FOLLOW_USER, res))
   },
   fetchAboutmeListAction({commit}, payload) {
-    requestApi('get', 'my/aboutmes', payload, (res) => commit(types.ABOUT_ME_LIST, res))
+    if (payload.page === 0) {
+      if (state.aboutmeList.length === parseInt(payload.size)) {
+        return true;
+      }
+      if (state.aboutmeList.length > 0) {
+        return false;
+      }
+    }
+    return requestApi('get', 'my/aboutmes', payload, (res) => {
+      commit(types.ABOUT_ME_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   },
   fetchMyFollowingListAction({commit}) {
     requestApi('get', '/my/followings', null, (res) => commit(types.FOLLOW_LIST, res))
@@ -78,7 +89,7 @@ const mutations = {
     state.followList = data.responseVO
   },
   [types.ABOUT_ME_LIST](state, data) {
-    state.aboutmeList = data.responseVO
+    state.aboutmeList = state.aboutmeList.concat(data.responseVO)
   }
 }
 

@@ -39,6 +39,8 @@ public interface CommonService {
 
     Article getArticleBaseInfoByIdAndType(long id, int type) throws GlobalException;
 
+    Article getArticleDetailInfoByIdAndType(long id, int type) throws GlobalException;
+
     int judgeLikeCondition(Article article) throws GlobalException;
 
     void ansyDeleteAboutMe(BaseLog baseLog) throws GlobalException;
@@ -55,4 +57,6 @@ public interface CommonService {
 
     @Async
     void ansyAddTimeLine(Long userId, long articleId, int type);
+
+    String concatImageUrl(String imgName) throws GlobalException;
 }

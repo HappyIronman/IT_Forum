@@ -11,7 +11,6 @@ import com.ironman.forum.util.*;
 import com.ironman.forum.vo.MomentVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -41,9 +40,6 @@ public class MomentServiceImpl implements MomentService {
 
     @Autowired
     private AnsyCommonService ansyCommonService;
-
-    @Value("#{prop.host}")
-    private String host;
 
     @Override
     @Transactional
@@ -104,8 +100,10 @@ public class MomentServiceImpl implements MomentService {
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
-        //异步插入时间轴
-        commonService.ansyAddTimeLine(userId, moment.getId(), ArticleTypeEnum.MOMENT.getId());
+        //如果不是私人权限，异步插入时间轴
+        if (!form.getIsPrivate()) {
+            commonService.ansyAddTimeLine(userId, moment.getId(), ArticleTypeEnum.MOMENT.getId());
+        }
     }
 
 
@@ -132,7 +130,7 @@ public class MomentServiceImpl implements MomentService {
         if (user == null) {
             throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
         }
-        List<Moment> momentList = momentDAO.getAllLimitByUserId(user.getId(), pageRequest);
+        List<Moment> momentList = momentDAO.getPublicLimitByUserId(user.getId(), pageRequest);
         List<MomentVO> momentVOList = new ArrayList<>();
         if (momentList != null) {
             for (Moment moment : momentList) {
@@ -153,15 +151,9 @@ public class MomentServiceImpl implements MomentService {
     @Override
     public MomentVO assembleMomentVO(Moment moment, User user) throws GlobalException {
         MomentVO momentVO = BeanUtils.copy(moment, MomentVO.class);
-        if (momentVO.getContent().length() > IronConstant.MOMENT_MAX_LENGTH) {
-            momentVO.setAbstract(true);
-        } else {
-            momentVO.setAbstract(false);
-        }
-
         momentVO.setUserId(user.getUniqueId());
         momentVO.setUsername(user.getUsername());
-        momentVO.setProfile(user.getProfile());
+        momentVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
 
         momentVO.setLikeCondition(commonService.judgeLikeCondition(moment));
 
@@ -179,7 +171,7 @@ public class MomentServiceImpl implements MomentService {
         if (imageList != null && imageList.size() != 0) {
             List<String> picUrlList = new ArrayList<>(imageList.size());
             for (Image image : imageList) {
-                String picUrl = IronUtil.concatImageUrl(this.host, image.getName());
+                String picUrl = commonService.concatImageUrl(image.getName());
                 picUrlList.add(picUrl);
             }
             momentVO.setPicUrlList(picUrlList);

@@ -16,7 +16,7 @@ public class MomentVO {
     private String uniqueId;
     private String userId;
     private String username;
-    private String profile;
+    private String profileUrl;
     private String content;
     private int likeNum;
     private int dislikeNum;
@@ -25,7 +25,7 @@ public class MomentVO {
     private int commentNum;
     private int shareNum;
     private int viewNum;
-    private boolean isAbstract;
+//    private boolean isAbstract;
     private Date createTime;
     //是否为私有
     private boolean isPrivate;

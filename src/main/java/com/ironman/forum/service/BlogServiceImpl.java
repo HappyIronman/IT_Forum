@@ -65,6 +65,8 @@ public class BlogServiceImpl implements BlogService {
         blogDAO.save(blog);
 
         if (form.getIsShare()) {
+            blog.setTitle("转发:" + title);
+
             String originUniqueId = form.getOriginId();
             if (StringUtils.isEmpty(originUniqueId)) {
                 throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
@@ -88,8 +90,10 @@ public class BlogServiceImpl implements BlogService {
         ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
                 userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
 
-
-        commonService.ansyAddTimeLine(userId, blog.getId(), ArticleTypeEnum.BLOG.getId());
+        //如果不是私人权限，异步插入时间轴
+        if (!isPrivate) {
+            commonService.ansyAddTimeLine(userId, blog.getId(), ArticleTypeEnum.BLOG.getId());
+        }
 
         return uniqueId;
     }
@@ -114,7 +118,7 @@ public class BlogServiceImpl implements BlogService {
         if (user == null) {
             throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
         }
-        List<Blog> blogList = blogDAO.getAllLimitByUserId(user.getId(), pageRequest);
+        List<Blog> blogList = blogDAO.getPublicLimitByUserId(user.getId(), pageRequest);
         List<BlogAbsVO> blogAbsVOList = new ArrayList<>();
         if (blogList != null && blogList.size() != 0) {
             for (Blog blog : blogList) {
@@ -136,7 +140,7 @@ public class BlogServiceImpl implements BlogService {
         blogAbsVO.setContent(absContent.getContent());
         blogAbsVO.setUserId(user.getUniqueId());
         blogAbsVO.setUsername(user.getUsername());
-        blogAbsVO.setProfile(user.getProfile());
+        blogAbsVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
         blogAbsVO.setLikeCondition(commonService.judgeLikeCondition(blog));
 
         if (blog.isShare()) {

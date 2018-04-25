@@ -39,4 +39,11 @@
             <property name="pageRequest" value="pageRequest"/>
         </include>
     </select>
+
+    <select id="getPublicLimitByUserId" resultType="com.ironman.forum.entity.Moment">
+        SELECT * FROM moment where user_id = ${userId} AND is_private = FALSE AND deleted = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 </mapper>

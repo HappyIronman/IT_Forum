@@ -4,7 +4,7 @@
       <div class="uk-card-header uk-padding-remove">
         <div class="uk-grid-small uk-flex-middle uk-margin-remove" uk-grid>
           <div>
-            <img class="uk-border-circle" width="40" height="40" src="../assets/logo.png">
+            <img class="uk-border-circle" style="width: 40px;height: 40px" v-bind:src="blog.profileUrl">
           </div>
           <div class="uk-width-auto">
             <h5 class="uk-card-title uk-margin-remove-bottom">

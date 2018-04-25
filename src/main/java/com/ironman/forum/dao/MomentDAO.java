@@ -20,4 +20,6 @@ public interface MomentDAO {
     Moment getBaseInfoByUniqueId(String unqueId);
 
     List<Moment> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
+
+    List<Moment> getPublicLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
 }

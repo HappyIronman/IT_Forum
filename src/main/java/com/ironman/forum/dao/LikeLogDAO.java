@@ -7,7 +7,7 @@ public interface LikeLogDAO {
     void save(LikeLog likeLog);
 
     /**
-     * ½«disabledÖÃÎ»true
+     * ï¿½ï¿½disabledï¿½ï¿½Î»true
      *
      * @param userId
      * @param targetId

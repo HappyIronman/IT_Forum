@@ -13,7 +13,8 @@
             </h4>
             <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
               <li><span>{{commentItem.createTime | formatDate('yyyy-MM-dd hh:mm')}}</span></li>
-              <li><a href="javascript:void(0);" v-on:click="fetchConversationList">对话列表{{commentItem.commentNum}}</a></li>
+              <li><a href="javascript:void(0);" v-on:click="fetchConversationList">对话列表{{commentItem.commentNum}}</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -82,6 +83,7 @@
         requestApi('get', 'comments', payload, (res) => {
           this.conversationList = res.responseVO
           this.isShowConversationList = true
+          this.isShowReplyComp = false
         })
       },
 

@@ -12,8 +12,6 @@ public class CommentVO {
     private String userId;
     private String username;
     private String profile;
-    //uniqueId
-    private String replyId;
     private int type;
     private String content;
     private int commentNum;

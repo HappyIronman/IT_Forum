@@ -39,7 +39,7 @@ public class IronUtil {
 
     public static AbstractContent getAbstractContent(String originContent, int targetLength) {
         AbstractContent abstractContent = new AbstractContent();
-        if (StringUtils.isEmpty(abstractContent)) {
+        if (StringUtils.isEmpty(originContent)) {
             return abstractContent;
         }
         if (originContent.length() > targetLength) {
@@ -52,17 +52,16 @@ public class IronUtil {
         return abstractContent;
     }
 
-    public static String concatImageUrl(String host, String imgName) throws GlobalException {
-        String picUrl;
-        if (StringUtils.isEmpty(host)) {
-            throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "hostÎª¿Õ");
+    public static String getAbstractContentStr(String originContent, int targetLength) {
+        AbstractContent abstractContent = new AbstractContent();
+        if (StringUtils.isEmpty(originContent)) {
+            return "";
         }
-        if (host.endsWith("/")) {
-            picUrl = host + "img/" + imgName;
+        if (originContent.length() > targetLength) {
+            return originContent.substring(0, targetLength);
         } else {
-            picUrl = host + "/img/" + imgName;
+            return originContent;
         }
-        return picUrl;
     }
 
 
@@ -84,7 +83,7 @@ public class IronUtil {
     public static long getTargetIdByViewNumMapKey(String key) throws GlobalException {
         String[] keyArray = key.split(":");
         if (keyArray.length != 2) {
-            throw new GlobalException("ViewNumMap¼üÖµ½âÎö´íÎó: " + key);
+            throw new GlobalException("ViewNumMapï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " + key);
         }
         return Long.parseLong(keyArray[0]);
     }
@@ -92,7 +91,7 @@ public class IronUtil {
     public static int getTypeByViewNumMapKey(String key) throws GlobalException {
         String[] keyArray = key.split(":");
         if (keyArray.length != 2) {
-            throw new GlobalException("ViewNumMap¼üÖµ½âÎö´íÎó: " + key);
+            throw new GlobalException("ViewNumMapï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: " + key);
         }
         return Integer.parseInt(keyArray[1]);
     }
@@ -100,16 +99,16 @@ public class IronUtil {
 
     public static String removeHtmlTags(String htmlStr) {
         log.info(htmlStr);
-        String reg = "<[^>]+>"; //¶¨ÒåHTML±êÇ©µÄÕýÔò±í´ïÊ½
+        String reg = "<[^>]+>"; //ï¿½ï¿½ï¿½ï¿½HTMLï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½
         Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(htmlStr);
-        String result = matcher.replaceAll(""); //¹ýÂËhtml±êÇ©
-        log.info("¹ýÂËºó½á¹û: " + result);
+        String result = matcher.replaceAll(""); //ï¿½ï¿½ï¿½ï¿½htmlï¿½ï¿½Ç©
+        log.info("ï¿½ï¿½ï¿½Ëºï¿½ï¿½ï¿½: " + result);
         return result;
     }
 
     /**
-     * Ö»½ØÈ¡µÚÒ»´Î³öÏÖµÄ¸ßÁÁ×Ö·ûµÄÉÏÏÂÎÄ
+     * Ö»ï¿½ï¿½È¡ï¿½ï¿½Ò»ï¿½Î³ï¿½ï¿½ÖµÄ¸ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      *
      * @param originContent
      * @return
@@ -126,12 +125,12 @@ public class IronUtil {
         } else {
             int firstIndex = originContent.indexOf(IronConstant.ES_PRE_TAGS);
             if (firstIndex < 0) {
-                log.info("Ã»ÓÐ¸ßÁÁ×Ö·û,½ØÈ¡¶ÎÊ×");
+                log.info("Ã»ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½Ö·ï¿½,ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½");
                 destContent = originContent.substring(0, destLength);
             } else {
                 int lastIndex = originContent.indexOf(IronConstant.ES_POST_TAGS);
                 if (lastIndex < 0) {
-                    log.error("´íÎó,Ã»ÓÐ¸ßÁÁºó×º");
+                    log.error("ï¿½ï¿½ï¿½ï¿½,Ã»ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½ï¿½×º");
                     destContent = originContent.substring(0, destLength);
                 } else {
 
@@ -155,10 +154,10 @@ public class IronUtil {
             }
         }
 
-        //Ìæ»»×Ô¶¨Òå±êÇ©Îª¸ßÁÁ±êÇ©
+        //ï¿½æ»»ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ç©Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©
         destContent = destContent.replaceAll(IronConstant.ES_PRE_TAGS, "<em>")
                 .replaceAll(IronConstant.ES_POST_TAGS, "</em>");
-        log.info("½ØÈ¡ºóÄÚÈÝ:" + destContent);
+        log.info("ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" + destContent);
         return destContent;
 
     }

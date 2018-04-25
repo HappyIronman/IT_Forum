@@ -15,4 +15,6 @@ public interface CommentDAO {
     Comment getBaseInfoByUniqueId(String uniqueId);
 
     Comment getBaseInfoById(long id);
+
+    Comment getById(long id);
 }

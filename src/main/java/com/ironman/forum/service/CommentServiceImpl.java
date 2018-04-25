@@ -65,6 +65,7 @@ public class CommentServiceImpl implements CommentService {
 
         //异步写入aboutMe
         CommentLog commentLog=new CommentLog();
+        commentLog.setId(comment.getId());
         commentLog.setUserId(userId);
         commentLog.setTargetId(article.getId());
         commentLog.setType(type);
@@ -96,6 +97,7 @@ public class CommentServiceImpl implements CommentService {
         }
         return commentVOList;
     }
+
 
     private CommentVO assembleCommentVO(Comment comment) {
         CommentVO commentVO = BeanUtils.copy(comment, CommentVO.class);

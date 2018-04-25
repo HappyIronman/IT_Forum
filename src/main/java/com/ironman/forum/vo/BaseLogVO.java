@@ -9,18 +9,18 @@ import java.util.Date;
 @Setter
 public class BaseLogVO {
     /**
-     * ¹Ø×¢ÎÒµÄÈËµÄuniqueId
+     * ï¿½ï¿½×¢ï¿½Òµï¿½ï¿½Ëµï¿½uniqueId
      */
     protected String userId;
 
     protected String username;
 
-    protected String profile;
+    protected String profileUrl;
 
     /**
-     * ¶ÔÓ¦AboutMe.LogType
+     * ï¿½ï¿½Ó¦AboutMe.LogType
      */
-    protected int type;
+    protected int logType;
 
     protected boolean isNew;
 
