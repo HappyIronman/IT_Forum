@@ -38,10 +38,6 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private CommonService commonService;
 
-    @Autowired
-    private AnsyCommonService ansyCommonService;
-
-
     @Override
     @Transactional
     public String publishBlog(BlogPublishForm form) throws GlobalException {
@@ -83,12 +79,11 @@ public class BlogServiceImpl implements BlogService {
             share.setCreateTime(createTime);
             shareDAO.save(share);
 
-            ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_BLOG,
+            commonService.ansyChangeArticlePropertyNum(ArticleTypeEnum.BLOG.getId(),
                     originBlog.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
-                userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
+        commonService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
 
         //如果不是私人权限，异步插入时间轴
         if (!isPrivate) {
@@ -174,7 +169,7 @@ public class BlogServiceImpl implements BlogService {
             blogDetailVO.setShare(true);
             Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleTypeEnum.BLOG.getId());
             if (share == null) {
-                log.error(blog.getId() + " ??????????");
+                log.error(blog.getId() + " 分享信息为空");
                 throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
             }
             Blog originBlog = blogDAO.getById(share.getOriginId());

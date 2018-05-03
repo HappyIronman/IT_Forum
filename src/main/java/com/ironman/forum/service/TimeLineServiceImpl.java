@@ -3,15 +3,14 @@ package com.ironman.forum.service;
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.BlogDAO;
 import com.ironman.forum.dao.MomentDAO;
+import com.ironman.forum.dao.QuestionDAO;
 import com.ironman.forum.dao.TimeLineDAO;
-import com.ironman.forum.entity.ArticleTypeEnum;
-import com.ironman.forum.entity.Blog;
-import com.ironman.forum.entity.Moment;
-import com.ironman.forum.entity.TimeLine;
+import com.ironman.forum.entity.*;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.PageRequest;
 import com.ironman.forum.vo.BlogAbsVO;
 import com.ironman.forum.vo.MomentVO;
+import com.ironman.forum.vo.QuestionVO;
 import com.ironman.forum.vo.TimeLineVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import java.util.List;
 public class TimeLineServiceImpl implements TimeLineService {
     @Autowired
     private TimeLineDAO timeLineDAO;
+
     @Autowired
     private MomentDAO momentDAO;
 
@@ -30,10 +30,16 @@ public class TimeLineServiceImpl implements TimeLineService {
     private BlogDAO blogDAO;
 
     @Autowired
+    private QuestionDAO questionDAO;
+
+    @Autowired
     private MomentService momentService;
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private QuestionService questionService;
 
     @Override
     public List<TimeLineVO> pageMyFriendCircle(PageRequest pageRequest) throws GlobalException {
@@ -57,7 +63,9 @@ public class TimeLineServiceImpl implements TimeLineService {
                 BlogAbsVO blogAbsVO = blogService.assembleBlogAbsVO(blog);
                 timeLineVO.setEntity(blogAbsVO);
             } else if (type == ArticleTypeEnum.QUESTION.getId()) {
-                //todo
+                Question question = questionDAO.getById(articleId);
+                QuestionVO questionVO = questionService.assembleQuestionVO(question);
+                timeLineVO.setEntity(questionVO);
             } else if (type == ArticleTypeEnum.COMMENT.getId()) {
                 //todo
             }

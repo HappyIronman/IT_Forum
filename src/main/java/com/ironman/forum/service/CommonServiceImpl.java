@@ -44,6 +44,9 @@ public class CommonServiceImpl implements CommonService {
     private CommentDAO commentDAO;
 
     @Autowired
+    private QuestionDAO questionDAO;
+
+    @Autowired
     private ViewLogDAO viewLogDAO;
 
     @Autowired
@@ -130,8 +133,10 @@ public class CommonServiceImpl implements CommonService {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
         } else if (type == ArticleTypeEnum.QUESTION.getId()) {
-            article = null;
-            //todo
+            article = questionDAO.getBaseInfoByUniqueId(uniqueId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
+            }
         } else {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
         }
@@ -157,8 +162,10 @@ public class CommonServiceImpl implements CommonService {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
         } else if (type == ArticleTypeEnum.QUESTION.getId()) {
-            //todo
-            article = null;
+            article = questionDAO.getBaseInfoById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
+            }
         } else {
             log.error("type不存在");
             throw new GlobalException();
@@ -185,8 +192,10 @@ public class CommonServiceImpl implements CommonService {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
         } else if (type == ArticleTypeEnum.QUESTION.getId()) {
-            //todo
-            article = null;
+            article = questionDAO.getById(id);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
+            }
         } else {
             log.error("type不存在");
             throw new GlobalException();
@@ -378,6 +387,11 @@ public class CommonServiceImpl implements CommonService {
         }
     }
 
+    @Override
+    public void ansyChangeUserPropertyNum(long userId, String property, boolean isIncrement) {
+        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, userId, property, isIncrement);
+    }
+
 
     @Override
     public void ansyAddTimeLine(Long userId, long articleId, int type) {
@@ -421,11 +435,9 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public String concatImageUrl(String imgName) throws GlobalException {
+    public String concatImageUrl(String imgName){
         String picUrl;
-        if (StringUtils.isEmpty(host)) {
-            throw new GlobalException(ResponseStatus.SYSTEM_ERROR, "hostΪ��");
-        }
+
         if (host.endsWith("/")) {
             picUrl = host + "img/" + imgName;
         } else {

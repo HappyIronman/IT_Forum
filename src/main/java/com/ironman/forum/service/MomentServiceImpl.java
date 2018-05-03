@@ -38,9 +38,6 @@ public class MomentServiceImpl implements MomentService {
     @Autowired
     private CommonService commonService;
 
-    @Autowired
-    private AnsyCommonService ansyCommonService;
-
     @Override
     @Transactional
     public void publishMoment(MomentPublishForm form) throws GlobalException {
@@ -79,7 +76,7 @@ public class MomentServiceImpl implements MomentService {
         if (form.getIsShare()) {
             String originUniqueId = form.getOriginId();
             if (StringUtils.isEmpty(originUniqueId)) {
-                throw new GlobalException(ResponseStatus.PARAM_ERROR, "userUniqueId must not be null");
+                throw new GlobalException(ResponseStatus.PARAM_ERROR, "原文章UniqueId不能为空");
             }
             Moment originMoment = momentDAO.getBaseInfoByUniqueId(originUniqueId);
             if (originMoment == null || originMoment.isPrivate()) {
@@ -93,12 +90,11 @@ public class MomentServiceImpl implements MomentService {
             share.setCreateTime(date);
             shareDAO.save(share);
 
-            ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_MOMENT,
+            commonService.ansyChangeArticlePropertyNum(ArticleTypeEnum.MOMENT.getId(),
                     originMoment.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER,
-                userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
+        commonService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
         //如果不是私人权限，异步插入时间轴
         if (!form.getIsPrivate()) {

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import state from '../store/modules/user'
 import homepage from '../pages/Homepage.vue'
 import writeBlogPage from '../pages/WriteBlogPage.vue'
+import writeQuestionPage from '../pages/WriteQuestionPage.vue'
 import shareBlogPage from '../pages/ShareBlogPage.vue'
 import selfPage from '../pages/SelfPage.vue'
 import loginPage from '../pages/LoginPage.vue'
@@ -45,17 +46,17 @@ const router = new Router({
           component: friendCircle
         },
         {
-          path: '/friend_circle',
+          path: 'friend_circle',
           name: 'friendCircle',
           component: friendCircle
         },
         {
-          path: '/recommend',
+          path: 'recommend',
           name: 'recommend',
           component: recommend
         },
         {
-          path: '/aboutme',
+          path: 'aboutme',
           name: 'aboutme',
           component: aboutme
         }
@@ -65,6 +66,15 @@ const router = new Router({
       path: '/write_blog',
       name: 'writeBlogPage',
       component: writeBlogPage,
+      meta: {
+        auth: true // 这里设置，当前路由需要校验
+      },
+      children: []
+    },
+    {
+      path: '/write_question',
+      name: 'writeQuestionPage',
+      component: writeQuestionPage,
       meta: {
         auth: true // 这里设置，当前路由需要校验
       },

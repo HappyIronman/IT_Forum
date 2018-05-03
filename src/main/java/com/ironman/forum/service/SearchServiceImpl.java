@@ -34,7 +34,8 @@ public class SearchServiceImpl implements SearchService {
             SearchBlogVO searchBlogVO = BeanUtils.copy(esBlog, SearchBlogVO.class);
 
             //��ȡ����keywords��������
-            String content = StringUtils.isEmpty(esBlog.getContentHighlight()) ? esBlog.getContent() : esBlog.getContentHighlight();
+            String content = StringUtils.isEmpty(esBlog.getContentHighlight()) ?
+                    esBlog.getContent() : esBlog.getContentHighlight();
             //ȥ������html��ǩ
             content = IronUtil.removeHtmlTags(content);
             //��ȡָ������
@@ -84,7 +85,6 @@ public class SearchServiceImpl implements SearchService {
         }
 
         List<Object> objectList = new ArrayList<>(entityList.size());
-//        Collections.addAll(objectList, entityList);
         for (T entity : entityList) {
             objectList.add(entity);
         }

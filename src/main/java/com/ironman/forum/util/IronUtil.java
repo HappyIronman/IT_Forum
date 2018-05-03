@@ -98,6 +98,9 @@ public class IronUtil {
 
 
     public static String removeHtmlTags(String htmlStr) {
+        if (StringUtils.isEmpty(htmlStr)) {
+            return htmlStr;
+        }
         log.info(htmlStr);
         String reg = "<[^>]+>"; //����HTML��ǩ��������ʽ
         Pattern pattern = Pattern.compile(reg, Pattern.CASE_INSENSITIVE);

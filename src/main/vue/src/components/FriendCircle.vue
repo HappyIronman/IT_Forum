@@ -34,16 +34,12 @@
         circleList: state => state.moment.circleList,
       })
     },
-//    created: function () {
-//        this.fetchMyCircleList()
-//    },
+
     methods: {
       ...mapActions([
         'fetchMyCircleListAction'// �� `this.increment()` ӳ��Ϊ `this.$store.dispatch('increment')`
       ]),
-//      fetchMyCircleList: function () {
-//        this.fetchMyCircleListAction()
-//      }
+
     }
   }
 </script>

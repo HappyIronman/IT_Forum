@@ -26,6 +26,15 @@
         </aop:aspect>
 
         <aop:aspect id="aspect" ref="saveViewLogAspect">
+            <!-- 配置一个切点 -->
+            <aop:pointcut id="saveQuestionViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.QuestionService.getQuestionDetail(..)) and args(uniqueId)"/>
+
+            <aop:after-returning pointcut-ref="saveQuestionViewLogPoint" method="afterReturningGetQuestionDetail"
+                                 arg-names="uniqueId,questionVO" returning="questionVO"/>
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
 
             <aop:pointcut id="saveMyMomentViewLogPoint"
                           expression="execution(public * com.ironman.forum.service.MomentService.pageMyMoments(..)) and args(pageRequest)"/>
@@ -45,6 +54,26 @@
                                  arg-names="userUniqueId,pageRequest,momentVOList" returning="momentVOList"/>
 
 
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+
+            <aop:pointcut id="saveMyQuestionViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.QuestionService.pageMyQuestions(..)) and args(pageRequest)"/>
+
+            <aop:after-returning pointcut-ref="saveMyQuestionViewLogPoint" method="afterReturningPageQuestions"
+                                 arg-names="pageRequest,questionVOList" returning="questionVOList"/>
+
+
+        </aop:aspect>
+
+        <aop:aspect id="aspect" ref="saveViewLogAspect">
+
+            <aop:pointcut id="saveUserQuestionViewLogPoint"
+                          expression="execution(public * com.ironman.forum.service.QuestionService.pageUserQuestions(..)) and args(userUniqueId,pageRequest)"/>
+
+            <aop:after-returning pointcut-ref="saveUserQuestionViewLogPoint" method="afterReturningPageUserQuestions"
+                                 arg-names="userUniqueId,pageRequest,questionVOList" returning="questionVOList"/>
         </aop:aspect>
 
         <aop:aspect id="aspect" ref="saveViewLogAspect">

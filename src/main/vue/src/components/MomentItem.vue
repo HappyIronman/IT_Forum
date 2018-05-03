@@ -56,7 +56,7 @@
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
         <moment-like-btn v-bind:article="moment" type="1"></moment-like-btn>
-        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="fetchCommentList">
+        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="isShowComment = !isShowComment">
           <span>评论</span>
           <span>({{moment.commentNum}})</span>
         </button>
@@ -72,9 +72,7 @@
     </div>
     <comment-list v-if="isShowComment" class="uk-width-2-3 uk-align-center uk-margin-right"
                   v-bind:type="1"
-                  v-bind:comment-list="commentList"
-                  v-bind:article="moment"
-                  v-on:refresh-comment-list="refreshCommentList">
+                  v-bind:articleId="moment.uniqueId">
     </comment-list>
 
     <moment-share-modal v-bind:id="'m'+ moment.uniqueId" v-bind:moment-info="moment"></moment-share-modal>
@@ -96,9 +94,6 @@
     },
     name: 'MomentItem',
     props: ['moment'],
-    comments: {
-      MomentShareModal
-    },
     data() {
       return {
         isShowComment: false,
@@ -114,33 +109,8 @@
     },
 
     methods: {
-
       onclickShareMoment: function () {
         UIkit.modal('#m' + this.moment.uniqueId).show();
-      },
-      onclickShowFullContent: function () {
-
-      },
-      fetchCommentList: function () {
-        if (this.commentList.length === 0) {
-          var payload = {
-            'replyId': this.moment.uniqueId,
-            'type': 1
-          }
-          requestApi('get', 'comments', payload, (res) => {
-            this.commentList = this.commentList.concat(res.responseVO)
-          })
-        }
-        this.isShowComment = !this.isShowComment
-      },
-      refreshCommentList: function () {
-        var payload = {
-          'replyId': this.moment.uniqueId,
-          'type': 1
-        }
-        requestApi('get', 'comments', payload, (res) => {
-          this.commentList = res.responseVO
-        })
       }
     }
   }

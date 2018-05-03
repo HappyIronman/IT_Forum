@@ -10,6 +10,7 @@ import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.PageRequest;
 import com.ironman.forum.vo.BlogDetailVO;
 import com.ironman.forum.vo.MomentVO;
+import com.ironman.forum.vo.QuestionVO;
 import com.ironman.forum.vo.TimeLineVO;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,6 @@ public class SaveViewLogAspect {
         if (blogDetailVO == null) {
             return;
         }
-        log.info("ִ�з���getBlogDetail���غ����У�����Ϊ:" + blogDetailVO);
         ViewLog viewLog = new ViewLog();
         long userId = UserLoginUtil.getLoginUserId();
         viewLog.setUserId(userId);
@@ -42,14 +42,14 @@ public class SaveViewLogAspect {
         viewLog.setDisabled(false);
         viewLog.setCreateTime(new Date());
         try {
-            //ע�⣬�˴�����ͬ������db����Ϊ����Ҫ�õ�id�����Բ��ܼ��뻺��
+            //异步增加访问量
             commonService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
             viewLogDAO.save(viewLog);
-            //�����û����ʲ�дaboutMe��
+            //匿名用户直接返回，不写aboutMe表
             if (userId == IronConstant.ANONYMOUS_USER_ID) {
                 return;
             }
-            //��������Լ����Լ������£���Ҫд��aboutme��
+            //自己看自己的博客不写入aboutMe
             if (!blogDetailVO.getUserId().equals(UserLoginUtil.getLoginUserUniqueId())) {
                 commonService.ansySaveAboutMe(viewLog);
             }
@@ -62,7 +62,6 @@ public class SaveViewLogAspect {
         if (momentVOList == null || momentVOList.size() == 0) {
             return;
         }
-        System.out.println("ִ�з���returningPageMoments���غ����У�����Ϊ:" + momentVOList);
 
         List<ViewLog> viewLogList = new ArrayList<>();
         for (MomentVO momentVO : momentVOList) {
@@ -85,31 +84,77 @@ public class SaveViewLogAspect {
         this.afterReturningPageMoments(pageRequest, momentVOList);
     }
 
+    public void afterReturningPageQuestions(PageRequest pageRequest, List<QuestionVO> questionVOList) {
+        if (questionVOList == null || questionVOList.size() == 0) {
+            return;
+        }
+
+        List<ViewLog> viewLogList = new ArrayList<>();
+        for (QuestionVO questionVO : questionVOList) {
+            ViewLog viewLog = new ViewLog();
+            viewLog.setUserId(UserLoginUtil.getLoginUserId());
+            viewLog.setType(ArticleTypeEnum.QUESTION.getId());
+            viewLog.setTargetId(questionVO.getId());
+            viewLog.setDisabled(false);
+            viewLog.setCreateTime(new Date());
+            viewLogList.add(viewLog);
+        }
+        try {
+            commonService.ansySaveViewLogList(viewLogList);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    public void afterReturningPageUserQuestions(String userUniqueId, PageRequest pageRequest, List<QuestionVO> questionVOList) {
+        this.afterReturningPageQuestions(pageRequest, questionVOList);
+    }
+
+    public void afterReturningGetQuestionDetail(String uniqueId, QuestionVO questionVO) {
+        if (questionVO == null) {
+            return;
+        }
+        ViewLog viewLog = new ViewLog();
+        long userId = UserLoginUtil.getLoginUserId();
+        viewLog.setUserId(userId);
+        viewLog.setType(ArticleTypeEnum.QUESTION.getId());
+        viewLog.setTargetId(questionVO.getId());
+        viewLog.setDisabled(false);
+        viewLog.setCreateTime(new Date());
+        try {
+            //异步增加访问量
+            commonService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            //落库访问记录
+            commonService.ansySaveViewLog(viewLog);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
 
     public void afterReturningPageMyFriendCircle(PageRequest pageRequest, List<TimeLineVO> timeLineVOList) {
         if (timeLineVOList == null || timeLineVOList.size() == 0) {
             return;
         }
-        System.out.println("ִ�з���pageMyFriendCircle���غ����У�����Ϊ:" + timeLineVOList);
 
         List<ViewLog> viewLogList = new ArrayList<>();
         for (TimeLineVO timeLineVO : timeLineVOList) {
             int type = timeLineVO.getType();
-            //�˴�blog����Ҫ��¼viewLog
             ViewLog viewLog = new ViewLog();
+            viewLog.setUserId(UserLoginUtil.getLoginUserId());
+            viewLog.setType(type);
+            viewLog.setDisabled(false);
+            viewLog.setCreateTime(new Date());
             if (type == ArticleTypeEnum.MOMENT.getId()) {
                 MomentVO momentVO = (MomentVO) timeLineVO.getEntity();
-                viewLog.setUserId(UserLoginUtil.getLoginUserId());
-                viewLog.setType(ArticleTypeEnum.MOMENT.getId());
                 viewLog.setTargetId(momentVO.getId());
-                viewLog.setDisabled(false);
-                viewLog.setCreateTime(new Date());
-                viewLogList.add(viewLog);
             } else if (type == ArticleTypeEnum.QUESTION.getId()) {
-                //todo
+                QuestionVO questionVO = (QuestionVO) timeLineVO.getEntity();
+                viewLog.setTargetId(questionVO.getId());
             } else if (type == ArticleTypeEnum.COMMENT.getId()) {
                 //todo
             }
+            viewLogList.add(viewLog);
         }
         try {
             commonService.ansySaveViewLogList(viewLogList);

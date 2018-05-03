@@ -32,17 +32,12 @@ public class MomentController {
      * @return
      */
     @RequestMapping(value = "/moment", method = RequestMethod.POST)
-    public IronResponseEntity publishMoment(@RequestBody @Valid MomentPublishForm form, BindingResult result) {
+    public IronResponseEntity publishMoment(@RequestBody @Valid MomentPublishForm form, BindingResult result) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            momentService.publishMoment(form);
-            return new IronResponseEntity(ResponseStatus.SUCCESS);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        momentService.publishMoment(form);
+        return new IronResponseEntity(ResponseStatus.SUCCESS);
     }
 
     /**
@@ -53,17 +48,12 @@ public class MomentController {
      * @return
      */
     @RequestMapping(value = "/mymoments", method = RequestMethod.GET)
-    public IronResponseEntity getMyMoments(@Valid PageRequest pageRequest, BindingResult result) {
+    public IronResponseEntity pageMyMoments(@Valid PageRequest pageRequest, BindingResult result) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            List<MomentVO> momentVOList = momentService.pageMyMoments(pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, momentVOList);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        List<MomentVO> momentVOList = momentService.pageMyMoments(pageRequest);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, momentVOList);
     }
 
     /**
@@ -75,18 +65,13 @@ public class MomentController {
      * @return
      */
     @RequestMapping(value = "/{userId}/moments", method = RequestMethod.GET)
-    public IronResponseEntity getUserMoments(@PathVariable("userId") String userUniqueId,
-                                             @Valid PageRequest pageRequest, BindingResult result) {
+    public IronResponseEntity pageUserMoments(@PathVariable("userId") String userUniqueId,
+                                             @Valid PageRequest pageRequest, BindingResult result) throws GlobalException {
         if (result.hasErrors()) {
             return IronUtil.processResult(result);
         }
-        try {
-            List<MomentVO> momentVOList = momentService.pageUserMoments(userUniqueId, pageRequest);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, momentVOList);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        List<MomentVO> momentVOList = momentService.pageUserMoments(userUniqueId, pageRequest);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, momentVOList);
     }
 
 }

@@ -1,20 +1,45 @@
 <template>
   <div>
     <self-page-nav index="2"></self-page-nav>
-    啥也没有呀
+
+    <div class="uk-text-center">
+      <span class="uk-label uk-label-success">我的提问</span>
+    </div>
+    <div v-for="myQuestion in myQuestionList">
+      <question-item v-bind:question="myQuestion"></question-item>
+    </div>
+
+    <pageable v-bind:fetch-data-func="fetchMyQuestionListAction" size="5"></pageable>
   </div>
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex'
   import SelfPageNav from "./SelfPageNav.vue";
+  import Pageable from "./Pageable.vue";
+  import QuestionItem from "./QuestionItem.vue";
 
   export default {
-    components: {SelfPageNav},
+    components: {
+      QuestionItem,
+      Pageable,
+      SelfPageNav
+    },
     name: 'MyQuestion',
     data() {
       return {
         msg: 'Welcome to Ironman\'s world haha !'
       }
+    },
+    computed: {
+      ...mapState({
+        myQuestionList: state => state.question.myQuestionList
+      })
+    },
+    methods: {
+      ...mapActions([
+        'fetchMyQuestionListAction'
+      ])
     }
   }
 </script>

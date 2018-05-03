@@ -50,7 +50,7 @@
             <header class="uk-comment-header uk-position-relative">
               <div class="uk-grid-medium uk-flex-middle" uk-grid>
                 <div class="uk-width-auto">
-                  <img class="uk-comment-avatar" v-bind:src="item.profile" style="width: 52px;height: 52px">
+                  <img class="uk-comment-avatar" v-bind:src="item.profileUrl" style="width: 52px;height: 52px">
                 </div>
                 <div class="uk-width-expand" style="padding-left: 10px;">
                   <div>

@@ -51,6 +51,9 @@ public class UserServiceImpl implements UserService {
     private BlogDAO blogDAO;
 
     @Autowired
+    private QuestionDAO questionDAO;
+
+    @Autowired
     private CommonService commonService;
 
     @Autowired
@@ -157,7 +160,36 @@ public class UserServiceImpl implements UserService {
         commentLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
         commentLogVO.setUniqueId(comment.getUniqueId());
         commentLogVO.setContent(comment.getContent());
-        Article article = commonService.getArticleDetailInfoByIdAndType(comment.getReplyId(), comment.getType());
+
+        int type = comment.getType();
+        long replyId = comment.getReplyId();
+        //获取文章必要信息
+        Article article;
+        if (type == ArticleTypeEnum.COMMENT.getId()) {
+            article = commentDAO.getById(replyId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.COMMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.MOMENT.getId()) {
+            article = momentDAO.getById(replyId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.MOMENT_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.BLOG.getId()) {
+            article = blogDAO.getBaseInfoById(replyId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+            }
+        } else if (type == ArticleTypeEnum.QUESTION.getId()) {
+            article = questionDAO.getBaseInfoById(replyId);
+            if (article == null) {
+                throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
+            }
+        } else {
+            log.error("文章类型不存在");
+            throw new GlobalException();
+        }
+
         commentLogVO.setReplyId(article.getUniqueId());
         commentLogVO.setType(comment.getType());
         commentLogVO.setReplyTitle(this.getCommentReplyTitle(article));

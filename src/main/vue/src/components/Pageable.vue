@@ -26,7 +26,6 @@
     methods: {
       fetchItemList: function () {
         this.fetchDataFunc({page: this.page, size: this.size}).then((res) => {
-          console.log(res)
           this.page++
           if (res) {
             this.isBottom = false

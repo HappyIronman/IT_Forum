@@ -57,7 +57,7 @@
       </div>
       <div class="uk-card-footer uk-padding-remove uk-text-right">
         <moment-like-btn v-bind:article="blog" type="2"></moment-like-btn>
-        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="fetchCommentList">
+        <button class="uk-button uk-button-text uk-margin-small-right" v-on:click="isShowComment = !isShowComment">
           <span>评论</span>
           <span>({{blog.commentNum}})</span>
         </button>
@@ -73,9 +73,7 @@
     </div>
     <comment-list v-if="isShowComment" class="uk-width-2-3 uk-align-center uk-margin-right"
                   v-bind:type="2"
-                  v-bind:comment-list="commentList"
-                  v-bind:article="blog"
-                  v-on:refresh-comment-list="refreshCommentList">
+                  v-bind:articleId="blog.uniqueId">
     </comment-list>
   </div>
 </template>
@@ -96,29 +94,7 @@
         commentList: []
       }
     },
-    methods: {
-      fetchCommentList: function () {
-        if (this.commentList.length === 0) {
-          var payload = {
-            'replyId': this.blog.uniqueId,
-            'type': 2
-          }
-          requestApi('get', 'comments', payload, (res) => {
-            this.commentList = this.commentList.concat(res.responseVO)
-          })
-        }
-        this.isShowComment = !this.isShowComment
-      },
-      refreshCommentList: function () {
-        var payload = {
-          'replyId': this.blog.uniqueId,
-          'type': 2
-        }
-        requestApi('get', 'comments', payload, (res) => {
-          this.commentList = res.responseVO
-        })
-      }
-    }
+    methods: {}
   }
 </script>
 

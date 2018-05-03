@@ -55,8 +55,10 @@ public interface CommonService {
 
     void ansyChangeArticlePropertyNum(int type, long targetId, String property, boolean isIncrement);
 
+    void ansyChangeUserPropertyNum(long userId, String property, boolean isIncrement);
+
     @Async
     void ansyAddTimeLine(Long userId, long articleId, int type);
 
-    String concatImageUrl(String imgName) throws GlobalException;
+    String concatImageUrl(String imgName);
 }

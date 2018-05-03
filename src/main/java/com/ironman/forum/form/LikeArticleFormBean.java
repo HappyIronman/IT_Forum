@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class LikeArticleFormBean {
-    @NotBlank(message = "����uniqueId����Ϊ��")
+    @NotBlank(message = "目标id不能为空")
     private String targetId;
-    @NotNull(message = "�������Ͳ���Ϊ��")
-    @Min(value = 0, message = "����ֵ���Ϸ�")
-    @Max(value = 3, message = "����ֵ���Ϸ�")
+    @NotNull(message = "类型不能为空")
+    @Min(value = 0, message = "类型不合法")
+    @Max(value = 3, message = "类型不合法")
     private Integer type;
     private boolean like = true;
 }

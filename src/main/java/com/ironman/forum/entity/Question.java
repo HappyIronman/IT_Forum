@@ -7,8 +7,8 @@ import lombok.Setter;
 @Setter
 public class Question extends Article {
     private String title;
-    private int answerNum;
+    //回答数量
+    private int commentNum;
     private int viewNum;
     private boolean closed;
-    private boolean isShare;
 }

@@ -31,9 +31,9 @@ import java.util.Map;
 
 @Log4j
 public class EsBlogRepositoryImpl implements CustomBlogRepository {
-    /* ËÑË÷Ä£Ê½ */
-    private String SCORE_MODE_SUM = "sum"; // È¨ÖØ·ÖÇóºÍÄ£Ê½
-    private Float MIN_SCORE = 10.0F;      // ÓÉÓÚÎÞÏà¹ØÐÔµÄ·ÖÖµÄ¬ÈÏÎª 1 £¬ÉèÖÃÈ¨ÖØ·Ö×îÐ¡ÖµÎª 10
+    /* ï¿½ï¿½ï¿½ï¿½Ä£Ê½ */
+    private String SCORE_MODE_SUM = "sum"; // È¨ï¿½Ø·ï¿½ï¿½ï¿½ï¿½Ä£Ê½
+    private Float MIN_SCORE = 10.0F;      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÔµÄ·ï¿½ÖµÄ¬ï¿½ï¿½Îª 1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½Ø·ï¿½ï¿½ï¿½Ð¡ÖµÎª 10
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -44,10 +44,8 @@ public class EsBlogRepositoryImpl implements CustomBlogRepository {
     @Override
     public List<EsBlog> searchBlog(String keyword, PageRequest pageRequest) {
         log.info("searchBlog: keyword [" + keyword + "]");
-        // ¹¹½¨ËÑË÷²éÑ¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯
         SearchQuery searchQuery = getBlogSearchQuery(pageRequest.getPage(), pageRequest.getSize(), keyword);
-
-        log.info("searchCity: searchContent [" + keyword + "] \n DSL  = \n " + searchQuery.getQuery().toString());
 
         elasticsearchTemplate.refresh(EsBlog.class);
         Page<EsBlog> blogPage = elasticsearchTemplate.queryForPage(searchQuery, EsBlog.class, new SearchResultMapper() {
@@ -119,11 +117,7 @@ public class EsBlogRepositoryImpl implements CustomBlogRepository {
 
         TermQueryBuilder deletedQueryBuilder = QueryBuilders.termQuery("deleted", 0);
         TermQueryBuilder isPrivateQueryBuilder = QueryBuilders.termQuery("is_private", 0);
-        // ¶ÌÓïÆ¥Åäµ½µÄËÑË÷´Ê£¬ÇóºÍÄ£Ê½ÀÛ¼ÓÈ¨ÖØ·Ö
-        // È¨ÖØ·Ö²éÑ¯ https://www.elastic.co/guide/c ... .html
-        //   - ¶ÌÓïÆ¥Åä https://www.elastic.co/guide/c ... .html
-        //   - ×Ö¶Î¶ÔÓ¦È¨ÖØ·ÖÉèÖÃ£¬¿ÉÒÔÓÅ»¯³É enum
-        //   - ÓÉÓÚÎÞÏà¹ØÐÔµÄ·ÖÖµÄ¬ÈÏÎª 1 £¬ÉèÖÃÈ¨ÖØ·Ö×îÐ¡ÖµÎª 10
+
         FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders
                 .functionScoreQuery()
                 .add(QueryBuilders.matchPhraseQuery("title", searchContent),
@@ -131,7 +125,7 @@ public class EsBlogRepositoryImpl implements CustomBlogRepository {
                 .add(QueryBuilders.matchPhraseQuery("content", searchContent),
                         ScoreFunctionBuilders.weightFactorFunction(100))
                 .scoreMode(SCORE_MODE_SUM).setMinScore(MIN_SCORE);
-        // ·ÖÒ³²ÎÊý
+        // ï¿½ï¿½Ò³ï¿½ï¿½ï¿½ï¿½
         Pageable pageable = new org.springframework.data.domain.PageRequest(pageNumber, pageSize);
 
 
@@ -142,14 +136,6 @@ public class EsBlogRepositoryImpl implements CustomBlogRepository {
                 .should(titleQueryBuilder)
                 .should(contentQueryBuilder)
                 .filter(functionScoreQueryBuilder);
-
-//
-//        SearchRequestBuilder request = elasticsearchTemplate.getClient().prepareSearch("blog")
-//                .setQuery(boolQueryBuilder)
-//                .addHighlightedField("title")
-//                .addHighlightedField("content")
-//                .setHighlighterPreTags("<hahaha>")
-//                .setHighlighterPostTags("</hehehe>");
 
 
         return new NativeSearchQueryBuilder()

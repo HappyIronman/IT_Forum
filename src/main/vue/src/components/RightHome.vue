@@ -29,7 +29,7 @@
                   <router-link to="/write_blog" class="uk-text-bold">博客</router-link>
                 </li>
                 <li class="uk-nav-header">
-                  <router-link to="/question">提问</router-link>
+                  <router-link to="/write_question">提问</router-link>
                 </li>
               </ul>
             </div>

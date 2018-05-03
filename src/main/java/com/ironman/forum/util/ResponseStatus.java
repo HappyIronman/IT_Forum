@@ -12,6 +12,7 @@ public enum ResponseStatus {
     COMMENT_NOT_EXIST(2008, HttpStatus.BAD_REQUEST, "评论不存在"),
     MOMENT_NOT_EXIST(3001, HttpStatus.BAD_REQUEST, "动态不存在"),
     BLOG_NOT_EXIST(4001, HttpStatus.BAD_REQUEST, "博客不存在"),
+    QUESTION_NOT_EXIST(5001, HttpStatus.BAD_REQUEST, "提问不存在"),
     DUPLICATE_LIKE_LOG(7001, HttpStatus.BAD_REQUEST, "不能重复赞或者踩"),
     DUPLICATE_FOLLOW_LOG(7002, HttpStatus.BAD_REQUEST, "不能重复关注或取关"),
     LOG_NOT_EXIST(7002, HttpStatus.BAD_REQUEST, "记录不存在"),

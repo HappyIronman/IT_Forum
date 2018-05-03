@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MomentVO {
-    //id字段必须存在，用于代理方法
+    //id字段必须存在，用于aop
     @JsonIgnore
     private long id;
     private String uniqueId;

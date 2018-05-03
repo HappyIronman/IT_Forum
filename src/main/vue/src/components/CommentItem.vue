@@ -13,7 +13,8 @@
             </h4>
             <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
               <li><span>{{commentItem.createTime | formatDate('yyyy-MM-dd hh:mm')}}</span></li>
-              <li><a href="javascript:void(0);" v-on:click="fetchConversationList">对话列表{{commentItem.commentNum}}</a>
+              <li><a href="javascript:void(0);"
+                     v-on:click="isShowConversationList = !isShowConversationList">对话列表{{commentItem.commentNum}}</a>
               </li>
             </ul>
           </div>
@@ -38,11 +39,12 @@
       v-bind:type="0"
       v-on:refresh-conversation-list="refreshConversationList"
       v-bind:rows="1"></reply-comment-comp>
-    <ul class="uk-margin-small-top" v-if="isShowConversationList">
-      <li class="uk-margin-small-top" v-for="comment in conversationList">
+    <div v-if="isShowConversationList" class="uk-margin-small-top">
+      <div class="uk-margin-left uk-margin-small-bottom" v-for="comment in conversationList">
         <sub-comment-item v-bind:comment="comment"></sub-comment-item>
-      </li>
-    </ul>
+      </div>
+      <pageable v-bind:fetch-data-func="fetchConversationList" size="5"></pageable>
+    </div>
   </div>
 </template>
 
@@ -50,9 +52,13 @@
   import {requestApi} from '../api/requestUtils'
   import SubCommentItem from "./SubCommentItem.vue";
   import ReplyCommentComp from "./ReplyCommentComp.vue";
+  import Pageable from "./Pageable.vue";
 
   export default {
-    components: {SubCommentItem, ReplyCommentComp},
+    components: {
+      Pageable,
+      SubCommentItem, ReplyCommentComp
+    },
     name: 'CommentItem',
     props: ['commentItem'],
     data() {
@@ -63,27 +69,33 @@
       }
     },
     methods: {
-      fetchConversationList: function () {
-        if (this.conversationList.length === 0) {
-          var payload = {
-            'replyId': this.commentItem.uniqueId,
-            'type': 0
+      fetchConversationList: function (pageParam) {
+        if (pageParam.page === 0) {
+          if (this.conversationList.length === parseInt(pageParam.size)) {
+            return true;
           }
-          requestApi('get', 'comments', payload, (res) => {
-            this.conversationList = this.conversationList.concat(res.responseVO)
-          })
+          if (this.conversationList.length > 0) {
+            return false;
+          }
         }
-        this.isShowConversationList = !this.isShowConversationList
+        return requestApi('get', 'comments', {
+            replyId: this.commentItem.uniqueId,
+            type: 0,
+            page: pageParam.page,
+            size: pageParam.size
+          },
+          (res) => {
+            this.conversationList = this.conversationList.concat(res.responseVO)
+            return (res.responseVO != null && res.responseVO.length === parseInt(pageParam.size))
+          }
+        )
       },
       refreshConversationList: function () {
-        var payload = {
-          'replyId': this.commentItem.uniqueId,
-          'type': 0
-        }
-        requestApi('get', 'comments', payload, (res) => {
-          this.conversationList = res.responseVO
+        this.isShowConversationList = false
+        this.conversationList = []
+        //重新挂载分页插件,以达到重新加载评论列表效果
+        this.$nextTick(() => {
           this.isShowConversationList = true
-          this.isShowReplyComp = false
         })
       },
 
