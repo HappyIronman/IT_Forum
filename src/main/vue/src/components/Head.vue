@@ -1,6 +1,8 @@
 <template>
   <nav class="uk-navbar-container" uk-navbar>
-    <a class="uk-navbar-item uk-logo" href="#">Logo</a>
+    <router-link class="uk-navbar-item uk-logo" to="/">
+      <img src="../../static/img/logo.png" style="height: 46px;width:46px;"/>
+    </router-link>
 
     <div class="uk-navbar-item">
       <form class="uk-form">

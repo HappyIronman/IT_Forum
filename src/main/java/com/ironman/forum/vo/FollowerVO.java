@@ -10,7 +10,7 @@ import java.util.Date;
 public class FollowerVO {
     private String uniqueId;
     private String username;
-    private String profile;
+    private String profileUrl;
     private int followerNum;
     private int followingNum;
     private int momentNum;

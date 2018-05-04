@@ -440,6 +440,9 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public String concatImageUrl(String imgName) {
+        if (StringUtils.isEmpty(imgName)) {
+            return null;
+        }
         String picUrl;
 
         if (host.endsWith("/")) {

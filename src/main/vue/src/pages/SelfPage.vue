@@ -3,7 +3,7 @@
        style="border:2px solid darkgrey">
     <div
       class="uk-background-fixed uk-background-center-center uk-width-1-1 uk-text-center uk-padding uk-margin-small-bottom"
-      style="background-image: url(../../static/img/3.jpg); height: 330px">
+      style="background-image: url(../../static/img/selfBack.jpg); height: 330px">
       <div>
         <img class="uk-border-circle" style="border:4px solid darkgrey; width: 120px; height: 120px"
              v-bind:src="loginUserInfo.profileUrl">
@@ -77,19 +77,19 @@
             <div class="uk-text-center uk-margin-remove-left" uk-grid uk-lightbox="animation: fade">
               <div
                 class="uk-width-2-3 uk-card-body uk-margin-remove uk-padding-remove" style="height: 160px">
-                <a href="../../static/img/3.jpg">
-                  <img src="../../static/img/3.jpg" style="width: 100% ;height: 100%"/>
+                <a href="../../static/img/my_pic3.jpg">
+                  <img src="../../static/img/my_pic3.jpg" style="width: 100% ;height: 100%"/>
                 </a>
               </div>
               <div class="uk-padding-remove uk-margin-remove uk-width-1-3">
                 <div style="height: 80px">
-                  <a href="../../static/img/2.jpg">
-                    <img src="../../static/img/2.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
+                  <a href="../../static/img/my_pic2.jpg">
+                    <img src="../../static/img/my_pic2.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
                   </a>
                 </div>
                 <div style="height: 80px">
-                  <a href="../../static/img/1.jpg">
-                    <img src="../../static/img/1.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
+                  <a href="../../static/img/my_pic6.jpg">
+                    <img src="../../static/img/my_pic6.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
                   </a>
                 </div>
               </div>
@@ -97,18 +97,18 @@
               <!--<div class="uk-text-center uk-margin-remove-left-->
               <!--uk-child-width-1-3" style="height: 80px" uk-grid>-->
               <div class="uk-padding-remove uk-width-1-3 uk-margin-remove" style="height: 80px">
-                <a href="../../static/img/1.jpg">
-                  <img src="../../static/img/1.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
+                <a href="../../static/img/my_pic4.jpg">
+                  <img src="../../static/img/my_pic4.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
                 </a>
               </div>
               <div class="uk-padding-remove uk-width-1-3 uk-margin-remove" style="height: 80px">
-                <a href="../../static/img/2.jpg">
-                  <img src="../../static/img/2.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
+                <a href="../../static/img/my_pic9.jpg">
+                  <img src="../../static/img/my_pic9.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
                 </a>
               </div>
               <div class="uk-padding-remove uk-width-1-3 uk-margin-remove" style="height: 80px">
-                <a href="../../static/img/3.jpg">
-                  <img src="../../static/img/3.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
+                <a href="../../static/img/my_pic8.jpg">
+                  <img src="../../static/img/my_pic8.jpg" style="width: 100% ;height: 100%; padding: 2px"/>
                 </a>
               </div>
               <!--</div>-->

@@ -46,7 +46,8 @@ public class IronConstant {
     public static final long ANONYMOUS_USER_ID = -1L;
     public static final String ANONYMOUS_USER_UNIQUE_ID = "-1";
     public static final String ANONYMOUS_USER_NAME = "�����û�";
-    public static final String ANONYMOUS_USER_PROFILE_URL = "ironman";
+    public static final String ANONYMOUS_USER_PROFILE_URL = "default_profile.jpg";
+    public static final String USER_DEFAULT_PROFILE = "default_profile.jpg";
 
 
     public static final String ES_PRE_TAGS = "#FU#";

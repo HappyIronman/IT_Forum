@@ -267,16 +267,16 @@ public class UserServiceImpl implements UserService {
 
 
         //��������
-        if (viewLog.getUserId() == IronConstant.ANONYMOUS_USER_ID) {
-            viewLogVO.setUserId(IronConstant.ANONYMOUS_USER_UNIQUE_ID);
-            viewLogVO.setUsername(IronConstant.ANONYMOUS_USER_NAME);
-            viewLogVO.setProfileUrl(IronConstant.ANONYMOUS_USER_PROFILE_URL);
-        } else {
-            User user = userDAO.getById(viewLog.getUserId());
-            viewLogVO.setUserId(user.getUniqueId());
-            viewLogVO.setUsername(user.getUsername());
-            viewLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
-        }
+//        if (viewLog.getUserId() == IronConstant.ANONYMOUS_USER_ID) {
+//            viewLogVO.setUserId(IronConstant.ANONYMOUS_USER_UNIQUE_ID);
+//            viewLogVO.setUsername(IronConstant.ANONYMOUS_USER_NAME);
+//            viewLogVO.setProfileUrl(IronConstant.ANONYMOUS_USER_PROFILE_URL);
+//        } else {
+        User user = userDAO.getById(viewLog.getUserId());
+        viewLogVO.setUserId(user.getUniqueId());
+        viewLogVO.setUsername(user.getUsername());
+        viewLogVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
+//        }
 
         viewLogVO.setCreateTime(viewLog.getCreateTime());
 
@@ -346,6 +346,7 @@ public class UserServiceImpl implements UserService {
                 throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
             }
             FollowerVO followerVO = BeanUtils.copy(user, FollowerVO.class);
+            followerVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
             followerVO.setFollowDate(follow.getCreateTime());
 
             //���Ƿ������ķ�˿
@@ -373,6 +374,7 @@ public class UserServiceImpl implements UserService {
                 throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
             }
             FollowerVO followerVO = BeanUtils.copy(user, FollowerVO.class);
+            followerVO.setProfileUrl(user.getProfile());
             followerVO.setFollowDate(follow.getCreateTime());
 
             //���Ƿ����ҵķ�˿
@@ -521,6 +523,7 @@ public class UserServiceImpl implements UserService {
         user.setUniqueId(IronUtil.generateUniqueId());
         user.setDisabled(false);
         user.setCreateTime(new Date());
+        user.setProfile(IronConstant.USER_DEFAULT_PROFILE);
         userDAO.save(user);
         this.saveUserSession(session, user);
         return this.assembleUserInfoVO(user);

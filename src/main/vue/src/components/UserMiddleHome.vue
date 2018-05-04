@@ -3,13 +3,13 @@
     <div class=" uk-margin-top uk-flex">
       <ul uk-tab class=" uk-margin-remove uk-width-2-3">
         <li>
-          <router-link v-bind:to="'/user/'+uniqueId+'/moment'">他的动态</router-link>
+          <router-link v-bind:to="'/user/'+uniqueId+'/moment'">TA的动态</router-link>
         </li>
         <li>
-          <router-link v-bind:to="'/user/'+uniqueId+'/blog'">他的博客</router-link>
+          <router-link v-bind:to="'/user/'+uniqueId+'/blog'">TA的博客</router-link>
         </li>
         <li>
-          <router-link v-bind:to="'/user/'+uniqueId+'/question' ">他的提问</router-link>
+          <router-link v-bind:to="'/user/'+uniqueId+'/question' ">TA的提问</router-link>
         </li>
       </ul>
     </div>

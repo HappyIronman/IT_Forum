@@ -20,7 +20,13 @@ export function requestApi(method, path, params, callback) {
       return callback(responseData);
     }).catch(response => {
       if (response.status === 401) {
-        alert("请先登录")
+        UIkit.notification({
+          message: '<span class="uk-text-small">请先登录哦!&nbsp;&nbsp;</span>' +
+          '<a class="uk-text-small uk-text-bold" href="/#/login" target="_blank">点我登录</a>',
+          status: 'primary',
+          pos: 'top-center',
+          timeout: 5000
+        });
       } else {
         alert(response.body.msg)
       }
@@ -38,7 +44,6 @@ export function requestApi(method, path, params, callback) {
     }).catch((response) => {
         console.error("request ERROR! " + JSON.stringify(response));
         if (response.status === 401) {
-          // alert("请先登录")
           UIkit.notification({
             message: '<span class="uk-text-small">请先登录哦!&nbsp;&nbsp;</span>' +
             '<a class="uk-text-small uk-text-bold" href="/#/login" target="_blank">点我登录</a>',

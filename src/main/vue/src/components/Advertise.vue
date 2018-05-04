@@ -4,13 +4,13 @@
          uk-slideshow="min-height: 200; max-height: 250;autoplay: true">
       <ul class="uk-slideshow-items">
         <li>
-          <img src="../assets/1.jpg" alt="" uk-cover>
+          <img src="../../static/img/adv3.jpg" alt="" uk-cover>
         </li>
         <li>
-          <img src="../assets/2.jpg" alt="" uk-cover>
+          <img src="../../static/img/adv4.jpg" alt="" uk-cover>
         </li>
         <li>
-          <img src="../assets/3.jpg" alt="" uk-cover>
+          <img src="../../static/img/adv1.jpg" alt="" uk-cover>
         </li>
       </ul>
 

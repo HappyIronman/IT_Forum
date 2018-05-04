@@ -7,7 +7,7 @@
           style="height: 160px">
           <div class="uk-width-1-4" style=" border-right:1px solid darkgrey">
             <img class="uk-border-circle uk-margin-top"
-                 src="../../static/img/ironman.jpeg" style="width: 60px;height: 60px;"/>
+                 v-bind:src="user.profileUrl" style="width: 60px;height: 60px;"/>
           </div>
           <div class="uk-width-expand uk-text-left uk-margin-small-left">
             <p class=" uk-margin-small-bottom">

@@ -13,7 +13,7 @@
           </div>
           <div class="form1">
             <p class="p-input pos">
-              <label for="num">手机号/用户名</label>
+              <label for="num">用户名</label>
               <input type="text" id="num" v-model="username">
               <span class="tel-warn num-err hide"><em>账号或密码错误，请重新输入</em><i class="icon-warn"></i></span>
             </p>

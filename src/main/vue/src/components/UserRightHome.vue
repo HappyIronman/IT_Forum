@@ -40,7 +40,7 @@
       <div class="uk-card-body uk-padding-remove uk-text-center">
 
         <div class="uk-margin-small-top">
-          <span class="uk-text-small">他的粉丝</span>
+          <span class="uk-text-small">TA的粉丝</span>
           <span class="uk-text-bold">{{userInfo.followerNum}}</span>
         </div>
         <div class="uk-margin-small-top">
@@ -48,19 +48,19 @@
           <span class="uk-text-bold">{{userInfo.followingNum}}</span>
         </div>
         <div class="uk-margin-small-top">
-          <span class="uk-text-small">他的动态</span>
+          <span class="uk-text-small">TA的动态</span>
           <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/moment'" class="uk-text-bold">
             {{userInfo.momentNum}}
           </router-link>
         </div>
         <div class="uk-margin-small-top">
-          <span class="uk-text-small">他的博客</span>
+          <span class="uk-text-small">TA的博客</span>
           <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/blog'" class="uk-text-bold">
             {{userInfo.blogNum}}
           </router-link>
         </div>
         <div class="uk-margin-small-top">
-          <span class="uk-text-small">他的提问</span>
+          <span class="uk-text-small">TA的提问</span>
           <router-link v-bind:to="'/user/'+userInfo.uniqueId+'/question'" class="uk-text-bold">
             {{userInfo.questionNum}}
           </router-link>

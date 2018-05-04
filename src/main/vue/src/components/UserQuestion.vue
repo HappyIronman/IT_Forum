@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="uk-text-center">
-      <span class="uk-label uk-label-success">他的提问</span>
+      <span class="uk-label uk-label-success">TA的提问</span>
     </div>
     <div v-for="question in userQuestionList">
       <user-question-item v-bind:question="question"></user-question-item>

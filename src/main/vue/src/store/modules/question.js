@@ -11,6 +11,7 @@ const actions = {
   publishQuestionAction({commit}, payload) {
     //增加成功失败处理...
     return requestApi('post', 'question', payload, () => {
+      commit(types.CLEAR_MY_QUESTION_LIST)
       return true
     })
   },
@@ -53,6 +54,9 @@ const actions = {
 const mutations = {
   [types.MY_QUESTION_LIST](state, data) {
     state.myQuestionList = state.myQuestionList.concat(data.responseVO)
+  },
+  [types.CLEAR_MY_QUESTION_LIST](state) {
+    state.myQuestionList = []
   },
   [types.USER_QUESTION_LIST](state, data) {
     state.userQuestionList = state.userQuestionList.concat(data.responseVO)
