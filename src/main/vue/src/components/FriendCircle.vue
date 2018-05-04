@@ -6,6 +6,7 @@
     <div v-for="item in circleList">
       <moment-item v-if="item.type===1" v-bind:moment="item.entity"></moment-item>
       <blog-item v-if="item.type===2" v-bind:blog="item.entity"></blog-item>
+      <user-question-item v-if="item.type===3" v-bind:question="item.entity"></user-question-item>
     </div>
 
     <pageable v-bind:fetch-data-func="fetchMyCircleListAction" size="5"></pageable>
@@ -18,9 +19,11 @@
   import MomentItem from './MomentItem'
   import BlogItem from "./BlogItem";
   import Pageable from "./Pageable.vue";
+  import UserQuestionItem from "./UserQuestionItem.vue";
 
   export default {
     components: {
+      UserQuestionItem,
       Pageable,
       BlogItem,
       MomentItem

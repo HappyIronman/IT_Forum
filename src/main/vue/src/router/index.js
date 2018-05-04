@@ -23,6 +23,7 @@ import userMoment from '../components/UserMoment.vue'
 import userBlog from '../components/UserBlog.vue'
 import userQuestion from '../components/UserQuestion.vue'
 import blogDetail from '../components/BlogDetail.vue'
+import questionDetail from '../components/QuestionDetail.vue'
 
 import userpage from '../pages/Userpage.vue'
 import storage from '../storage'
@@ -136,6 +137,11 @@ const router = new Router({
           path: 'my_blog/:blogId',
           name: 'blogDetail',
           component: blogDetail
+        },
+        {
+          path: 'my_question/:questionId',
+          name: 'questionDetail',
+          component: questionDetail
         }
       ]
     },
@@ -187,6 +193,11 @@ const router = new Router({
           path: 'blog/:blogId',
           name: 'blogDetail',
           component: blogDetail
+        },
+        {
+          path: 'question/:questionId',
+          name: 'questionDetail',
+          component: questionDetail
         }
       ]
     },

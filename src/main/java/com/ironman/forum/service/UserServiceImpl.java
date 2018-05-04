@@ -151,7 +151,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private BaseLogVO assembleCommentLogVo(Comment comment) throws GlobalException {
+    private CommentLogVO assembleCommentLogVo(Comment comment) throws GlobalException {
         CommentLogVO commentLogVO = new CommentLogVO();
         commentLogVO.setLogType(AboutMe.LogType.COMMENT.getId());
         User user = userDAO.getById(comment.getUserId());
@@ -295,7 +295,12 @@ public class UserServiceImpl implements UserService {
         likeLogVO.setArticleType(articleType);
 
         if (articleType == ArticleTypeEnum.COMMENT.getId()) {
-            //todo
+            Comment comment = commentDAO.getById(targetId);
+            if (comment == null) {
+                throw new GlobalException(ResponseStatus.COMMENT_NOT_EXIST);
+            }
+            likeLogVO.setArticleId(comment.getUniqueId());
+            likeLogVO.setArticleContent(comment.getContent());
         } else if (articleType == ArticleTypeEnum.MOMENT.getId()) {
             Moment moment = momentDAO.getById(targetId);
             if (moment == null) {

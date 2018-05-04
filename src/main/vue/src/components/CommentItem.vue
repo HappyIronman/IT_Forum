@@ -1,10 +1,10 @@
 <template>
   <div>
-    <article class="uk-comment uk-visible-toggle uk-background-muted uk-padding-small">
+    <article class="uk-card uk-card-default uk-visible-toggle uk-background-muted uk-padding-small">
       <header class="uk-comment-header uk-position-relative">
         <div class="uk-grid-medium uk-flex-middle" uk-grid>
           <div class="uk-width-auto">
-            <img class="uk-comment-avatar" v-bind:src="commentItem.profile" style="width: 52px;height: 52px">
+            <img class="uk-comment-avatar" v-bind:src="commentItem.profileUrl" style="width: 52px;height: 52px">
           </div>
           <div class="uk-width-expand" style="padding-left: 10px;">
             <h4 class="uk-comment-title uk-margin-remove">
@@ -14,15 +14,14 @@
             <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top">
               <li><span>{{commentItem.createTime | formatDate('yyyy-MM-dd hh:mm')}}</span></li>
               <li><a href="javascript:void(0);"
-                     v-on:click="isShowConversationList = !isShowConversationList">对话列表{{commentItem.commentNum}}</a>
+                     v-on:click="onclickShowConversationList">对话列表{{commentItem.commentNum}}</a>
               </li>
             </ul>
           </div>
         </div>
         <div class="uk-position-top-right">
           <div>
-            <a class="uk-link-muted" href="#">赞{{commentItem.likeNum}}</a>
-            <a class="uk-link-muted" href="#">踩{{commentItem.dislikeNum}}</a>
+            <moment-like-btn v-bind:article="commentItem" type="0"></moment-like-btn>
           </div>
           <a class="uk-link-text uk-hidden-hover" href="javascript:void(0);" v-on:click="showReplyComp">回复</a>
         </div>
@@ -43,7 +42,7 @@
       <div class="uk-margin-left uk-margin-small-bottom" v-for="comment in conversationList">
         <sub-comment-item v-bind:comment="comment"></sub-comment-item>
       </div>
-      <pageable v-bind:fetch-data-func="fetchConversationList" size="5"></pageable>
+      <pageable v-bind:fetchDataFunc="fetchConversationList" size="5"></pageable>
     </div>
   </div>
 </template>
@@ -53,9 +52,11 @@
   import SubCommentItem from "./SubCommentItem.vue";
   import ReplyCommentComp from "./ReplyCommentComp.vue";
   import Pageable from "./Pageable.vue";
+  import MomentLikeBtn from "./MomentLikeBtn.vue";
 
   export default {
     components: {
+      MomentLikeBtn,
       Pageable,
       SubCommentItem, ReplyCommentComp
     },
@@ -70,14 +71,7 @@
     },
     methods: {
       fetchConversationList: function (pageParam) {
-        if (pageParam.page === 0) {
-          if (this.conversationList.length === parseInt(pageParam.size)) {
-            return true;
-          }
-          if (this.conversationList.length > 0) {
-            return false;
-          }
-        }
+
         return requestApi('get', 'comments', {
             replyId: this.commentItem.uniqueId,
             type: 0,
@@ -99,6 +93,12 @@
         })
       },
 
+      onclickShowConversationList: function () {
+        this.isShowConversationList = !this.isShowConversationList
+        if (!this.isShowConversationList) {
+          this.conversationList = []
+        }
+      },
       showReplyComp: function () {
         this.isShowReplyComp = !this.isShowReplyComp
         return this.isShowReplyComp

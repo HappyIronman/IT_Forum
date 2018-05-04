@@ -26,10 +26,6 @@ public class QuestionController {
 
     /**
      * 发表提问
-     *
-     * @param form
-     * @param result
-     * @return
      */
     @RequestMapping(value = "/question", method = RequestMethod.POST)
     public IronResponseEntity publishQuestion(@RequestBody @Valid QuestionPublishForm form,
@@ -42,10 +38,7 @@ public class QuestionController {
     }
 
     /**
-     * 问题详情
-     *
-     * @param uniqueId
-     * @return
+     * 问题详细信息
      */
     @RequestMapping(value = "/question/{uniqueId}", method = RequestMethod.GET)
     public IronResponseEntity questionDetail(@PathVariable("uniqueId") String uniqueId) throws GlobalException {
@@ -55,10 +48,6 @@ public class QuestionController {
 
     /**
      * 我的问题列表
-     *
-     * @param pageRequest
-     * @param result
-     * @return
      */
     @RequestMapping(value = "/myquestions", method = RequestMethod.GET)
     public IronResponseEntity pageMyQuestions(@Valid PageRequest pageRequest, BindingResult result) {

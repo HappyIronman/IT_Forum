@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
         commonService.ansyIncreaseCommentNum(comment);
 
         //异步写入aboutMe
-        CommentLog commentLog=new CommentLog();
+        CommentLog commentLog = new CommentLog();
         commentLog.setId(comment.getId());
         commentLog.setUserId(userId);
         commentLog.setTargetId(article.getId());
@@ -99,13 +99,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    private CommentVO assembleCommentVO(Comment comment) {
+    private CommentVO assembleCommentVO(Comment comment) throws GlobalException {
         CommentVO commentVO = BeanUtils.copy(comment, CommentVO.class);
         long userId = comment.getUserId();
         User user = userDAO.getArticleBaseInfoById(userId);
         commentVO.setUserId(user.getUniqueId());
         commentVO.setUsername(user.getUsername());
-        commentVO.setProfile(user.getProfile());
+        commentVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
+        commentVO.setLikeCondition(commonService.judgeLikeCondition(comment));
         return commentVO;
     }
 

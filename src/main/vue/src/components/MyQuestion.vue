@@ -6,7 +6,7 @@
       <span class="uk-label uk-label-success">我的提问</span>
     </div>
     <div v-for="myQuestion in myQuestionList">
-      <question-item v-bind:question="myQuestion"></question-item>
+      <my-question-item v-bind:question="myQuestion"></my-question-item>
     </div>
 
     <pageable v-bind:fetch-data-func="fetchMyQuestionListAction" size="5"></pageable>
@@ -17,11 +17,11 @@
   import {mapActions, mapState} from 'vuex'
   import SelfPageNav from "./SelfPageNav.vue";
   import Pageable from "./Pageable.vue";
-  import QuestionItem from "./QuestionItem.vue";
+  import MyQuestionItem from "./MyQuestionItem.vue";
 
   export default {
     components: {
-      QuestionItem,
+      MyQuestionItem,
       Pageable,
       SelfPageNav
     },

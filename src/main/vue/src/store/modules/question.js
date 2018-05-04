@@ -4,6 +4,7 @@ import types from '../mutation-types'
 const state = {
   myQuestionList: [],//我的提问列表
   userQuestionList: [],//用户提问列表
+  questionDetail: {}//问题详情
 }
 
 const actions = {
@@ -43,7 +44,10 @@ const actions = {
       commit(types.USER_QUESTION_LIST, res)
       return (res.responseVO != null && res.responseVO.length === parseInt(payload.pageParam.size))
     })
-  }
+  },
+  fetchQuestionDetailAction({commit}, uniqueId) {
+    requestApi('get', 'question/' + uniqueId, null, (res) => commit(types.QUESTION_DETAIL, res))
+  },
 }
 
 const mutations = {
@@ -52,6 +56,9 @@ const mutations = {
   },
   [types.USER_QUESTION_LIST](state, data) {
     state.userQuestionList = state.userQuestionList.concat(data.responseVO)
+  },
+  [types.QUESTION_DETAIL](state, data) {
+    state.questionDetail = data.responseVO
   }
 }
 

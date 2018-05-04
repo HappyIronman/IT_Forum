@@ -48,7 +48,7 @@ const actions = {
   },
   fetchBlogDetailAction({commit}, uniqueId) {
     requestApi('get', 'blog/' + uniqueId, null, (res) => commit(types.BLOG_DETAIL, res))
-  },
+  }
 }
 
 const mutations = {

@@ -1,18 +1,18 @@
 <template>
   <div class="uk-inline">
     <button class="uk-button uk-button-text uk-margin-small-right"
-            v-bind:style="likeBtnStyle" v-on:click="likeArticle(article, true)"
-            v-bind:disabled="article.likeCondition===3">
-      <span v-show="article.likeCondition!==2">赞</span>
-      <span v-show="article.likeCondition===2">已赞</span>
-      <span>({{article.likeNum}})</span>
+            v-bind:style="likeBtnStyle" v-on:click="likeArticle(localArticle, true)"
+            v-bind:disabled="localArticle.likeCondition===3">
+      <span v-show="localArticle.likeCondition!==2">赞</span>
+      <span v-show="localArticle.likeCondition===2">已赞</span>
+      <span>({{localArticle.likeNum}})</span>
     </button>
     <button class="uk-button uk-button-text uk-margin-small-right"
-            v-bind:style="dislikeBtnStyle" v-on:click="likeArticle(article, false)"
-            v-bind:disabled="article.likeCondition===2">
-      <span v-show="article.likeCondition!==3">踩</span>
-      <span v-show="article.likeCondition===3">已踩</span>
-      <span>({{article.dislikeNum}})</span>
+            v-bind:style="dislikeBtnStyle" v-on:click="likeArticle(localArticle, false)"
+            v-bind:disabled="localArticle.likeCondition===2">
+      <span v-show="localArticle.likeCondition!==3">踩</span>
+      <span v-show="localArticle.likeCondition===3">已踩</span>
+      <span>({{localArticle.dislikeNum}})</span>
     </button>
   </div>
 </template>
@@ -28,12 +28,15 @@
       }
     },
     computed: {
+      localArticle: function () {
+        return this.article
+      },
       //赞或者踩的状态，1-->未赞或踩过， 2--->已赞，3--->已踩
       likeBtnStyle: function () {
-        return {color: this.article.likeCondition === 2 ? 'blue' : 'black'}
+        return {color: this.localArticle.likeCondition === 2 ? 'blue' : 'black'}
       },
       dislikeBtnStyle: function () {
-        return {color: this.article.likeCondition === 3 ? 'blue' : 'black'}
+        return {color: this.localArticle.likeCondition === 3 ? 'blue' : 'black'}
       }
     },
     methods:{
@@ -41,28 +44,28 @@
         'likeArticleAction',
         'cancelLikeArticleAction'
       ]),
-      likeArticle:  function (article, isLike) {
+      likeArticle:  function (localArticle, isLike) {
         var params = {
-          targetId: article.uniqueId,
+          targetId: localArticle.uniqueId,
           type: this.type,
           like: isLike
         }
-        if (article.likeCondition !== 1) {
+        if (localArticle.likeCondition !== 1) {
           this.cancelLikeArticleAction(params)
-          article.likeCondition = 1
+          localArticle.likeCondition = 1
           if (isLike) {
-            article.likeNum -= 1
+            localArticle.likeNum -= 1
           } else {
-            article.dislikeNum -= 1
+            localArticle.dislikeNum -= 1
           }
         } else {
           this.likeArticleAction(params)
           if (isLike) {
-            article.likeCondition = 2
-            article.likeNum += 1
+            localArticle.likeCondition = 2
+            localArticle.likeNum += 1
           } else {
-            article.likeCondition = 3
-            article.dislikeNum += 1
+            localArticle.likeCondition = 3
+            localArticle.dislikeNum += 1
           }
         }
       }

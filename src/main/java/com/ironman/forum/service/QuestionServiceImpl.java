@@ -63,7 +63,17 @@ public class QuestionServiceImpl implements QuestionService {
             throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
         }
 
-        return this.assembleQuestionVO(question);
+        return this.assembleQuestionDetailVO(question);
+    }
+
+    private QuestionVO assembleQuestionDetailVO(Question question) {
+        long userId = question.getUserId();
+        User user = userDAO.getArticleBaseInfoById(userId);
+        QuestionVO questionVO = BeanUtils.copy(question, QuestionVO.class);
+        questionVO.setUserId(user.getUniqueId());
+        questionVO.setUsername(user.getUsername());
+        questionVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
+        return questionVO;
     }
 
 
@@ -78,7 +88,7 @@ public class QuestionServiceImpl implements QuestionService {
         User user = userDAO.getArticleBaseInfoById(userId);
 
         for (Question question : questionList) {
-            QuestionVO questionVO = this.assembleQuestionVO(question, user);
+            QuestionVO questionVO = this.assembleQuestionAbsVO(question, user);
             questionVOList.add(questionVO);
         }
         return questionVOList;
@@ -95,20 +105,20 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         for (Question question : questionList) {
-            QuestionVO questionVO = this.assembleQuestionVO(question, user);
+            QuestionVO questionVO = this.assembleQuestionAbsVO(question, user);
             questionVOList.add(questionVO);
         }
         return questionVOList;
     }
 
     @Override
-    public QuestionVO assembleQuestionVO(Question question) {
+    public QuestionVO assembleQuestionAbsVO(Question question) {
         long userId = question.getUserId();
         User user = userDAO.getArticleBaseInfoById(userId);
-        return this.assembleQuestionVO(question, user);
+        return this.assembleQuestionAbsVO(question, user);
     }
 
-    private QuestionVO assembleQuestionVO(Question question, User user) {
+    private QuestionVO assembleQuestionAbsVO(Question question, User user) {
         QuestionVO questionVO = BeanUtils.copy(question, QuestionVO.class);
         String content = IronUtil.removeHtmlTags(question.getContent());
         questionVO.setContent(content);

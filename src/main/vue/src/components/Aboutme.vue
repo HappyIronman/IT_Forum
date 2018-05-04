@@ -17,7 +17,7 @@
             </span>
             <span v-if="item.articleType===2">
               博客:
-              <router-link v-bind:to="'/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
+              <router-link v-bind:to="'/self/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
             </span>
             <span v-if="item.articleType===3">
               提问: {{item.articleTitle}}
@@ -37,7 +37,7 @@
             </span>
             <span v-if="item.articleType===2">
               博客:
-              <router-link v-bind:to="'/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
+              <router-link v-bind:to="'/self/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
             </span>
             <span v-if="item.articleType===3">
               提问: {{item.articleTitle}}
@@ -59,22 +59,18 @@
                       </router-link>
                     </h4>
                     <span v-if="item.type===0">
-                      回复了您的评论:
+                      回复了您的评论:{{item.replyTitle}}...
                     </span>
                     <span v-if="item.type===1">
-                      评论了您的动态:
+                      评论了您的动态:{{item.replyTitle}}...
                     </span>
                     <span v-if="item.type===2">
                       评论了您的博客:
+                      <router-link v-bind:to="'/self/my_blog/'+item.replyId">{{item.replyTitle}}</router-link>
                     </span>
                     <span v-if="item.type===3">
                       回答了您的问题:
-                    </span>
-                    <span>
-                      {{item.replyTitle}}
-                    </span>
-                    <span v-if="item.type===0||item.type===1">
-                      ...
+                      <router-link v-bind:to="'/self/my_question/'+item.replyId">{{item.replyTitle}}</router-link>
                     </span>
                   </div>
                   <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove-top uk-padding-remove">

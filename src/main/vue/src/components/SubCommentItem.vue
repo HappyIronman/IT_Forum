@@ -5,7 +5,7 @@
         <div>
           <div class="uk-flex">
             <div class="uk-width-auto">
-              <img class="uk-comment-avatar" v-bind:src="comment.profile" style="width: 34px;height: 34px">
+              <img class="uk-comment-avatar" v-bind:src="comment.profileUrl" style="width: 34px;height: 34px">
               <span class="uk-text-bold">{{comment.username}}</span>
               <span class="uk-text-muted">回复:&nbsp;</span>
               <span>{{comment.content}}</span>
@@ -22,12 +22,13 @@
           <div class="uk-position-right">
             <ul class="uk-comment-meta uk-subnav uk-subnav-divider uk-margin-remove">
               <li>
-                <a href="javascript:void(0);" v-on:click="isShowConversationList = !isShowConversationList">
+                <a href="javascript:void(0);" v-on:click="onclickShowConversationList">
                   对话列表{{comment.commentNum}}
                 </a>
               </li>
-              <li><a class="uk-link-muted" href="#">赞{{comment.likeNum}}</a></li>
-              <li><a class="uk-link-muted" href="#">踩{{comment.dislikeNum}}</a></li>
+              <li>
+                <moment-like-btn v-bind:article="comment" type="0"></moment-like-btn>
+              </li>
             </ul>
           </div>
         </div>
@@ -54,10 +55,12 @@
   import {requestApi} from '../api/requestUtils'
   import ReplyCommentComp from "./ReplyCommentComp.vue";
   import Pageable from "./Pageable.vue";
+  import MomentLikeBtn from "./MomentLikeBtn.vue";
 
   export default {
     name: 'SubCommentItem',
     components: {
+      MomentLikeBtn,
       Pageable,
       ReplyCommentComp
     },
@@ -71,14 +74,6 @@
     },
     methods: {
       fetchConversationList: function (pageParam) {
-        if (pageParam.page === 0) {
-          if (this.conversationList.length === parseInt(pageParam.size)) {
-            return true;
-          }
-          if (this.conversationList.length > 0) {
-            return false;
-          }
-        }
         return requestApi('get', 'comments', {
             replyId: this.comment.uniqueId,
             type: 0,
@@ -98,6 +93,12 @@
         this.$nextTick(() => {
           this.isShowConversationList = true
         })
+      },
+      onclickShowConversationList: function () {
+        this.isShowConversationList = !this.isShowConversationList
+        if (!this.isShowConversationList) {
+          this.conversationList = []
+        }
       },
       showReplyComp: function () {
         this.isShowReplyComp = !this.isShowReplyComp

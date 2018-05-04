@@ -17,5 +17,5 @@ public interface QuestionService {
 
     List<QuestionVO> pageUserQuestions(String userId, PageRequest pageRequest);
 
-    QuestionVO assembleQuestionVO(Question question);
+    QuestionVO assembleQuestionAbsVO(Question question);
 }

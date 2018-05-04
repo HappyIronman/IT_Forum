@@ -11,11 +11,12 @@ public class CommentVO {
     //uniqueId
     private String userId;
     private String username;
-    private String profile;
+    private String profileUrl;
     private int type;
     private String content;
     private int commentNum;
     private int likeNum;
     private int dislikeNum;
+    private int likeCondition;
     private Date createTime;
 }

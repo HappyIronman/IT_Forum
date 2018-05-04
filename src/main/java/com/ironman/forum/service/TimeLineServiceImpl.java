@@ -64,7 +64,7 @@ public class TimeLineServiceImpl implements TimeLineService {
                 timeLineVO.setEntity(blogAbsVO);
             } else if (type == ArticleTypeEnum.QUESTION.getId()) {
                 Question question = questionDAO.getById(articleId);
-                QuestionVO questionVO = questionService.assembleQuestionVO(question);
+                QuestionVO questionVO = questionService.assembleQuestionAbsVO(question);
                 timeLineVO.setEntity(questionVO);
             } else if (type == ArticleTypeEnum.COMMENT.getId()) {
                 //todo

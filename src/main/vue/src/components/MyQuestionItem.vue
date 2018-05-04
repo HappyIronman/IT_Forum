@@ -8,15 +8,15 @@
           </div>
           <div class="uk-width-auto">
             <h5 class="uk-card-title uk-margin-remove-bottom">
-              <router-link v-bind:to="'/user/'+question.userId">{{question.username}}</router-link>
+              <router-link to="/">{{question.username}}</router-link>
             </h5>
             <p class="uk-text-meta uk-margin-remove-top">
               {{question.createTime | formatDate('yyyy-MM-dd hh:mm')}}
             </p>
           </div>
-          <div class="uk-width-expand uk-text-right uk-text-small">
-            <p class="uk-margin-right">发表了提问</p>
-          </div>
+          <!--<div class="uk-width-expand uk-text-right uk-text-small">-->
+            <!--<p class="uk-margin-right">发表了提问</p>-->
+          <!--</div>-->
         </div>
       </div>
       <div class="uk-card-body uk-padding-small">
@@ -60,7 +60,7 @@
   import {requestApi} from '../api/requestUtils'
 
   export default {
-    name: 'QuestionItem',
+    name: 'MyQuestionItem',
     props: ['question'],
     data() {
       return {

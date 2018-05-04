@@ -206,6 +206,10 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public int judgeLikeCondition(Article article) throws GlobalException {
         Long userId = UserLoginUtil.getLoginUserId();
+        //若未登录,直接返回默认状态
+        if (userId == IronConstant.ANONYMOUS_USER_ID) {
+            return IronConstant.LIKE_CONDITION_DEFAULT;
+        }
         int type;
         if (article instanceof Comment) {
             type = ArticleTypeEnum.COMMENT.getId();
@@ -435,7 +439,7 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public String concatImageUrl(String imgName){
+    public String concatImageUrl(String imgName) {
         String picUrl;
 
         if (host.endsWith("/")) {
