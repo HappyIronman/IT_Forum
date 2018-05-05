@@ -28,4 +28,5 @@ hs_err_pid*
 .idea/
 src/main/webapp/images/
 target/
-src/components/CommentList.vue
+src/main/vue/dist/
+src/main/vue/src/assets/
