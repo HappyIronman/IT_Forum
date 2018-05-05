@@ -193,11 +193,16 @@
         },
 
         completeAll: function () {
-          let profileInfo = JSON.parse(arguments[0].response)[0]
-          console.log(profileInfo)
-          self.profileUrl = profileInfo.url
-          self.profile = profileInfo.name
-          UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>上传成功', status: 'success'})
+          let res = JSON.parse(arguments[0].response)
+          console.log(res)
+          if (res.code === 1000) {
+            let profileInfo = res.responseVO[0]
+            self.profileUrl = profileInfo.url
+            self.profile = profileInfo.name
+            UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>上传成功', status: 'success'})
+          } else {
+            UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>上传失败', status: 'danger'})
+          }
         }
       });
     }

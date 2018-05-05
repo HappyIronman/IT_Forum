@@ -151,7 +151,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public BlogDetailVO getBlogDetail(String uniqueId) throws GlobalException {
+    public BlogDetailVO getUserBlogDetail(String uniqueId) throws GlobalException {
         Blog blog = blogDAO.getByUniqueId(uniqueId);
         Long userId = UserLoginUtil.getLoginUserId();
         if (blog == null) {
@@ -160,6 +160,21 @@ public class BlogServiceImpl implements BlogService {
         if (blog.isPrivate() && blog.getUserId() != userId) {
             throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
         }
+        return this.assembleBlogDetailVO(blog);
+
+    }
+
+    @Override
+    public BlogDetailVO getMyBlogDetail(String uniqueId) throws GlobalException {
+        Blog blog = blogDAO.getByUniqueId(uniqueId);
+        Long userId = UserLoginUtil.getLoginUserId();
+        if (blog == null || blog.getUserId() != userId) {
+            throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
+        }
+        return this.assembleBlogDetailVO(blog);
+    }
+
+    private BlogDetailVO assembleBlogDetailVO(Blog blog) throws GlobalException {
         BlogDetailVO blogDetailVO = BeanUtils.copy(blog, BlogDetailVO.class);
         User author = userDAO.getArticleBaseInfoById(blog.getUserId());
         blogDetailVO.setUserId(author.getUniqueId());

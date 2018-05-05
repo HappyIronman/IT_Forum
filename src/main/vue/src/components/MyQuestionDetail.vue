@@ -62,7 +62,7 @@
 
   export default {
     components: {CommentList, MomentLikeBtn},
-    name: 'QuestionDetail',
+    name: 'MyQuestionDetail',
     data() {
       return {
         commentList: []
@@ -74,11 +74,11 @@
       })
     },
     created: function () {
-      this.fetchQuestionDetailAction(this.$route.params.questionId)
+      this.fetchMyQuestionDetailAction(this.$route.params.questionId)
     },
     methods: {
       ...mapActions([
-        'fetchQuestionDetailAction'
+        'fetchMyQuestionDetailAction'
       ]),
     }
   }

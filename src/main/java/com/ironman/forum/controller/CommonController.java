@@ -77,15 +77,9 @@ public class CommonController {
      */
     @RequestMapping(value = "/upload/pic")
     @ResponseBody
-    public List<ImageVO> uploadPics(@RequestParam("pics") MultipartFile[] images) {
+    public IronResponseEntity uploadPics(@RequestParam("pics") MultipartFile[] images) throws GlobalException {
 
-        List<ImageVO> imageVOList = null;
-        try {
-            imageVOList = commonService.saveImages(images);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        return imageVOList;
+        List<ImageVO> imageVOList = commonService.saveImages(images);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, imageVOList);
     }
 }

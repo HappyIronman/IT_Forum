@@ -1,5 +1,6 @@
 import {requestApi} from '../../api/requestUtils'
 import types from '../mutation-types'
+import storage from "../../storage";
 
 const state = {
   myQuestionList: [],//我的提问列表
@@ -46,7 +47,10 @@ const actions = {
       return (res.responseVO != null && res.responseVO.length === parseInt(payload.pageParam.size))
     })
   },
-  fetchQuestionDetailAction({commit}, uniqueId) {
+  fetchMyQuestionDetailAction({commit}, uniqueId) {
+    requestApi('get', 'my_question/' + uniqueId, null, (res) => commit(types.QUESTION_DETAIL, res))
+  },
+  fetchUserQuestionDetailAction({commit}, uniqueId) {
     requestApi('get', 'question/' + uniqueId, null, (res) => commit(types.QUESTION_DETAIL, res))
   },
 }
@@ -57,6 +61,7 @@ const mutations = {
   },
   [types.CLEAR_MY_QUESTION_LIST](state) {
     state.myQuestionList = []
+    storage.updateLoginUserInfo("questionNum", parseInt(storage.getStorage("LOGIN_USER_INFO").questionNum) + 1)
   },
   [types.USER_QUESTION_LIST](state, data) {
     state.userQuestionList = state.userQuestionList.concat(data.responseVO)

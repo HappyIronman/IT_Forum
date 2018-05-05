@@ -132,12 +132,18 @@
 
         completeAll: function () {
           self.moment.isContainPic = true
-          var picList = JSON.parse(arguments[0].response)
-          for (var i = 0; i < picList.length; i++) {
-            self.picPathList.push(picList[i].url)
-            self.moment.picNameList.push(picList[i].name)
+          var res = JSON.parse(arguments[0].response)
+          console.log(res)
+          if (res.code === 1000) {
+            var picList = res.responseVO
+            for (var i = 0; i < picList.length; i++) {
+              self.picPathList.push(picList[i].url)
+              self.moment.picNameList.push(picList[i].name)
+            }
+            UIkit.notification({message: '<span uk-icon=\'icon: check\'></span>上传成功', status: 'success'})
+          } else {
+            UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>上传失败', status: 'danger'})
           }
-          alert('Upload Completed');
         }
 
       });

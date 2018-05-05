@@ -28,7 +28,7 @@ export function requestApi(method, path, params, callback) {
           timeout: 5000
         });
       } else {
-        alert(response.body.msg)
+        UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + response.body.msg, status: 'danger'})
       }
       // error callback
       console.error("request ERROR! " + JSON.stringify(response));
@@ -52,7 +52,7 @@ export function requestApi(method, path, params, callback) {
             timeout: 5000
           });
         } else {
-          alert(response.body.msg)
+          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + response.body.msg, status: 'danger'})
         }
         // error callback
       }

@@ -1,5 +1,6 @@
 import {requestApi} from '../../api/requestUtils'
 import types from '../mutation-types'
+import storage from "../../storage";
 
 const state = {
   //我的博客列表
@@ -14,7 +15,7 @@ const actions = {
   publishBlogAction({commit}, payload) {
     //增加成功失败处理...
     return requestApi('post', 'blog', payload, (res) => {
-      commit(types.DEFAULT)
+      commit(types.PUBLISH_BLOG)
       return res.responseVO
     })
   },
@@ -46,13 +47,19 @@ const actions = {
       return (res.responseVO != null && res.responseVO.length === parseInt(payload.pageParam.size))
     })
   },
-  fetchBlogDetailAction({commit}, uniqueId) {
+  fetchUserBlogDetailAction({commit}, uniqueId) {
     requestApi('get', 'blog/' + uniqueId, null, (res) => commit(types.BLOG_DETAIL, res))
+  },
+  fetchMyBlogDetailAction({commit}, uniqueId) {
+    requestApi('get', 'my_blog/' + uniqueId, null, (res) => commit(types.BLOG_DETAIL, res))
   }
 }
 
 const mutations = {
   [types.DEFAULT](state) {
+  },
+  [types.PUBLISH_BLOG](state) {
+    storage.updateLoginUserInfo("blogNum", parseInt(storage.getStorage("LOGIN_USER_INFO").blogNum) + 1)
   },
   [types.MY_BLOG_LIST](state, data) {
     state.myBlogList = state.myBlogList.concat(data.responseVO)

@@ -91,16 +91,35 @@ public class BlogController {
     }
 
     /**
-     * 获取博客内容详情
+     * 获取用户博客内容详情
      *
      * @param uniqueId
      * @return
      */
     @RequestMapping(value = "/blog/{uniqueId}", method = RequestMethod.GET)
-    public IronResponseEntity getBlogDetail(@PathVariable("uniqueId") String uniqueId) {
+    public IronResponseEntity getUserBlogDetail(@PathVariable("uniqueId") String uniqueId) {
 
         try {
-            BlogDetailVO blogDetailVO = blogService.getBlogDetail(uniqueId);
+            BlogDetailVO blogDetailVO = blogService.getUserBlogDetail(uniqueId);
+            return new IronResponseEntity(ResponseStatus.SUCCESS, blogDetailVO);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
+
+
+    /**
+     * 获取我的博客内容详情
+     *
+     * @param uniqueId
+     * @return
+     */
+    @RequestMapping(value = "/my_blog/{uniqueId}", method = RequestMethod.GET)
+    public IronResponseEntity getMyBlogDetail(@PathVariable("uniqueId") String uniqueId) {
+
+        try {
+            BlogDetailVO blogDetailVO = blogService.getMyBlogDetail(uniqueId);
             return new IronResponseEntity(ResponseStatus.SUCCESS, blogDetailVO);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);

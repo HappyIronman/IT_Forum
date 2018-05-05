@@ -5,7 +5,7 @@ import storage from '../../storage'
 
 const state = {
   //登录信息
-  loginUserInfo: storage.getStorage("loginUserInfo"),
+  loginUserInfo: storage.getStorage("LOGIN_USER_INFO"),
   //个人信息
   userInfo: {},
   followList: [],
@@ -70,20 +70,20 @@ const actions = {
 const mutations = {
   [types.LOGIN_USER_INFO](state, data) {
     state.loginUserInfo = data.responseVO
-    storage.setStorage("loginUserInfo", state.loginUserInfo, 1000 * 60 * 180)
+    storage.setStorage("LOGIN_USER_INFO", state.loginUserInfo, 1000 * 60 * 180)
     console.log('个人信息存储成功' + JSON.stringify(state.loginUserInfo))
   },
   [types.USER_LOGOUT](state) {
     state.loginUserInfo = {}
-    storage.removeStorage("loginUserInfo")
+    storage.removeStorage("LOGIN_USER_INFO")
   },
   [types.USER_INFO](state, data) {
     state.userInfo = data.responseVO
   },
   [types.FOLLOW_USER](state, data) {
-    console.log('follow success')
     state.loginUserInfo.relation = data.responseVO
     state.loginUserInfo.followerNum += 1
+    storage.updateLoginUserInfo("followingNum", parseInt(storage.getStorage("LOGIN_USER_INFO").followingNum) + 1)
   },
   [types.FOLLOW_LIST](state, data) {
     state.followList = data.responseVO

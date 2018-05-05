@@ -64,7 +64,7 @@
 
   export default {
     components: {CommentList, MomentLikeBtn},
-    name: 'BlogDetail',
+    name: 'UserBlogDetail',
     data() {
       return {
         commentList: []
@@ -76,11 +76,11 @@
       })
     },
     created: function () {
-      this.fetchBlogDetailAction(this.$route.params.blogId)
+      this.fetchUserBlogDetailAction(this.$route.params.blogId)
     },
     methods: {
       ...mapActions([
-        'fetchBlogDetailAction'
+        'fetchUserBlogDetailAction'
       ]),
     }
   }

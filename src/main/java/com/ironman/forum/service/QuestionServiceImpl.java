@@ -57,9 +57,20 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionVO getQuestionDetail(String uniqueId) throws GlobalException {
+    public QuestionVO getUserQuestionDetail(String uniqueId) throws GlobalException {
         Question question = questionDAO.getByUniqueId(uniqueId);
         if (question == null) {
+            throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
+        }
+
+        return this.assembleQuestionDetailVO(question);
+    }
+
+    @Override
+    public QuestionVO getMyQuestionDetail(String uniqueId) throws GlobalException {
+        Question question = questionDAO.getByUniqueId(uniqueId);
+        long userId = UserLoginUtil.getLoginUserId();
+        if (question == null || question.getUserId() != userId) {
             throw new GlobalException(ResponseStatus.QUESTION_NOT_EXIST);
         }
 

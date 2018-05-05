@@ -38,11 +38,20 @@ public class QuestionController {
     }
 
     /**
-     * 问题详细信息
+     * 用户问题详细信息
      */
     @RequestMapping(value = "/question/{uniqueId}", method = RequestMethod.GET)
-    public IronResponseEntity questionDetail(@PathVariable("uniqueId") String uniqueId) throws GlobalException {
-        QuestionVO questionVO = questionService.getQuestionDetail(uniqueId);
+    public IronResponseEntity userQuestionDetail(@PathVariable("uniqueId") String uniqueId) throws GlobalException {
+        QuestionVO questionVO = questionService.getUserQuestionDetail(uniqueId);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, questionVO);
+    }
+
+    /**
+     * 我的问题详细信息
+     */
+    @RequestMapping(value = "/my_question/{uniqueId}", method = RequestMethod.GET)
+    public IronResponseEntity myQuestionDetail(@PathVariable("uniqueId") String uniqueId) throws GlobalException {
+        QuestionVO questionVO = questionService.getMyQuestionDetail(uniqueId);
         return new IronResponseEntity(ResponseStatus.SUCCESS, questionVO);
     }
 

@@ -9,7 +9,7 @@
         <aop:aspect id="aspect" ref="saveViewLogAspect">
             <!-- 配置一个切点 -->
             <aop:pointcut id="saveBlogViewLogPoint"
-                          expression="execution(public * com.ironman.forum.service.BlogService.getBlogDetail(..)) and args(uniqueId)"/>
+                          expression="execution(public * com.ironman.forum.service.BlogService.getUserBlogDetail(..)) and args(uniqueId)"/>
 
             <!-- 配置前置通知 -->
             <!--<aop:before pointcut-ref="saveViewLogPoint" method="beforeSaveViewLog" arg-names="uniqueId"/>-->
@@ -28,7 +28,7 @@
         <aop:aspect id="aspect" ref="saveViewLogAspect">
             <!-- 配置一个切点 -->
             <aop:pointcut id="saveQuestionViewLogPoint"
-                          expression="execution(public * com.ironman.forum.service.QuestionService.getQuestionDetail(..)) and args(uniqueId)"/>
+                          expression="execution(public * com.ironman.forum.service.QuestionService.getUserQuestionDetail(..)) and args(uniqueId)"/>
 
             <aop:after-returning pointcut-ref="saveQuestionViewLogPoint" method="afterReturningGetQuestionDetail"
                                  arg-names="uniqueId,questionVO" returning="questionVO"/>

@@ -30,7 +30,7 @@ public interface BlogService {
     List<BlogAbsVO> pageMyBlogs(PageRequest pageRequest) throws GlobalException;
 
     /**
-     * ×é×°²©¿Í¼òÂÔÐÅÏ¢£¨ÓÃÀ´Õ¹Ê¾ÔÚÊ±¼äÖáµÈ´¦£©
+     * ï¿½ï¿½×°ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½
      *
      * @param blog
      * @param user
@@ -40,7 +40,7 @@ public interface BlogService {
     BlogAbsVO assembleBlogAbsVO(Blog blog, User user) throws GlobalException;
 
     /**
-     * ×é×°²©¿Í¼òÂÔÐÅÏ¢£¨ÓÃÀ´Õ¹Ê¾ÔÚÊ±¼äÖáµÈ´¦£©
+     * ï¿½ï¿½×°ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¹Ê¾ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½
      *
      * @param blog the blog
      * @return the blog abs vo
@@ -48,7 +48,9 @@ public interface BlogService {
      */
     BlogAbsVO assembleBlogAbsVO(Blog blog) throws GlobalException;
 
-    BlogDetailVO getBlogDetail(String uniqueId) throws GlobalException;
+    BlogDetailVO getUserBlogDetail(String uniqueId) throws GlobalException;
+
+    BlogDetailVO getMyBlogDetail(String uniqueId) throws GlobalException;
 
     List<BlogAbsVO> pageUserBlogs(String userUniqueId, PageRequest pageRequest) throws GlobalException;
 }

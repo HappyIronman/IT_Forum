@@ -32,6 +32,13 @@ var storage = {
   removeStorage: function (key) {
     localStorage.removeItem(key);
   },
+  updateLoginUserInfo(prop, value) {
+    var user = this.getStorage("LOGIN_USER_INFO")
+    if (user !== null) {
+      user[prop] = value
+      this.setStorage("LOGIN_USER_INFO", user, 1000 * 60 * 180)
+    }
+  },
   getSession: function (key) {
     var data = sessionStorage[key];
     if (!data || data === "null") {

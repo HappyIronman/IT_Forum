@@ -22,8 +22,10 @@ import editInfo from '../components/EditInfo.vue'
 import userMoment from '../components/UserMoment.vue'
 import userBlog from '../components/UserBlog.vue'
 import userQuestion from '../components/UserQuestion.vue'
-import blogDetail from '../components/BlogDetail.vue'
-import questionDetail from '../components/QuestionDetail.vue'
+import myBlogDetail from '../components/MyBlogDetail.vue'
+import userBlogDetail from '../components/UserBlogDetail.vue'
+import myQuestionDetail from '../components/MyQuestionDetail.vue'
+import userQuestionDetail from '../components/UserQuestionDetail.vue'
 
 import userpage from '../pages/Userpage.vue'
 import storage from '../storage'
@@ -135,13 +137,13 @@ const router = new Router({
         },
         {
           path: 'my_blog/:blogId',
-          name: 'blogDetail',
-          component: blogDetail
+          name: 'myBlogDetail',
+          component: myBlogDetail
         },
         {
           path: 'my_question/:questionId',
-          name: 'questionDetail',
-          component: questionDetail
+          name: 'myQuestionDetail',
+          component: myQuestionDetail
         }
       ]
     },
@@ -191,13 +193,13 @@ const router = new Router({
         },
         {
           path: 'blog/:blogId',
-          name: 'blogDetail',
-          component: blogDetail
+          name: 'userBlogDetail',
+          component: userBlogDetail
         },
         {
           path: 'question/:questionId',
-          name: 'questionDetail',
-          component: questionDetail
+          name: 'userQuestionDetail',
+          component: userQuestionDetail
         }
       ]
     },
@@ -213,7 +215,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(m => m.meta.auth)) {
     // 对路由进行验证
-    let loginUserInfo = storage.getStorage("loginUserInfo")
+    let loginUserInfo = storage.getStorage("LOGIN_USER_INFO")
     console.log('srotageLoginUserInfo:' + JSON.stringify(loginUserInfo))
     if (loginUserInfo) { // 已经登陆
       state.loginUserInfo = loginUserInfo

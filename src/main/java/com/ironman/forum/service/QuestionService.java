@@ -11,7 +11,9 @@ import java.util.List;
 public interface QuestionService {
     void publishQuestion(QuestionPublishForm form);
 
-    QuestionVO getQuestionDetail(String uniqueId) throws GlobalException;
+    QuestionVO getUserQuestionDetail(String uniqueId) throws GlobalException;
+
+    QuestionVO getMyQuestionDetail(String uniqueId) throws GlobalException;
 
     List<QuestionVO> pageMyQuestions(PageRequest pageRequest);
 

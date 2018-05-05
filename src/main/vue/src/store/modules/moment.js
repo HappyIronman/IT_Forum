@@ -1,5 +1,7 @@
 import {requestApi} from '../../api/requestUtils'
 import types from '../mutation-types'
+import storage from '../../storage'
+
 
 const state = {
   circleList: [], //首页朋友圈列表
@@ -21,7 +23,7 @@ const actions = {
   publishMomentAction({commit}, payload) {
     //增加成功失败处理...
     return requestApi('post', 'moment', payload, () => {
-      commit(types.DISPLAY_PUBLISH_MOMENT_COMP, false)
+      commit(types.PUBLISH_MOMENT)
       return true
     })
   },
@@ -78,6 +80,10 @@ const mutations = {
   },
   [types.DISPLAY_PUBLISH_MOMENT_COMP](state, isShow) {
     state.isShowPublishMoment = isShow
+  },
+  [types.PUBLISH_MOMENT](state) {
+    state.isShowPublishMoment = false
+    storage.updateLoginUserInfo("momentNum", parseInt(storage.getStorage("LOGIN_USER_INFO").momentNum) + 1)
   },
   [types.MY_CIRCLE_LIST](state, data) {
     state.circleList = state.circleList.concat(data.responseVO)
