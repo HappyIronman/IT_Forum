@@ -4,7 +4,7 @@
       <div class="uk-grid-medium uk-flex-middle" uk-grid>
         <div class="uk-width-expand">
           <h4 class="uk-comment-title uk-margin-remove">
-            <router-link class="uk-link-reset" v-bind:to="'/user/'+item.userUniqueId+'/blog/'+item.uniqueId">
+            <router-link class="uk-text-bold" v-bind:to="'/user/'+item.userUniqueId+'/blog/'+item.uniqueId">
               {{item.title}}
             </router-link>
           </h4>

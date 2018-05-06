@@ -72,7 +72,9 @@
         'userLogoutAction'
       ]),
       search: function () {
-        this.$router.push({path: `/search/`, query: {keywords: this.keywords, type: this.type}})
+        if (this.keywords !== null && this.keywords !== '') {
+          this.$router.push({path: `/search/`, query: {keywords: this.keywords, type: this.type}})
+        }
       },
       logout: function () {
         this.userLogoutAction()

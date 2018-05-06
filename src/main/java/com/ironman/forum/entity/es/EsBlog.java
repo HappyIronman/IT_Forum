@@ -12,7 +12,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Document(indexName = "forum", type = "blog")
-//½âÎöÍÕ·åÃüÃû
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class EsBlog {
     @Id
