@@ -22,6 +22,8 @@ public interface UserService {
 
     UserInfoVO getUserBaseInfo(String uniqueId) throws GlobalException;
 
+    int judgeUserRelation(long selfId, long userId);
+
     UserInfoVO userLogin(UserLoginForm form, HttpSession session) throws GlobalException;
 
     /**

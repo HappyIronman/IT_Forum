@@ -204,7 +204,7 @@ const router = new Router({
       ]
     },
     {
-      path: '/search/:keywords',
+      path: '/search',
       name: 'searchPage',
       component: searchPage,
       children: []

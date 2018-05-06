@@ -46,4 +46,11 @@
         school = #{school}, intro = #{intro}
         WHERE id = #{id}
     </update>
+
+    <select id="pageByUsernameLike" resultType="com.ironman.forum.entity.User">
+        SELECT * FROM user where username LIKE "%"#{username}"%" AND disabled = FALSE
+        <include refid="com.ironman.baseSql.page">
+            <property name="pageRequest" value="pageRequest"/>
+        </include>
+    </select>
 </mapper>

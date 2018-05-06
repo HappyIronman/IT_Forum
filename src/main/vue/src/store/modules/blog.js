@@ -21,12 +21,7 @@ const actions = {
   },
   fetchMyBlogListAction({commit}, payload) {
     if (payload.page === 0) {
-      if (state.myBlogList.length === parseInt(payload.size)) {
-        return true;
-      }
-      if (state.myBlogList.length > 0) {
-        return false;
-      }
+      state.myBlogList = []
     }
     return requestApi('get', 'myblogs', payload, (res) => {
       commit(types.MY_BLOG_LIST, res)
@@ -35,12 +30,7 @@ const actions = {
   },
   fetchUserBlogListAction({commit}, payload) {
     if (payload.pageParam.page === 0) {
-      if (state.userBlogList.length === parseInt(payload.pageParam.size)) {
-        return true;
-      }
-      if (state.userBlogList.length > 0) {
-        return false;
-      }
+      state.userBlogList = []
     }
     return requestApi('get', payload.uniqueId + '/blogs', payload.pageParam, (res) => {
       commit(types.USER_BLOG_LIST, res)

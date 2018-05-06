@@ -47,12 +47,7 @@ const actions = {
   },
   fetchAboutmeListAction({commit}, payload) {
     if (payload.page === 0) {
-      if (state.aboutmeList.length === parseInt(payload.size)) {
-        return true;
-      }
-      if (state.aboutmeList.length > 0) {
-        return false;
-      }
+      state.aboutmeList = []
     }
     return requestApi('get', 'my/aboutmes', payload, (res) => {
       commit(types.ABOUT_ME_LIST, res)
@@ -81,7 +76,7 @@ const mutations = {
     state.userInfo = data.responseVO
   },
   [types.FOLLOW_USER](state, data) {
-    state.loginUserInfo.relation = data.responseVO
+    state.userInfo.relation = data.responseVO
     state.loginUserInfo.followerNum += 1
     storage.updateLoginUserInfo("followingNum", parseInt(storage.getStorage("LOGIN_USER_INFO").followingNum) + 1)
   },

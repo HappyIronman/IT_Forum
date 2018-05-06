@@ -374,7 +374,7 @@ public class UserServiceImpl implements UserService {
                 throw new GlobalException(ResponseStatus.USER_NOT_EXIST);
             }
             FollowerVO followerVO = BeanUtils.copy(user, FollowerVO.class);
-            followerVO.setProfileUrl(user.getProfile());
+            followerVO.setProfileUrl(commonService.concatImageUrl(user.getProfile()));
             followerVO.setFollowDate(follow.getCreateTime());
 
             //���Ƿ����ҵķ�˿
@@ -402,7 +402,8 @@ public class UserServiceImpl implements UserService {
         return userInfoVO;
     }
 
-    private int judgeUserRelation(long selfId, long userId) {
+    @Override
+    public int judgeUserRelation(long selfId, long userId) {
         //�û�δ��¼��ֱ�ӷ���İ����
         if (selfId == IronConstant.ANONYMOUS_USER_ID) {
             return UserInfoVO.Relation.STRANGER.getId();

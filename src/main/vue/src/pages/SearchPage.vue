@@ -5,12 +5,32 @@
       <div class="uk-width-1-5">
         <left-home></left-home>
       </div>
-      <div class="uk-width-3-5 uk-padding-remove">
-        <div class="uk-padding">
-          <ul class="uk-comment-list">
-            <search-blog-item v-for="searchResult in searchResultList" v-bind:item="searchResult"
-                              v-bind:key="searchResult.unniqueId"></search-blog-item>
-          </ul>
+      <div class="uk-width-3-5 uk-padding-small">
+        <ul uk-tab>
+          <li>
+            <router-link v-bind:to="{path:'/search',query:{keywords:keywords, type:2}}">博客</router-link>
+          </li>
+          <li>
+            <router-link v-bind:to="{path:'/search',query:{keywords:keywords, type:4}}">用户</router-link>
+          </li>
+        </ul>
+        <div>
+          <div v-if="type==2">
+            <ul class="uk-comment-list">
+              <li class="uk-margin-small-top" v-for="searchBlog in searchResultList">
+                <search-blog-item v-bind:item="searchBlog"
+                                  v-bind:key="searchBlog.uniqueId"></search-blog-item>
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="type==4" class="uk-grid-small uk-child-width-1-2 uk-text-center" uk-grid>
+            <div v-for="user in searchResultList">
+              <user-card v-bind:user="user"></user-card>
+            </div>
+          </div>
+
+          <pageable v-if="isShowPageable" v-bind:fetchDataFunc="fetchSearchResult" size="5"></pageable>
         </div>
       </div>
     </div>
@@ -23,38 +43,62 @@
   import advertise from '../components/Advertise.vue'
   import leftHome from '../components/LeftHome.vue'
   import searchBlogItem from '../components/SearchBlogItem.vue'
+  import Pageable from "../components/Pageable.vue";
+  import UserCard from "../components/UserCard.vue";
 
   export default {
     components: {
+      UserCard,
+      Pageable,
       advertise,
       leftHome,
       searchBlogItem,
     },
     data() {
-      return {}
+      return {
+        isShowPageable: true
+      }
     },
     computed: {
       ...mapState({
         searchResultList: state => state.common.searchResultList
       }),
       keywords: function () {
-        return this.$route.params.keywords
+        return this.$route.query.keywords
+      },
+      type: function () {
+        return this.$route.query.type
       }
     },
     watch: {
+      //重新挂载分页插件达到刷新页面数据效果
       keywords: function (newKeywords, oldKeywords) {
-        this.fetchSearchResultAction({keywords: newKeywords, type: 2, page: 0, size: 10})
+        this.isShowPageable = false
+        this.$nextTick(() => {
+          this.isShowPageable = true
+        })
+      },
+      type: function (newType, oldType) {
+        this.isShowPageable = false
+        this.$nextTick(() => {
+          this.isShowPageable = true
+        })
       }
     },
-    created: function () {
-      //type暂时写死,为blog
-      this.fetchSearchResultAction({keywords: this.keywords, type: 2, page: 0, size: 10})
-    },
+
     methods: {
       ...
         mapActions([
           'fetchSearchResultAction'
-        ])
+        ]),
+      fetchSearchResult: function (pageParam) {
+        return this.fetchSearchResultAction({
+          keywords: this.keywords,
+          type: this.type,
+          page: pageParam.page,
+          size: pageParam.size
+        })
+      }
     }
   }
 </script>

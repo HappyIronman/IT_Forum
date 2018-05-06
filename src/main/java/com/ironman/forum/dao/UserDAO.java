@@ -1,8 +1,11 @@
 package com.ironman.forum.dao;
 
 import com.ironman.forum.entity.User;
+import com.ironman.forum.util.PageRequest;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserDAO {
@@ -23,4 +26,6 @@ public interface UserDAO {
     void save(User user);
 
     void update(User user);
+
+    List<User> pageByUsernameLike(@Param("username") String username,@Param("pageRequest") PageRequest pageRequest);
 }

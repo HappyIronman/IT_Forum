@@ -20,12 +20,7 @@ const actions = {
   //获取我的提问列表
   fetchMyQuestionListAction({commit}, payload) {
     if (payload.page === 0) {
-      if (state.myQuestionList.length === parseInt(payload.size)) {
-        return true;
-      }
-      if (state.myQuestionList.length > 0) {
-        return false;
-      }
+      state.myQuestionList = []
     }
     return requestApi('get', 'myquestions', payload, (res) => {
       commit(types.MY_QUESTION_LIST, res)
@@ -35,12 +30,7 @@ const actions = {
   //获取用户的提问列表
   fetchUserQuestionListAction({commit}, payload) {
     if (payload.pageParam.page === 0) {
-      if (state.userQuestionList.length === parseInt(payload.pageParam.size)) {
-        return true;
-      }
-      if (state.userQuestionList.length > 0) {
-        return false;
-      }
+      state.userQuestionList = []
     }
     return requestApi('get', payload.uniqueId + '/questions', payload.pageParam, (res) => {
       commit(types.USER_QUESTION_LIST, res)

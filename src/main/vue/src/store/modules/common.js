@@ -14,7 +14,13 @@ const actions = {
     requestApi('post', 'article/cancel_like', payload, () => commit(types.DEFAULT))
   },
   fetchSearchResultAction({commit}, payload) {
-    requestApi('post', 'search', payload, (res) => commit(types.SEARCH_RESULT_LIST, res))
+    if (payload.page === 0) {
+      state.searchResultList = []
+    }
+    return requestApi('post', 'search', payload, (res) => {
+      commit(types.SEARCH_RESULT_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   }
 }
 
@@ -22,7 +28,7 @@ const mutations = {
   [types.DEFAULT](state) {
   },
   [types.SEARCH_RESULT_LIST](state, data) {
-    state.searchResultList = (data.responseVO)
+    state.searchResultList = state.searchResultList.concat(data.responseVO)
   }
 }
 

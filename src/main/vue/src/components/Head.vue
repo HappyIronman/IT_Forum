@@ -58,7 +58,8 @@
     name: 'Head',
     data() {
       return {
-        keywords: null
+        keywords: null,
+        type: 2
       }
     },
     computed: {
@@ -71,7 +72,7 @@
         'userLogoutAction'
       ]),
       search: function () {
-        this.$router.push({path: `/search/` + this.keywords})
+        this.$router.push({path: `/search/`, query: {keywords: this.keywords, type: this.type}})
       },
       logout: function () {
         this.userLogoutAction()
