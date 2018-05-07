@@ -68,7 +68,7 @@ public class BlogServiceImpl implements BlogService {
                 throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
             }
             Blog originBlog = blogDAO.getBaseInfoByUniqueId(originUniqueId);
-            if (originBlog == null || originBlog.isPrivate()) {
+            if (originBlog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
             Share share = new Share();

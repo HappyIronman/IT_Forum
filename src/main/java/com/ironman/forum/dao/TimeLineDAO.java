@@ -9,7 +9,7 @@ import java.util.List;
 public interface TimeLineDAO {
     void save(TimeLine timeLine);
 
-    void batchSave(@Param("timeLineList") List<TimeLine> timeLineList);
+    void batchSave1(@Param("timeLineList") List<TimeLine> timeLineList);
 
     List<TimeLine> getAllLimitByUserId(@Param("userId") Long userId, @Param("pageRequest") PageRequest pageRequest);
 }

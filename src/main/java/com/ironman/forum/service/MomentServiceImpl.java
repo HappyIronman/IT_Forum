@@ -181,18 +181,18 @@ public class MomentServiceImpl implements MomentService {
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
         }
         Moment originMoment = momentDAO.getById(share.getOriginId());
-        if (originMoment.isPrivate()) {
-            momentVO.setExist(false);
-        } else {
-            momentVO.setExist(true);
-            User originUser = userDAO.getArticleBaseInfoById(originMoment.getUserId());
-            momentVO.setOriginUserId(originUser.getUniqueId());
-            momentVO.setOriginUsername(originUser.getUsername());
-            momentVO.setOriginUserId(originUser.getUniqueId());
-            momentVO.setOriginContent(
-                    IronUtil.getAbstractContent(originMoment.getContent(), IronConstant.MOMENT_MAX_LENGTH)
-                            .getContent());
-            momentVO.setOriginCreateTime(originMoment.getCreateTime());
-        }
+//        if (originMoment.isPrivate()) {
+//            momentVO.setExist(false);
+//        } else {
+        momentVO.setExist(true);
+        User originUser = userDAO.getArticleBaseInfoById(originMoment.getUserId());
+        momentVO.setOriginUserId(originUser.getUniqueId());
+        momentVO.setOriginUsername(originUser.getUsername());
+        momentVO.setOriginUserId(originUser.getUniqueId());
+        momentVO.setOriginContent(
+                IronUtil.getAbstractContent(originMoment.getContent(), IronConstant.MOMENT_MAX_LENGTH)
+                        .getContent());
+        momentVO.setOriginCreateTime(originMoment.getCreateTime());
+//        }
     }
 }

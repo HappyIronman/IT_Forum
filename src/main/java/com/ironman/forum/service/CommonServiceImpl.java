@@ -414,8 +414,8 @@ public class CommonServiceImpl implements CommonService {
         //分批插入粉丝的时间轴
         int batchSize = 200;
         PageRequest pageRequest = new PageRequest(0, batchSize);
-        List<Follow> followList = new ArrayList<>(batchSize);
-        while (followList.size() == batchSize) {
+        List<Follow> followList;
+        do {
             followList = followDAO.getAllLimitByUserId(userId, pageRequest);
             if (CollectionUtils.isEmpty(followList)) {
                 break;
@@ -427,15 +427,14 @@ public class CommonServiceImpl implements CommonService {
                 timeLine.setArticleId(articleId);
                 timeLine.setType(type);
                 timeLine.setNew(true);
-                timeLine.setSelf(true);
+                timeLine.setSelf(false);
                 timeLine.setCreateTime(createTime);
                 timeLineList.add(timeLine);
             }
             //批量插入
-            timeLineDAO.batchSave(timeLineList);
-
+            timeLineDAO.batchSave1(timeLineList);
             pageRequest.nextPage();
-        }
+        } while (followList.size() == batchSize);
     }
 
     @Override

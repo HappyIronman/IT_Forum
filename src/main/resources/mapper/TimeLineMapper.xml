@@ -10,11 +10,11 @@
     </insert>
 
 
-    <insert id="batchSave">
+    <insert id="batchSave1">
         INSERT INTO time_line(user_id, article_id, type, is_self, is_new, create_time)
         VALUES
-        <foreach collection="timeLineList" item="item" separator=",">
-            (#{item.userId},#{item.targetId},#{item.type},#{item.isSelf},#{item.isNew},#{log.createTime})
+        <foreach collection="timeLineList" item="timeLine" separator=",">
+            (#{timeLine.userId},#{timeLine.articleId},#{timeLine.type},#{timeLine.isSelf},#{timeLine.isNew},#{timeLine.createTime})
         </foreach>
     </insert>
 
