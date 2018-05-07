@@ -1,7 +1,7 @@
 <template>
   <div class="uk-margin-top">
     <img src="../../static/img/backLeft.jpg" class="uk-margin-small-bottom" style="width: 100%; min-height: 400px"/>
-    <img src="../../static/img/backLeft4.jpg" class="uk-margin-small-bottom" style="width: 100%; min-height: 400px"/>
+    <img src="../../static/img/backLeft5.jpg" class="uk-margin-small-bottom" style="width: 100%; min-height: 400px"/>
     <img src="../../static/img/backLeft3.jpg" style="width: 100%; min-height: 400px"/>
   </div>
 </template>
