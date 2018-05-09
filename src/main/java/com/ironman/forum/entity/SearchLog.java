@@ -9,4 +9,5 @@ public class SearchLog extends BaseEntity {
     private String keyword;
     private long userId;
     private long hit;
+    private int type;
 }

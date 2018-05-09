@@ -4,6 +4,7 @@ import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.UserDAO;
 import com.ironman.forum.dao.es.EsBlogRepository;
 import com.ironman.forum.entity.ArticleTypeEnum;
+import com.ironman.forum.entity.SearchLog;
 import com.ironman.forum.entity.User;
 import com.ironman.forum.entity.es.EsBlog;
 import com.ironman.forum.form.SearchForm;
@@ -17,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,6 +36,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AnsyCommonService ansyCommonService;
 
     @Override
     public List<SearchBlogVO> searchBlog(String keywords, PageRequest pageRequest) throws GlobalException {
@@ -108,9 +113,23 @@ public class SearchServiceImpl implements SearchService {
             throw new GlobalException(ResponseStatus.ARTICLE_TYPE_ILLEGAL);
         }
 
+        //异步更新SearchLog,若为匿名,同样更新
+        long userId = UserLoginUtil.getLoginUserId();
+        this.ansyUpdateSearchLog(userId, keywords, type);
+
 
         //�첽����searchLog
         return entityVOList;
+    }
+
+    @Override
+    public void ansyUpdateSearchLog(long userId, String keyword, int type) {
+        SearchLog searchLog = new SearchLog();
+        searchLog.setUserId(userId);
+        searchLog.setKeyword(keyword);
+        searchLog.setType(type);
+        searchLog.setCreateTime(new Date());
+        ansyCommonService.ansyUpdateSearchLog(searchLog);
     }
 
     private <T> List<Object> convertToObjectList(List<T> entityList) {

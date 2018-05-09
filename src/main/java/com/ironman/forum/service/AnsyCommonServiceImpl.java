@@ -2,8 +2,9 @@ package com.ironman.forum.service;
 
 import com.ironman.forum.dao.AboutMeDAO;
 import com.ironman.forum.dao.CommonDAO;
-import com.ironman.forum.dao.TimeLineDAO;
+import com.ironman.forum.dao.SearchLogDAO;
 import com.ironman.forum.entity.AboutMe;
+import com.ironman.forum.entity.SearchLog;
 import com.ironman.forum.util.GlobalException;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Log4j
 public class AnsyCommonServiceImpl implements AnsyCommonService {
+
     @Autowired
-    private TimeLineDAO timeLineDAO;
+    private SearchLogDAO searchLogDAO;
 
     @Autowired
     private CommonDAO commonDAO;
@@ -45,5 +47,10 @@ public class AnsyCommonServiceImpl implements AnsyCommonService {
     @Override
     public void ansyIncreasePropertyNumById(String table, long id, String property, int addNum) {
         commonDAO.increasePropertyNumById(table, id, property, addNum);
+    }
+
+    @Override
+    public void ansyUpdateSearchLog(SearchLog searchLog) {
+        searchLogDAO.update(searchLog);
     }
 }

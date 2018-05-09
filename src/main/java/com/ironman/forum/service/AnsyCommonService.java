@@ -1,6 +1,7 @@
 package com.ironman.forum.service;
 
 import com.ironman.forum.entity.AboutMe;
+import com.ironman.forum.entity.SearchLog;
 import com.ironman.forum.util.GlobalException;
 import org.springframework.scheduling.annotation.Async;
 
@@ -38,4 +39,7 @@ public interface AnsyCommonService {
 
     @Async
     void ansyIncreasePropertyNumById(String table, long id, String property, int addNum);
+
+    @Async
+    void ansyUpdateSearchLog(SearchLog searchLog);
 }

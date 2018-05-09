@@ -4,4 +4,9 @@
 
 <mapper namespace="com.ironman.forum.dao.SearchLogDAO">
 
+    <insert id="update" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO search_log(user_id,keyword,type,create_time)
+        VALUES(#{userId},#{keyword},#{type},#{createTime})
+        ON DUPLICATE KEY UPDATE hit = hit + 1
+    </insert>
 </mapper>

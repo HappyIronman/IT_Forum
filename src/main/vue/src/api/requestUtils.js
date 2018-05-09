@@ -28,7 +28,8 @@ export function requestApi(method, path, params, callback) {
           timeout: 5000
         });
       } else {
-        UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + response.body.msg, status: 'danger'})
+        var msg = response.body.msg? response.body.msg: '系统错误'
+        UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})
       }
       // error callback
       console.error("request ERROR! " + JSON.stringify(response));
@@ -52,8 +53,8 @@ export function requestApi(method, path, params, callback) {
             timeout: 5000
           });
         } else {
-          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + response.body.msg, status: 'danger'})
-        }
+          var msg = response.body.msg? response.body.msg: '系统错误'
+          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})        }
         // error callback
       }
     );

@@ -14,4 +14,6 @@ public interface SearchService {
     List<SearchUserVO> searchUser(String keywords, PageRequest pageRequest);
 
     List<Object> searchEntity(SearchForm form) throws GlobalException;
+
+    void ansyUpdateSearchLog(long userId, String keyword, int type);
 }
