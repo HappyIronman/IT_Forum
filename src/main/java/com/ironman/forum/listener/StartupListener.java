@@ -40,11 +40,15 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
                                     if (cacheSize >= IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
                                         log.info("�����洢viewLog����");
                                         IronExecutor.execute(batchSaveViewLogToDbTask());
-
                                     }
-                                    Thread.sleep(800);
                                 } catch (Exception e) {
                                     log.error(e.getMessage(), e);
+                                } finally {
+                                    try {
+                                        Thread.sleep(800);
+                                    } catch (InterruptedException e) {
+                                        log.error(e.getMessage(), e);
+                                    }
                                 }
                             }
                         }
