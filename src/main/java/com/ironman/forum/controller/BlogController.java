@@ -116,15 +116,10 @@ public class BlogController {
      * @return
      */
     @RequestMapping(value = "/my_blog/{uniqueId}", method = RequestMethod.GET)
-    public IronResponseEntity getMyBlogDetail(@PathVariable("uniqueId") String uniqueId) {
+    public IronResponseEntity getMyBlogDetail(@PathVariable("uniqueId") String uniqueId) throws GlobalException {
 
-        try {
-            BlogDetailVO blogDetailVO = blogService.getMyBlogDetail(uniqueId);
-            return new IronResponseEntity(ResponseStatus.SUCCESS, blogDetailVO);
-        } catch (GlobalException e) {
-            log.error(e.getMessage(), e);
-            return new IronResponseEntity(e.getResponseStatus());
-        }
+        BlogDetailVO blogDetailVO = blogService.getMyBlogDetail(uniqueId);
+        return new IronResponseEntity(ResponseStatus.SUCCESS, blogDetailVO);
     }
 
 

@@ -24,7 +24,7 @@
                   class="uk-textarea" rows="6" placeholder="说点想说的..."></textarea>
         <div uk-grid class="uk-margin-remove">
 
-          <img class="uk-padding-remove" v-for="path in picPathList" v-bind:src="path"
+          <img class="uk-padding-remove uk-margin-small-right" v-for="path in picPathList" v-bind:src="path"
                style="height: 40px;width: 40px"/>
 
           <div class="js-upload" uk-form-custom>

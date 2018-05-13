@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,10 +30,12 @@ import java.util.Set;
 public class LoginInterceptor implements HandlerInterceptor {
 
     /**
-     * 允许发起跨域请求的域名
+     * 允许发起跨域请求的域名数组
      */
-    @Value("#{prop.permitted_origin_host}")
-    private String permittedOriginHost;
+    @Value("#{prop.permitted_origin_hosts}")
+    private String permittedOriginHostStr;
+
+    private Set<String> permittedOriginHostSet;
 
     /**
      * 受限url和权限对应map，默认为用户权限
@@ -43,19 +47,29 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     private RegexSet<String> publicUrlSet;
 
+    @PostConstruct
+    public void init() {
+        log.info("LoginInterceptor初始化permittedOriginHostSet");
+        String[] permittedOriginHostArr = this.permittedOriginHostStr.split(";");
+        this.permittedOriginHostSet = new HashSet<>(Arrays.asList(permittedOriginHostArr));
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-        httpServletResponse.setHeader("Access-Control-Allow-Origin", this.permittedOriginHost);
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers",
-                "Origin, X-Requested-With, content-type, Accept");
-        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        String originHeader = httpServletRequest.getHeader("Origin");
+        if (permittedOriginHostSet.contains(originHeader)) {
+            httpServletResponse.setHeader("Access-Control-Allow-Origin", originHeader);
+            httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+            httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
+            httpServletResponse.setHeader("Access-Control-Allow-Headers",
+                    "Origin, X-Requested-With, content-type, Accept");
+            httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 
-        if (httpServletRequest.getMethod().equals(HttpMethod.OPTIONS.toString())) {
-            httpServletResponse.setStatus(HttpStatus.OK.value());
-            return true;
+            if (httpServletRequest.getMethod().equals(HttpMethod.OPTIONS.toString())) {
+                httpServletResponse.setStatus(HttpStatus.OK.value());
+                return true;
+            }
         }
 
 
@@ -131,7 +145,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         this.publicUrlSet = publicUrlSet;
     }
 
-    public void setPermittedOriginHost(String permittedOriginHost) {
-        this.permittedOriginHost = permittedOriginHost;
+    public void setPermittedOriginHostStr(String permittedOriginHostStr) {
+        this.permittedOriginHostStr = permittedOriginHostStr;
     }
 }

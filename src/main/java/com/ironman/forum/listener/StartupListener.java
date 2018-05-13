@@ -19,17 +19,17 @@ import java.util.List;
 public class StartupListener implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private SaveViewLogTask saveViewLogListToDB;
+    private SaveViewLogTask saveViewLogTask;
 
     /**
-     * ¿ÉÓÃspring¶¨Ê±ÈÎÎñ´úÌæ
+     * ï¿½ï¿½ï¿½ï¿½springï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      *
      * @param contextRefreshedEvent the context refreshed event
      */
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext().getParent() == null) {
-            log.info("listenerÆô¶¯");
+            log.info("listenerï¿½ï¿½ï¿½ï¿½");
             new Thread(
                     new Runnable() {
                         @Override
@@ -38,11 +38,11 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
                                 try {
                                     int cacheSize = IronCache.getViewLogCacheSize();
                                     if (cacheSize >= IronConstant.VIEW_LOG_MAX_CACHE_SIZE) {
-                                        log.info("ÅúÁ¿´æ´¢viewLog´¥·¢");
+                                        log.info("ï¿½ï¿½ï¿½ï¿½ï¿½æ´¢viewLogï¿½ï¿½ï¿½ï¿½");
                                         IronExecutor.execute(batchSaveViewLogToDbTask());
 
-                                        Thread.sleep(600);
                                     }
+                                    Thread.sleep(800);
                                 } catch (Exception e) {
                                     log.error(e.getMessage(), e);
                                 }
@@ -58,7 +58,7 @@ public class StartupListener implements ApplicationListener<ContextRefreshedEven
             @Override
             public void run() {
                 List<ViewLog> viewLogList = IronCache.batchGetViewLogs(IronConstant.VIEW_LOG_MAX_CACHE_SIZE);
-                saveViewLogListToDB.saveViewLogListToDB(viewLogList);
+                saveViewLogTask.saveViewLogListToDB(viewLogList);
             }
         };
     }

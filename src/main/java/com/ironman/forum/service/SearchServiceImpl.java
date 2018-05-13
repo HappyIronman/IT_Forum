@@ -52,12 +52,12 @@ public class SearchServiceImpl implements SearchService {
         for (EsBlog esBlog : esBlogList) {
             SearchBlogVO searchBlogVO = BeanUtils.copy(esBlog, SearchBlogVO.class);
 
-            //��ȡ����keywords��������
+            //1.提取包含关键字的内容
             String content = StringUtils.isEmpty(esBlog.getContentHighlight()) ?
                     esBlog.getContent() : esBlog.getContentHighlight();
-            //ȥ������html��ǩ
+            //2.去除原生html标签
             content = IronUtil.removeHtmlTags(content);
-            //��ȡָ������
+            //3.截取指定长度内容，并且替换自定义高亮tag为<em>标签
             content = IronUtil.getSearchAbsContent(content);
             searchBlogVO.setContent(content);
 

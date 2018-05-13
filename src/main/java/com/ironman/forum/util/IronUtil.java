@@ -8,10 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -163,5 +160,15 @@ public class IronUtil {
         log.info("��ȡ������:" + destContent);
         return destContent;
 
+    }
+
+    public static void main(String[] args) {
+        String s = "aa;bb;cc;";
+        String[] arr = s.split(";");
+        Set<String> hashSet = new HashSet<>(Arrays.asList(arr));
+        System.out.println(hashSet.size());
+        for (String ss : hashSet) {
+            System.out.println(ss);
+        }
     }
 }

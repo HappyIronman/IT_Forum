@@ -5,7 +5,6 @@ import com.ironman.forum.util.IronUtil;
 import com.ironman.forum.util.ResponseBean;
 import com.ironman.forum.util.ResponseStatus;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,9 +17,6 @@ import java.io.PrintWriter;
 @Component
 @Log4j
 public class WebExceptionAspect {
-
-    @Value("#{prop.permitted_origin_host}")
-    private String permittedOriginHost;
 
     public void handleThrowing(Exception e) {
         log.error(e.getMessage(), e);
@@ -39,7 +35,9 @@ public class WebExceptionAspect {
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         response.reset();
         response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", this.permittedOriginHost);
+        String originHeader = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest().getHeader("Origin");
+        response.setHeader("Access-Control-Allow-Origin", originHeader);
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers",

@@ -28,7 +28,7 @@ export function requestApi(method, path, params, callback) {
           timeout: 5000
         });
       } else {
-        var msg = response.body.msg? response.body.msg: '系统错误'
+        var msg = response.body.msg? response.body.msg: '系统异常'
         UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})
       }
       // error callback
@@ -53,7 +53,7 @@ export function requestApi(method, path, params, callback) {
             timeout: 5000
           });
         } else {
-          var msg = response.body.msg? response.body.msg: '系统错误'
+          var msg = response.body.msg? response.body.msg: '系统异常'
           UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})        }
         // error callback
       }
