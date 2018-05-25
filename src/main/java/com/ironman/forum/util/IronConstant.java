@@ -55,4 +55,6 @@ public class IronConstant {
     public static final int ES_HIGHLIGHT_MAX_SIZE = 400;
     public static final int ES_BLOG_MAX_SIZE = 150;
     public static final int TITLE_MAX_LENGTH = 30;
+
+    public static final String SLASH = "/";
 }

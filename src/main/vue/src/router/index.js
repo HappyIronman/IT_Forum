@@ -11,7 +11,7 @@ import userLoginPage from '../pages/UserLoginPage.vue'
 import registerPage from '../pages/RegisterPage.vue'
 import searchPage from '../pages/SearchPage.vue'
 import friendCircle from '../components/FriendCircle.vue'
-import recommend from '../components/Recommend.vue'
+import recommendPage from '../pages/RecommendPage.vue'
 import aboutme from '../components/Aboutme.vue'
 import myMoment from '../components/MyMoment.vue'
 import myBlog from '../components/MyBlog.vue'
@@ -55,8 +55,8 @@ const router = new Router({
         },
         {
           path: 'recommend',
-          name: 'recommend',
-          component: recommend
+          name: 'recommendPage',
+          component: recommendPage
         },
         {
           path: 'aboutme',

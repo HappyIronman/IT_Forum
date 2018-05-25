@@ -3,7 +3,9 @@ import types from '../mutation-types'
 
 const state = {
   //搜索结果列表
-  searchResultList: []
+  searchResultList: [],
+  //个性推荐列表
+  myRecommendList:[]
 }
 
 const actions = {
@@ -21,7 +23,16 @@ const actions = {
       commit(types.SEARCH_RESULT_LIST, res)
       return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
     })
-  }
+  },
+  fetchMyRecommendListAction({commit}, payload) {
+    if (payload.page === 0) {
+      state.myRecommendList = []
+    }
+    return requestApi('get', 'recommend/homepage/', payload, (res) => {
+      commit(types.MY_RECOMMEND_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
+  },
 }
 
 const mutations = {
@@ -29,6 +40,9 @@ const mutations = {
   },
   [types.SEARCH_RESULT_LIST](state, data) {
     state.searchResultList = state.searchResultList.concat(data.responseVO)
+  },
+  [types.MY_RECOMMEND_LIST](state, data) {
+    state.myRecommendList = state.myRecommendList.concat(data.responseVO)
   }
 }
 

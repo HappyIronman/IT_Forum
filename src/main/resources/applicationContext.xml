@@ -37,5 +37,7 @@
     <!-- 支持 @Async 注解 -->
     <task:executor id="annotationExecutor" pool-size="20"/>
 
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate"/>
+
 
 </beans>

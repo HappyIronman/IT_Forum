@@ -78,12 +78,12 @@
       })
     },
     created: function () {
-      this.fetchBlogDetailAction(this.$route.params.uniqueId)
+      this.fetchUserBlogDetailAction(this.$route.params.uniqueId)
     },
     methods: {
       ...mapActions([
         'publishBlogAction',
-        'fetchBlogDetailAction'
+        'fetchUserBlogDetailAction'
       ]),
       publishBlog: function () {
         this.publishBlogAction(this.blog).then(uniqueId => {

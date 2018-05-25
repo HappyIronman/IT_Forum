@@ -12,10 +12,6 @@ const state = {
 }
 
 const actions = {
-  //获取首页推荐动态列表
-  getRecommendMoments({commit}, payload) {
-    requestApi('get', 'main', payload, (res) => commit(types.RECOMMEND_MOMENTS, res))
-  },
   //显示发表动态组件
   isShowPublishMomentCompAction({commit}, isShow) {
     commit(types.DISPLAY_PUBLISH_MOMENT_COMP, isShow)
@@ -60,9 +56,6 @@ const actions = {
 }
 
 const mutations = {
-  [types.RECOMMEND_MOMENTS](state, data) {
-    state.momentList = data.responseVO
-  },
   [types.DISPLAY_PUBLISH_MOMENT_COMP](state, isShow) {
     state.isShowPublishMoment = isShow
   },
