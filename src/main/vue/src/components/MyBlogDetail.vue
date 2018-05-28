@@ -29,6 +29,10 @@
 
     <div class="uk-width-1-1\@l uk-margin-large-top">
       <div class="uk-text-right">
+        <div v-if="blogDetail.private" class="uk-margin-small-right">
+          <span uk-icon="lock"></span>
+          <span>私人</span>
+        </div>
         <div class="uk-text-bold">
           <moment-like-btn v-bind:article="blogDetail" type="2"></moment-like-btn>
         </div>

@@ -5,11 +5,15 @@
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">我的动态</span>
     </div>
-    <div v-for="myMoment in myMomentList">
-      <moment-item v-bind:moment="myMoment"></moment-item>
+    <div v-if="myMomentList!=null && myMomentList.length>0">
+      <div v-for="myMoment in myMomentList">
+        <moment-item v-bind:moment="myMoment"></moment-item>
+      </div>
     </div>
-
+    <blank-icon v-else></blank-icon>
     <pageable v-bind:fetch-data-func="fetchMyMomentListAction" size="5"></pageable>
+
+
   </div>
 </template>
 
@@ -18,10 +22,12 @@
   import MomentItem from "./MomentItem";
   import SelfPageNav from "./SelfPageNav";
   import Pageable from "./Pageable.vue";
+  import BlankIcon from "./BlankIcon.vue";
 
 
   export default {
     components: {
+      BlankIcon,
       Pageable,
       SelfPageNav,
       MomentItem

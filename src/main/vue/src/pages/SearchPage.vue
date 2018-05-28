@@ -14,7 +14,7 @@
             <router-link v-bind:to="{path:'/search',query:{keywords:keywords, type:4}}">用户</router-link>
           </li>
         </ul>
-        <div>
+        <div v-if="searchResultList!=null&&searchResultList.length>0">
           <div v-if="type==2">
             <ul class="uk-comment-list">
               <li class="uk-margin-small-top" v-for="searchBlog in searchResultList">
@@ -30,8 +30,9 @@
             </div>
           </div>
 
-          <pageable v-if="isShowPageable" v-bind:fetchDataFunc="fetchSearchResult" size="5"></pageable>
         </div>
+        <blank-icon v-else></blank-icon>
+        <pageable v-if="isShowPageable" v-bind:fetchDataFunc="fetchSearchResult" size="5"></pageable>
       </div>
     </div>
     <div class="uk-width-1-5 uk-padding-remove">
@@ -45,9 +46,11 @@
   import searchBlogItem from '../components/SearchBlogItem.vue'
   import Pageable from "../components/Pageable.vue";
   import UserCard from "../components/UserCard.vue";
+  import BlankIcon from "../components/BlankIcon.vue";
 
   export default {
     components: {
+      BlankIcon,
       UserCard,
       Pageable,
       advertise,

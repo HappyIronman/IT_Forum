@@ -33,10 +33,15 @@
           <moment-like-btn v-bind:article="blogDetail" type="2"></moment-like-btn>
         </div>
         <div class="uk-margin-small-right">
-          <span class="uk-text-bold uk-text-small uk-margin-small-right">
-            分享:&nbsp;{{blogDetail.shareNum}}
-          </span>
-          <span class="uk-text-muted uk-text-small">浏览:&nbsp;{{blogDetail.viewNum}}</span>
+          <div>
+            <router-link class="uk-button uk-button-link"
+                         v-bind:to="'/share_blog/' + blogDetail.uniqueId">
+              <span>分享:&nbsp;{{blogDetail.shareNum}}</span>
+            </router-link>
+          </div>
+          <div>
+            <span class="uk-text-muted uk-text-small">浏览:&nbsp;{{blogDetail.viewNum}}</span>
+          </div>
         </div>
       </div>
 

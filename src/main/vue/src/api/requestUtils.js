@@ -6,19 +6,20 @@ Vue.use(VueResource);
 
 export function requestApi(method, path, params, callback) {
 
+  var notification = UIkit.notification({message: '正在加载...', status: 'primary'})
   var baseUrl = global.HOST + '/data/';
   var requestUri = baseUrl + path;
   var responseData = '';
   if (method === 'get') {
-    // Vue.http.options.xhr = {withCredentials: true}
-    // GET /someUrl
     return Vue.http.get(requestUri, {params: params, credentials: true}).then(response => {
+      notification.close(true)
       // get body data
       responseData = response.body;
       // console.log(JSON.stringify(response))
       console.log("ResponseData: " + JSON.stringify(responseData));
       return callback(responseData);
     }).catch(response => {
+      notification.close(true)
       if (response.status === 401) {
         UIkit.notification({
           message: '<span class="uk-text-small">请先登录哦!&nbsp;&nbsp;</span>' +
@@ -28,7 +29,7 @@ export function requestApi(method, path, params, callback) {
           timeout: 5000
         });
       } else {
-        var msg = response.body.msg? response.body.msg: '系统异常'
+        var msg = response.body.msg ? response.body.msg : '系统异常'
         UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})
       }
       // error callback
@@ -38,11 +39,13 @@ export function requestApi(method, path, params, callback) {
 
   else if (method === 'post') {
     return Vue.http.post(requestUri, params, {credentials: true}).then((response) => {
+      notification.close(true)
       // success callback
       responseData = response.data;
       console.log("ResponseData: " + JSON.stringify(responseData));
       return callback(responseData);
     }).catch((response) => {
+        notification.close(true)
         console.error("request ERROR! " + JSON.stringify(response));
         if (response.status === 401) {
           UIkit.notification({
@@ -53,8 +56,9 @@ export function requestApi(method, path, params, callback) {
             timeout: 5000
           });
         } else {
-          var msg = response.body.msg? response.body.msg: '系统异常'
-          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})        }
+          var msg = response.body.msg ? response.body.msg : '系统异常'
+          UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})
+        }
         // error callback
       }
     );

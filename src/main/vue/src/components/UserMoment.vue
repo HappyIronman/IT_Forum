@@ -3,9 +3,12 @@
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">ta的动态</span>
     </div>
-    <div v-for="moment in userMomentList">
-      <moment-item v-bind:moment="moment"></moment-item>
+    <div v-if="userMomentList!=null&&userMomentList.length>0">
+      <div v-for="moment in userMomentList">
+        <moment-item v-bind:moment="moment"></moment-item>
+      </div>
     </div>
+    <blank-icon v-else></blank-icon>
     <pageable v-bind:fetch-data-func="fetchUserMomentList" size="5"></pageable>
   </div>
 </template>
@@ -14,10 +17,12 @@
   import {mapActions, mapState} from 'vuex'
   import MomentItem from "./MomentItem";
   import Pageable from "./Pageable.vue";
+  import BlankIcon from "./BlankIcon.vue";
 
 
   export default {
     components: {
+      BlankIcon,
       Pageable,
       MomentItem
     },

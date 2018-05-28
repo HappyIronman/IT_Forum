@@ -3,10 +3,12 @@
     <div class="uk-text-center">
       <span class="uk-label uk-label-success">TA的提问</span>
     </div>
-    <div v-for="question in userQuestionList">
-      <user-question-item v-bind:question="question"></user-question-item>
+    <div v-if="userQuestionList!=null&&userQuestionList.length>0">
+      <div v-for="question in userQuestionList">
+        <user-question-item v-bind:question="question"></user-question-item>
+      </div>
     </div>
-
+    <blank-icon v-else></blank-icon>
     <pageable v-bind:fetch-data-func="fetchUserQuestionList" size="5"></pageable>
   </div>
 </template>
@@ -16,9 +18,11 @@
   import SelfPageNav from "./SelfPageNav.vue";
   import Pageable from "./Pageable.vue";
   import UserQuestionItem from "./UserQuestionItem.vue";
+  import BlankIcon from "./BlankIcon.vue";
 
   export default {
     components: {
+      BlankIcon,
       UserQuestionItem,
       Pageable,
       SelfPageNav
