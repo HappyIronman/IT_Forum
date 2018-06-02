@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <div v-if="item.logType===1" class="uk-card uk-card-small uk-card-default uk-card-body">
+          <div v-if="item.logType===1" class="uk-card uk-card-small uk-card-default uk-card-body uk-width-3-4">
             <div>
               <router-link v-bind:to="'/user/'+item.userId">{{item.username}}</router-link>
               <span>浏览了您的</span>
