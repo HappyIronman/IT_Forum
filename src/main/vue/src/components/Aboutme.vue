@@ -5,32 +5,32 @@
         <li v-for="item in aboutmeList">
 
           <div v-if="item.logType===0" class="uk-card uk-card-small uk-card-default uk-card-body">
-            <div>
+            <div class="uk-width-3-4">
               <router-link v-bind:to="'/user/'+item.userId">{{item.username}}</router-link>
               <span v-if="item.like">赞</span>
               <span v-if="!item.like">踩</span>
               <span>了您的</span>
               <span v-if="item.articleType===0">
               评论: {{item.articleContent}}
-            </span>
+              </span>
               <span v-if="item.articleType===1">
               动态: {{item.articleContent}}
-            </span>
+              </span>
               <span v-if="item.articleType===2">
               博客:
               <router-link v-bind:to="'/self/my_blog/'+item.articleId">{{item.articleTitle}}</router-link>
-            </span>
+              </span>
               <span v-if="item.articleType===3">
               提问: {{item.articleTitle}}
-            </span>
+              </span>
             </div>
             <div class="uk-position-center-right uk-margin-small-right">
               <span>{{item.createTime | formatDate('yyyy-MM-dd hh:mm')}}</span>
             </div>
           </div>
 
-          <div v-if="item.logType===1" class="uk-card uk-card-small uk-card-default uk-card-body uk-width-3-4">
-            <div>
+          <div v-if="item.logType===1" class="uk-card uk-card-small uk-card-default uk-card-body">
+            <div class="uk-width-3-4">
               <router-link v-bind:to="'/user/'+item.userId">{{item.username}}</router-link>
               <span>浏览了您的</span>
               <span v-if="item.articleType===0">
@@ -96,7 +96,7 @@
 
 
           <div v-if="item.logType===3" class="uk-card uk-card-small uk-card-default uk-card-body">
-            <div>
+            <div class="uk-width-3-4">
               <router-link v-bind:to="'/user/'+item.userId">{{item.username}}</router-link>
               关注了您
             </div>
