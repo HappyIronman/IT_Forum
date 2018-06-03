@@ -22,15 +22,15 @@
     </select>
 
     <select id="getByUsernameAndPassword" resultType="com.ironman.forum.entity.User">
-        SELECT * FROM user WHERE username = #{username} AND password = #{password} AND disabled = FALSE ;
+        SELECT * FROM user WHERE username = #{username} AND password = #{password} AND disabled = FALSE
     </select>
 
     <select id="getByPhone" parameterType="java.lang.String" resultType="com.ironman.forum.entity.User">
-        SELECT * FROM user WHERE phone = #{phone} AND disabled = FALSE;
+        SELECT * FROM user WHERE phone = #{phone} AND disabled = FALSE
     </select>
 
     <select id="getByUsername" parameterType="java.lang.String" resultType="com.ironman.forum.entity.User">
-        SELECT * FROM user WHERE username = #{username} AND disabled = FALSE;
+        SELECT * FROM user WHERE username = #{username} AND disabled = FALSE
     </select>
 
     <insert id="save" parameterType="com.ironman.forum.entity.User" useGeneratedKeys="true" keyProperty="id">
@@ -44,7 +44,7 @@
     <update id="update" parameterType="com.ironman.forum.entity.User">
         UPDATE user SET profile = #{profile}, phone = #{phone}, email = #{email}, sex = #{sex},
         school = #{school}, intro = #{intro}
-        WHERE id = #{id}
+        WHERE id = #{id} AND disabled = FALSE
     </update>
 
     <select id="pageByUsernameLike" resultType="com.ironman.forum.entity.User">
@@ -53,4 +53,12 @@
             <property name="pageRequest" value="pageRequest"/>
         </include>
     </select>
+
+    <select id="getNewAboutMeNumById" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        SELECT new_about_me_num FROM user WHERE id = #{id} AND disabled = FALSE
+    </select>
+
+    <update id="updateNewAboutMeNumById">
+        UPDATE user SET new_about_me_num = #{value} WHERE id = #{id} AND disabled = FALSE
+    </update>
 </mapper>

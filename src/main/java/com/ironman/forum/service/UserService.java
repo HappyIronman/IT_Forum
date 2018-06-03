@@ -62,4 +62,6 @@ public interface UserService {
     UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException;
 
     void logout(HttpSession session);
+
+    int getNewAboutMeNum();
 }

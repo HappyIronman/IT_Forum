@@ -3,7 +3,7 @@
     <advertise></advertise>
     <div uk-grid>
       <div class="uk-width-1-5">
-        <left-home></left-home>
+        <!--<left-home></left-home>-->
       </div>
       <div class="uk-width-3-5 uk-padding-small">
         <ul uk-tab>

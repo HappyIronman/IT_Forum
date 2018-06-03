@@ -6,7 +6,7 @@ Vue.use(VueResource);
 
 export function requestApi(method, path, params, callback) {
 
-  var notification = UIkit.notification({message: '正在加载...', status: 'primary', timeout: 10000})
+  var notification = UIkit.notification({message: '正在加载...', status: 'primary', timeout: 30000})
   var baseUrl = global.HOST + '/data/';
   var requestUri = baseUrl + path;
   var responseData = '';

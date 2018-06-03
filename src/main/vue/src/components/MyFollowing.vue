@@ -1,12 +1,12 @@
 <template>
   <div class="uk-margin-top uk-margin-right">
-    <div v-if="followList!=null&& followList.length>0" class="uk-grid-small uk-child-width-1-3 uk-text-center" uk-grid>
-      <div v-for="user in followList">
+    <div v-if="followingList!=null&& followingList.length>0" class="uk-grid-small uk-child-width-1-3 uk-text-center" uk-grid>
+      <div v-for="user in followingList">
         <user-card v-bind:user="user"></user-card>
       </div>
     </div>
     <blank-icon v-else></blank-icon>
-    <pageable v-bind:fetchDataFunc="fetchMyFollowingListAction" size="5"></pageable>
+    <pageable v-bind:fetchDataFunc="fetchMyFollowingListAction" size="6"></pageable>
   </div>
 </template>
 
@@ -28,7 +28,7 @@
     },
     computed: {
       ...mapState({
-        followList: state => state.user.followList
+        followingList: state => state.user.followingList
       })
     },
     methods: {

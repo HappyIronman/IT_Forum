@@ -113,6 +113,17 @@ public class UserController {
     }
 
     /**
+     * 获取首页“关于我”新消息数目
+     *
+     * @return
+     */
+    @RequestMapping(value = "/my/new_about_me_num", method = RequestMethod.GET)
+    public IronResponseEntity getNewAboutMeNum() {
+        int num = userService.getNewAboutMeNum();
+        return new IronResponseEntity(ResponseStatus.SUCCESS, num);
+    }
+
+    /**
      * 获取用户基本信息
      *
      * @param uniqueId

@@ -147,6 +147,10 @@ public class UserServiceImpl implements UserService {
             baseLogVO.setCreateTime(aboutMe.getCreateTime());
             baseLogVOList.add(baseLogVO);
         }
+        //将user表中的new_about_me_num置为0
+        if (pageRequest.getPage() == 0) {
+            userDAO.updateNewAboutMeNumById(userId, 0);
+        }
         return baseLogVOList;
     }
 
@@ -534,6 +538,12 @@ public class UserServiceImpl implements UserService {
     public void logout(HttpSession session) {
         session.removeAttribute(IronConstant.SESSION_USER_KEY);
         session.removeAttribute(IronConstant.SESSION_ROLE_KEY);
+    }
+
+    @Override
+    public int getNewAboutMeNum() {
+        long userId = UserLoginUtil.getLoginUserId();
+        return userDAO.getNewAboutMeNumById(userId);
     }
 
     private void saveUserSession(HttpSession session, User user) {

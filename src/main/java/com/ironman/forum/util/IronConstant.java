@@ -18,6 +18,7 @@ public class IronConstant {
     public static final String USER_PROPERTY_QUESTION_NUM = "question_num";
     public static final String USER_PROPERTY_FOLLOWING_NUM = "following_num";
     public static final String USER_PROPERTY_FOLLOWER_NUM = "follower_num";
+    public static final String USER_PROPERTY_NEW_ABOUT_ME_NUM = "new_about_me_num";
     public static final String ARTICLE_PROPERTY_LIKE_NUM = "like_num";
     public static final String ARTICLE_PROPERTY_DISLIKE_NUM = "dislike_num";
     public static final String ARTICLE_PROPERTY_SHARE_NUM = "share_num";

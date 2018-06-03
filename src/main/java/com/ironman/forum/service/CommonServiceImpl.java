@@ -287,7 +287,6 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public void ansySaveAboutMe(BaseLog baseLog) throws GlobalException {
         AboutMe aboutMe = new AboutMe();
-        long targetId = baseLog.getTargetId();
         aboutMe.setLogId(baseLog.getId());
         aboutMe.setDeleted(false);
         aboutMe.setNew(true);
@@ -311,15 +310,22 @@ public class CommonServiceImpl implements CommonService {
         }
 
         int type = baseLog.getType();
+        long userId;
+        long targetId = baseLog.getTargetId();
         if (type == ArticleTypeEnum.USER.getId()) {
+            userId = targetId;
             aboutMe.setUserId(targetId);
         } else {
             Article article = this.getArticleBaseInfoByIdAndType(targetId, type);
-            aboutMe.setUserId(article.getUserId());
+            userId = article.getUserId();
         }
+        aboutMe.setUserId(userId);
 
 
         ansyCommonService.ansySaveAboutMe(aboutMe);
+        //增加user表中new_about_me_num
+        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, userId,
+                IronConstant.USER_PROPERTY_NEW_ABOUT_ME_NUM, true);
     }
 
 

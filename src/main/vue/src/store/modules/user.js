@@ -8,7 +8,9 @@ const state = {
   loginUserInfo: storage.getStorage("LOGIN_USER_INFO"),
   //个人信息
   userInfo: {},
-  followList: [],
+  followerList: [],
+  followingList: [],
+  newAboutMeNum: 0,
   aboutmeList: []
 }
 
@@ -45,6 +47,9 @@ const actions = {
   followUserAction({commit}, uniqueId) {
     requestApi('post', 'my/follow/' + uniqueId, null, (res) => commit(types.FOLLOW_USER, res))
   },
+  fetchNewAboutMeNum({commit}) {
+    requestApi('get', 'my/new_about_me_num/', null, (res) => commit(types.NEW_ABOUT_ME_NUM, res))
+  },
   fetchAboutmeListAction({commit}, payload) {
     if (payload.page === 0) {
       state.aboutmeList = []
@@ -54,11 +59,23 @@ const actions = {
       return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
     })
   },
-  fetchMyFollowingListAction({commit}) {
-    requestApi('get', '/my/followings', null, (res) => commit(types.FOLLOW_LIST, res))
+  fetchMyFollowerListAction({commit}, payload) {
+    if (payload.page === 0) {
+      state.followerList = []
+    }
+    return requestApi('get', 'my/followers', payload, (res) => {
+      commit(types.FOLLOWER_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   },
-  fetchMyFollowerListAction({commit}) {
-    requestApi('get', '/my/followers', null, (res) => commit(types.FOLLOW_LIST, res))
+  fetchMyFollowingListAction({commit}, payload) {
+    if (payload.page === 0) {
+      state.followingList = []
+    }
+    return requestApi('get', 'my/followings', payload, (res) => {
+      commit(types.FOLLOWING_LIST, res)
+      return (res.responseVO != null && res.responseVO.length === parseInt(payload.size))
+    })
   }
 }
 
@@ -80,11 +97,20 @@ const mutations = {
     state.loginUserInfo.followerNum += 1
     storage.updateLoginUserInfo("followingNum", parseInt(storage.getStorage("LOGIN_USER_INFO").followingNum) + 1)
   },
-  [types.FOLLOW_LIST](state, data) {
-    state.followList = data.responseVO
+  [types.FOLLOWER_LIST](state, data) {
+    state.followerList = data.responseVO
   },
-  [types.ABOUT_ME_LIST](state, data) {
+  [types.FOLLOWING_LIST](state, data) {
+    state.followingList = data.responseVO
+  },
+  [types.NEW_ABOUT_ME_NUM](state, data) {
+    state.newAboutMeNum = parseInt(data.responseVO)
+  },
+  [types.ABOUT_ME_LIST](state, data, page) {
     state.aboutmeList = state.aboutmeList.concat(data.responseVO)
+    if (state.newAboutMeNum !== 0) {
+      state.newAboutMeNum = 0
+    }
   }
 }
 

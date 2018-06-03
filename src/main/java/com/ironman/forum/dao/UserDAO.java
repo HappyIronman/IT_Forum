@@ -27,5 +27,9 @@ public interface UserDAO {
 
     void update(User user);
 
-    List<User> pageByUsernameLike(@Param("username") String username,@Param("pageRequest") PageRequest pageRequest);
+    List<User> pageByUsernameLike(@Param("username") String username, @Param("pageRequest") PageRequest pageRequest);
+
+    int getNewAboutMeNumById(long id);
+
+    void updateNewAboutMeNumById(@Param("id") long id, @Param("value") int value);
 }

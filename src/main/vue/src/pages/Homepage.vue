@@ -1,14 +1,14 @@
 <template>
   <div class="uk-container">
     <advertise></advertise>
-    <div uk-grid>
-      <div class="uk-width-1-5">
-        <left-home></left-home>
-      </div>
-      <div class="uk-width-3-5 uk-padding-remove">
+    <div uk-grid class="uk-margin-left">
+      <!--<div class="uk-width-1-5">-->
+        <!--<left-home></left-home>-->
+      <!--</div>-->
+      <div class="uk-width-4-5 uk-padding-remove">
         <middle-home></middle-home>
       </div>
-      <div class="uk-width-1-5 uk-padding-remove">
+      <div class="uk-width-expand uk-padding-remove">
         <right-home></right-home>
       </div>
     </div>
