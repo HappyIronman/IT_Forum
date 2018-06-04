@@ -12,7 +12,8 @@
       <div class="uk-width-expand uk-text-right uk-text-bottom uk-margin-right">
         <router-link class="uk-button uk-button-link uk-text-bold" to="/aboutme">
           <span uk-icon="triangle-right"></span>
-          <span>关于我{{showNewAboutMeNum}}</span>
+          <span>关于我</span>
+          <span v-if="newAboutMeNum!==0">（<em>{{newAboutMeNum}}</em>）</span>
           <span uk-icon="triangle-left"></span>
         </router-link>
       </div>
@@ -84,11 +85,6 @@
         isShowPublishMoment: state => state.moment.isShowPublishMoment,
         newAboutMeNum: state => state.user.newAboutMeNum
       }),
-      showNewAboutMeNum: function () {
-        if (this.newAboutMeNum !== 0) {
-          return '(' + this.newAboutMeNum + ')'
-        }
-      }
     },
     methods: {
       ...mapActions([

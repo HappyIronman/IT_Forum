@@ -2,7 +2,7 @@ package com.ironman.forum.service.task;
 
 import com.ironman.forum.dao.ViewLogDAO;
 import com.ironman.forum.entity.ViewLog;
-import com.ironman.forum.service.CommonService;
+import com.ironman.forum.service.AnsyService;
 import com.ironman.forum.util.IronCache;
 import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.IronUtil;
@@ -17,8 +17,10 @@ import java.util.Map;
 @Component
 @Log4j
 public class SaveViewLogTask {
+
     @Autowired
-    private CommonService commonService;
+    private AnsyService ansyService;
+
     @Autowired
     private ViewLogDAO viewLogDAO;
 
@@ -46,7 +48,7 @@ public class SaveViewLogTask {
                     int type = IronUtil.getTypeByViewNumMapKey(key);
                     int addNum = (int) entry.getValue();
                     //�����첽����
-                    commonService.ansyIncreaseArticleViewLog(targetId, type, addNum);
+                    ansyService.ansyIncreaseArticleViewLog(targetId, type, addNum);
                 }
                 viewLogDAO.batchSave(viewLogList);
             } catch (Exception e) {

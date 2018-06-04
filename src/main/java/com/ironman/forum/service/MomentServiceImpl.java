@@ -24,6 +24,12 @@ import java.util.List;
 public class MomentServiceImpl implements MomentService {
 
     @Autowired
+    private CommonService commonService;
+
+    @Autowired
+    private AnsyService ansyService;
+
+    @Autowired
     private MomentDAO momentDAO;
 
     @Autowired
@@ -35,8 +41,6 @@ public class MomentServiceImpl implements MomentService {
     @Autowired
     private ImageDAO imageDAO;
 
-    @Autowired
-    private CommonService commonService;
 
     @Override
     @Transactional
@@ -90,15 +94,15 @@ public class MomentServiceImpl implements MomentService {
             share.setCreateTime(date);
             shareDAO.save(share);
 
-            commonService.ansyChangeArticlePropertyNum(ArticleTypeEnum.MOMENT.getId(),
+            ansyService.ansyChangeArticlePropertyNum(ArticleTypeEnum.MOMENT.getId(),
                     originMoment.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        commonService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
+        ansyService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_MOMENT_NUM, true);
 
         //如果不是私人权限，异步插入时间轴
         if (!form.getIsPrivate()) {
-            commonService.ansyAddTimeLine(userId, moment.getId(), ArticleTypeEnum.MOMENT.getId());
+            ansyService.ansyAddTimeLine(userId, moment.getId(), ArticleTypeEnum.MOMENT.getId());
         }
     }
 

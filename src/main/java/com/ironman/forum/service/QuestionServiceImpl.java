@@ -25,14 +25,15 @@ import java.util.List;
 public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
+    private CommonService commonService;
+    @Autowired
+    private AnsyService ansyService;
+
+    @Autowired
     private QuestionDAO questionDAO;
 
     @Autowired
     private UserDAO userDAO;
-
-    @Autowired
-    private CommonService commonService;
-
 
     @Override
     public void publishQuestion(QuestionPublishForm form) {
@@ -51,9 +52,9 @@ public class QuestionServiceImpl implements QuestionService {
 
         questionDAO.save(question);
 
-        commonService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_QUESTION_NUM, true);
+        ansyService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_QUESTION_NUM, true);
 
-        commonService.ansyAddTimeLine(userId, question.getId(), ArticleTypeEnum.QUESTION.getId());
+        ansyService.ansyAddTimeLine(userId, question.getId(), ArticleTypeEnum.QUESTION.getId());
     }
 
     @Override

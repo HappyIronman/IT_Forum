@@ -1,5 +1,6 @@
 package com.ironman.forum.service;
 
+import com.ironman.forum.form.LikeArticleFormBean;
 import com.ironman.forum.form.RegisterForm;
 import com.ironman.forum.form.UserEditForm;
 import com.ironman.forum.form.UserLoginForm;
@@ -62,6 +63,10 @@ public interface UserService {
     UserInfoVO editInfo(UserEditForm form, HttpSession session) throws GlobalException;
 
     void logout(HttpSession session);
+
+    void likeArticle(LikeArticleFormBean formBean) throws GlobalException;
+
+    void cancelLikeArticle(LikeArticleFormBean formBean) throws GlobalException;
 
     int getNewAboutMeNum();
 }

@@ -3,6 +3,7 @@ package com.ironman.forum.service;
 import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.*;
 import com.ironman.forum.entity.*;
+import com.ironman.forum.form.LikeArticleFormBean;
 import com.ironman.forum.form.RegisterForm;
 import com.ironman.forum.form.UserEditForm;
 import com.ironman.forum.form.UserLoginForm;
@@ -25,6 +26,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private static Log log = LogFactory.getLog(UserServiceImpl.class);
+
+    @Autowired
+    private CommonService commonService;
 
     @Autowired
     private UserDAO userDAO;
@@ -54,10 +58,7 @@ public class UserServiceImpl implements UserService {
     private QuestionDAO questionDAO;
 
     @Autowired
-    private CommonService commonService;
-
-    @Autowired
-    private AnsyCommonService ansyCommonService;
+    private AnsyService ansyService;
 
     @Override
     public UserInfoVO getMyBaseInfo() throws GlobalException {
@@ -151,6 +152,8 @@ public class UserServiceImpl implements UserService {
         if (pageRequest.getPage() == 0) {
             userDAO.updateNewAboutMeNumById(userId, 0);
         }
+        //异步将isNew标志置为false
+        ansyService.ansyUpdateAboutMeStatus(aboutMeList);
         return baseLogVOList;
     }
 
@@ -472,10 +475,10 @@ public class UserServiceImpl implements UserService {
         followDAO.save(follow);
 
         //�첽���ӱ����˷�˿��
-        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, targetId,
+        ansyService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, targetId,
                 IronConstant.USER_PROPERTY_FOLLOWER_NUM, true);
         //�첽���ӷ�˿��ע��
-        ansyCommonService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, followerId,
+        ansyService.ansyChangeEntityPropertyNumById(IronConstant.TABLE_USER, followerId,
                 IronConstant.USER_PROPERTY_FOLLOWING_NUM, true);
 
 
@@ -487,7 +490,7 @@ public class UserServiceImpl implements UserService {
         followLog.setDisabled(false);
         followLog.setType(ArticleTypeEnum.USER.getId());
         followLog.setCreateTime(createTime);
-        commonService.ansySaveAboutMe(followLog);
+        ansyService.ansySaveAboutMe(followLog);
 
 
         //���Ƿ����ҵķ�˿
@@ -538,6 +541,57 @@ public class UserServiceImpl implements UserService {
     public void logout(HttpSession session) {
         session.removeAttribute(IronConstant.SESSION_USER_KEY);
         session.removeAttribute(IronConstant.SESSION_ROLE_KEY);
+    }
+
+    @Override
+    public void likeArticle(LikeArticleFormBean formBean) throws GlobalException {
+        Long userId = UserLoginUtil.getLoginUserId();
+        int type = formBean.getType();
+        Long targetId = commonService.getArticleBaseInfoByUniqueIdAndType(formBean.getTargetId(), type).getId();
+        boolean isLike = formBean.isLike();
+
+        LikeLog existLikeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
+        if (existLikeLog != null) {
+            throw new GlobalException(ResponseStatus.DUPLICATE_LIKE_LOG);
+        }
+
+
+        LikeLog likeLog = new LikeLog();
+        likeLog.setUserId(userId);
+        likeLog.setTargetId(targetId);
+        likeLog.setType(type);
+        likeLog.setLike(isLike);
+        likeLog.setDisabled(false);
+        likeLog.setCreateTime(new Date());
+
+        likeLogDAO.save(likeLog);
+
+        //增加赞数量
+        String property = isLike ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
+        ansyService.ansyChangeArticlePropertyNum(type, targetId, property, true);
+
+        //异步写入aboutme
+        ansyService.ansySaveAboutMe(likeLog);
+    }
+
+    @Override
+    @Transactional
+    public void cancelLikeArticle(LikeArticleFormBean formBean) throws GlobalException {
+        Long userId = UserLoginUtil.getLoginUserId();
+        int type = formBean.getType();
+        Long targetId = commonService.getArticleBaseInfoByUniqueIdAndType(formBean.getTargetId(), type).getId();
+        boolean isLike = formBean.isLike();
+        LikeLog likeLog = likeLogDAO.getByUserIdAndTargetIdAndType(userId, targetId, type);
+        if (null == likeLog) {
+            //赞或踩记录不存在
+            throw new GlobalException(ResponseStatus.LOG_NOT_EXIST);
+        }
+        likeLogDAO.updateDisabledByUserIdAndTargetIdAndTypeAndIsLike(userId, targetId, type, isLike);
+        //异步减少赞或踩数量
+        String property = isLike ? IronConstant.ARTICLE_PROPERTY_LIKE_NUM : IronConstant.ARTICLE_PROPERTY_DISLIKE_NUM;
+        ansyService.ansyChangeArticlePropertyNum(type, targetId, property, false);
+        //异步删除aboutme
+        ansyService.ansyDeleteAboutMe(likeLog);
     }
 
     @Override

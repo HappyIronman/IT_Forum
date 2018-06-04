@@ -29,6 +29,9 @@ public class CommentServiceImpl implements CommentService {
     private CommonService commonService;
 
     @Autowired
+    private AnsyService ansyService;
+
+    @Autowired
     private CommentDAO commentDAO;
 
     @Autowired
@@ -61,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
         commentDAO.save(comment);
 
         //异步递归增加评论数量
-        commonService.ansyIncreaseCommentNum(comment);
+        ansyService.ansyIncreaseCommentNum(comment);
 
         //异步写入aboutMe
         CommentLog commentLog = new CommentLog();
@@ -71,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
         commentLog.setType(type);
         commentLog.setCreateTime(new Date());
         commentLog.setDisabled(false);
-        commonService.ansySaveAboutMe(commentLog);
+        ansyService.ansySaveAboutMe(commentLog);
 
         return this.assembleCommentVO(comment);
     }

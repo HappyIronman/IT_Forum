@@ -25,6 +25,13 @@ import java.util.List;
 @Service
 @Log4j
 public class BlogServiceImpl implements BlogService {
+
+    @Autowired
+    private AnsyService ansyService;
+
+    @Autowired
+    private CommonService commonService;
+
     @Autowired
     private BlogDAO blogDAO;
 
@@ -33,10 +40,6 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private ShareDAO shareDAO;
-
-
-    @Autowired
-    private CommonService commonService;
 
     @Override
     @Transactional
@@ -79,15 +82,15 @@ public class BlogServiceImpl implements BlogService {
             share.setCreateTime(createTime);
             shareDAO.save(share);
 
-            commonService.ansyChangeArticlePropertyNum(ArticleTypeEnum.BLOG.getId(),
+            ansyService.ansyChangeArticlePropertyNum(ArticleTypeEnum.BLOG.getId(),
                     originBlog.getId(), IronConstant.ARTICLE_PROPERTY_SHARE_NUM, true);
         }
 
-        commonService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
+        ansyService.ansyChangeUserPropertyNum(userId, IronConstant.USER_PROPERTY_BLOG_NUM, true);
 
         //如果不是私人权限，异步插入时间轴
         if (!isPrivate) {
-            commonService.ansyAddTimeLine(userId, blog.getId(), ArticleTypeEnum.BLOG.getId());
+            ansyService.ansyAddTimeLine(userId, blog.getId(), ArticleTypeEnum.BLOG.getId());
         }
 
         return uniqueId;

@@ -98,15 +98,15 @@ const mutations = {
     storage.updateLoginUserInfo("followingNum", parseInt(storage.getStorage("LOGIN_USER_INFO").followingNum) + 1)
   },
   [types.FOLLOWER_LIST](state, data) {
-    state.followerList = data.responseVO
+    state.followerList = state.followerList.concat(data.responseVO)
   },
   [types.FOLLOWING_LIST](state, data) {
-    state.followingList = data.responseVO
+    state.followingList = state.followingList.concat(data.responseVO)
   },
   [types.NEW_ABOUT_ME_NUM](state, data) {
     state.newAboutMeNum = parseInt(data.responseVO)
   },
-  [types.ABOUT_ME_LIST](state, data, page) {
+  [types.ABOUT_ME_LIST](state, data) {
     state.aboutmeList = state.aboutmeList.concat(data.responseVO)
     if (state.newAboutMeNum !== 0) {
       state.newAboutMeNum = 0

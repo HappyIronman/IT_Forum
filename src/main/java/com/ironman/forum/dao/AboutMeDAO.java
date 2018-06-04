@@ -9,7 +9,11 @@ import java.util.List;
 public interface AboutMeDAO {
     void save(AboutMe aboutMe);
 
+    AboutMe getByLogIdAndType(@Param("logId") long logId, @Param("type") int type);
+
     void deleteByLogIdAndType(@Param("logId") long logId, @Param("type") int type);
 
     List<AboutMe> getAllLimitByUserId(@Param("userId") long userId, @Param("pageRequest") PageRequest pageRequest);
+
+    void updateStatusById(long id);
 }

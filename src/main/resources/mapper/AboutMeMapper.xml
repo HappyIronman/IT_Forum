@@ -8,8 +8,16 @@
         VALUES (#{userId}, #{logId}, #{type}, #{isNew}, #{deleted}, #{createTime})
     </insert>
 
+    <select id="getByLogIdAndType" resultType="com.ironman.forum.entity.AboutMe">
+        SELECT * FROM about_me WHERE log_id = #{logId} AND type = #{type} AND deleted = FALSE
+    </select>
+
     <update id="deleteByLogIdAndType">
         UPDATE about_me SET deleted = TRUE WHERE log_id = #{logId} AND type = #{type} AND deleted = FALSE
+    </update>
+
+    <update id="updateStatusById" parameterType="java.lang.Long">
+        UPDATE about_me set is_new = FALSE WHERE id = #{id} AND deleted = FALSE
     </update>
 
     <select id="getAllLimitByUserId" resultType="com.ironman.forum.entity.AboutMe">

@@ -4,7 +4,7 @@ import com.ironman.forum.conf.UserLoginUtil;
 import com.ironman.forum.dao.ViewLogDAO;
 import com.ironman.forum.entity.ArticleTypeEnum;
 import com.ironman.forum.entity.ViewLog;
-import com.ironman.forum.service.CommonService;
+import com.ironman.forum.service.AnsyService;
 import com.ironman.forum.util.GlobalException;
 import com.ironman.forum.util.IronConstant;
 import com.ironman.forum.util.PageRequest;
@@ -25,7 +25,7 @@ import java.util.List;
 public class SaveViewLogAspect {
 
     @Autowired
-    private CommonService commonService;
+    private AnsyService ansyService;
 
     @Autowired
     private ViewLogDAO viewLogDAO;
@@ -43,7 +43,7 @@ public class SaveViewLogAspect {
         viewLog.setCreateTime(new Date());
         try {
             //异步增加访问量
-            commonService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            ansyService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
             viewLogDAO.save(viewLog);
             //匿名用户直接返回，不写aboutMe表
             if (userId == IronConstant.ANONYMOUS_USER_ID) {
@@ -51,7 +51,7 @@ public class SaveViewLogAspect {
             }
             //自己看自己的博客不写入aboutMe
             if (!blogDetailVO.getUserId().equals(UserLoginUtil.getLoginUserUniqueId())) {
-                commonService.ansySaveAboutMe(viewLog);
+                ansyService.ansySaveAboutMe(viewLog);
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -74,7 +74,7 @@ public class SaveViewLogAspect {
             viewLogList.add(viewLog);
         }
         try {
-            commonService.ansySaveViewLogList(viewLogList);
+            ansyService.ansySaveViewLogList(viewLogList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -100,7 +100,7 @@ public class SaveViewLogAspect {
             viewLogList.add(viewLog);
         }
         try {
-            commonService.ansySaveViewLogList(viewLogList);
+            ansyService.ansySaveViewLogList(viewLogList);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -123,9 +123,9 @@ public class SaveViewLogAspect {
         viewLog.setCreateTime(new Date());
         try {
             //异步增加访问量
-            commonService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
+            ansyService.ansyIncreaseArticleViewLog(viewLog.getTargetId(), viewLog.getType(), 1);
             //落库访问记录
-            commonService.ansySaveViewLog(viewLog);
+            ansyService.ansySaveViewLog(viewLog);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -157,7 +157,7 @@ public class SaveViewLogAspect {
             viewLogList.add(viewLog);
         }
         try {
-            commonService.ansySaveViewLogList(viewLogList);
+            ansyService.ansySaveViewLogList(viewLogList);
         } catch (GlobalException e) {
             log.error(e.getMessage(), e);
         }

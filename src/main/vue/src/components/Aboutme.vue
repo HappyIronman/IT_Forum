@@ -3,7 +3,7 @@
     <div v-if="aboutmeList!=null&&aboutmeList.length>0">
       <ul class="uk-list uk-list-divider">
         <li v-for="item in aboutmeList">
-
+          <em v-if="item.new">NEW</em>
           <div v-if="item.logType===0" class="uk-card uk-card-small uk-card-default uk-card-body">
             <div class="uk-width-3-4">
               <router-link v-bind:to="'/user/'+item.userId">{{item.username}}</router-link>

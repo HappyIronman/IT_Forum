@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
     private UserService userService;
 
     @Autowired
-    private AnsyCommonService ansyCommonService;
+    private AnsyService ansyService;
 
     @Override
     public List<SearchBlogVO> searchBlog(String keywords, PageRequest pageRequest) throws GlobalException {
@@ -129,7 +129,7 @@ public class SearchServiceImpl implements SearchService {
         searchLog.setKeyword(keyword);
         searchLog.setType(type);
         searchLog.setCreateTime(new Date());
-        ansyCommonService.ansyUpdateSearchLog(searchLog);
+        ansyService.ansyUpdateSearchLog(searchLog);
     }
 
     private <T> List<Object> convertToObjectList(List<T> entityList) {

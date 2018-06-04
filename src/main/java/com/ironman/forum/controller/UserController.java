@@ -1,5 +1,6 @@
 package com.ironman.forum.controller;
 
+import com.ironman.forum.form.LikeArticleFormBean;
 import com.ironman.forum.form.RegisterForm;
 import com.ironman.forum.form.UserEditForm;
 import com.ironman.forum.form.UserLoginForm;
@@ -219,4 +220,47 @@ public class UserController {
         return new IronResponseEntity(ResponseStatus.SUCCESS);
     }
 
+
+
+    /**
+     * 给文章点赞
+     *
+     * @param form
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/article/like", method = RequestMethod.POST)
+    public IronResponseEntity likeArticle(@RequestBody @Valid LikeArticleFormBean form, BindingResult result) {
+        if (result.hasErrors()) {
+            return IronUtil.processResult(result);
+        }
+        try {
+            userService.likeArticle(form);
+            return new IronResponseEntity(ResponseStatus.SUCCESS);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
+
+    /**
+     * 取消赞
+     *
+     * @param form
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/article/cancel_like", method = RequestMethod.POST)
+    public IronResponseEntity cancelLikeArticle(@RequestBody @Valid LikeArticleFormBean form, BindingResult result) {
+        if (result.hasErrors()) {
+            return IronUtil.processResult(result);
+        }
+        try {
+            userService.cancelLikeArticle(form);
+            return new IronResponseEntity(ResponseStatus.SUCCESS);
+        } catch (GlobalException e) {
+            log.error(e.getMessage(), e);
+            return new IronResponseEntity(e.getResponseStatus());
+        }
+    }
 }
