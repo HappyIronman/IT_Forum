@@ -140,6 +140,10 @@ public class SaveViewLogAspect {
         List<ViewLog> viewLogList = new ArrayList<>();
         for (TimeLineVO timeLineVO : timeLineVOList) {
             int type = timeLineVO.getType();
+            //朋友圈中的blog不计入浏览量
+            if (type == ArticleTypeEnum.BLOG.getId()) {
+                continue;
+            }
             ViewLog viewLog = new ViewLog();
             viewLog.setUserId(UserLoginUtil.getLoginUserId());
             viewLog.setType(type);

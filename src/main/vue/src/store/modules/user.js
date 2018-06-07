@@ -94,7 +94,7 @@ const mutations = {
   },
   [types.FOLLOW_USER](state, data) {
     state.userInfo.relation = data.responseVO
-    state.loginUserInfo.followerNum += 1
+    state.loginUserInfo.followingNum += 1
     storage.updateLoginUserInfo("followingNum", parseInt(storage.getStorage("LOGIN_USER_INFO").followingNum) + 1)
   },
   [types.FOLLOWER_LIST](state, data) {
