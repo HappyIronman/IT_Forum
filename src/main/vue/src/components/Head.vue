@@ -25,7 +25,7 @@
            uk-dropdown="animation: uk-animation-slide-top-small; duration: 500; pos: bottom-justify">
         <ul class="uk-nav uk-dropdown-nav">
           <li class="uk-nav-header">
-            <router-link to="/">我的主页</router-link>
+            <router-link to="/self">我的主页</router-link>
           </li>
           <li class="uk-nav-header">
             <a href="javascript:void(0);" v-on:click="logout">退出登录</a>
