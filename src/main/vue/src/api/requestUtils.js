@@ -66,12 +66,26 @@ export function requestApi(method, path, params, callback) {
 
   else if (method === 'put') {
     return Vue.http.put(requestUri, params, {credentials: true}).then((response) => {
+      notification.close(true)
       // success callback
       responseData = response.data;
       console.log("ResponseData: " + responseData);
       return callback(responseData);
     }).catch((response) => {
+      notification.close(true)
       console.error("request ERROR! " + JSON.stringify(response));
+      if (response.status === 401) {
+        UIkit.notification({
+          message: '<span class="uk-text-small">请先登录哦!&nbsp;&nbsp;</span>' +
+          '<a class="uk-text-small uk-text-bold" href="/#/login" target="_blank">点我登录</a>',
+          status: 'primary',
+          pos: 'top-center',
+          timeout: 5000
+        });
+      } else {
+        var msg = response.body.msg ? response.body.msg : '系统异常'
+        UIkit.notification({message: '<span uk-icon=\'icon: warning\'></span>' + msg, status: 'danger'})
+      }
       // error callback
     });
   }
