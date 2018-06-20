@@ -19,7 +19,12 @@
           <div v-html="blogDetail.originContent"></div>
 
           <div class="uk-text-muted uk-text-right">
-            <p class="uk-margin-small-bottom">原作者:&nbsp;{{blogDetail.originUsername}}</p>
+            <p class="uk-margin-small-bottom">
+              原作者:&nbsp;
+              <router-link v-bind:to="'/user/'+blogDetail.originUserId">
+                <span class="uk-text-success">{{blogDetail.originUsername}}</span>
+              </router-link>
+            </p>
             <p class="uk-margin-small-top">
               发表于:&nbsp;{{blogDetail.originCreateTime | formatDate('yyyy-MM-dd hh:mm')}}</p>
           </div>

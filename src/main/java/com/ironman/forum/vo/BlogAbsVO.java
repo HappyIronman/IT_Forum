@@ -19,25 +19,26 @@ public class BlogAbsVO {
     private String content;
     private int likeNum;
     private int dislikeNum;
-    //�޻��߲ȵ�״̬��1-->δ�޻�ȹ��� 2--->���ޣ�3--->�Ѳ�
     private int likeCondition;
     private int commentNum;
     private int shareNum;
     private int viewNum;
     private boolean isAbstract;
     private Date createTime;
-    //�Ƿ�Ϊ˽��
+    //是否私有
     private boolean isPrivate;
-    //�Ƿ�Ϊת��
+    //是否为分享
     private boolean isShare;
-    //��Ϊת��,�Ƿ�ԭ���ʹ���
+    //原博客是否存在
     private boolean isExist = true;
-    //��Ϊת�أ�ԭ���������ǳ�
+    //原博客作者用户名
     private String originUsername;
-    //��Ϊת�أ�ԭ��������uniqueId
+    //原博客作者uniqueId
     private String originUserId;
-    //��Ϊת�أ�ԭ������Ŀ
+    //原博客uniqueId
+    private String originBlogId;
+    //原博客题目
     private String originTitle;
-    //��Ϊת�أ�ԭ���ͷ���ʱ��
+    //原博客发表时间
     private Date originCreateTime;
 }

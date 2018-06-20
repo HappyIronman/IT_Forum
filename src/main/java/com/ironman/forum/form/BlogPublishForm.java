@@ -9,14 +9,14 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class BlogPublishForm {
-    @NotBlank(message = "标题不能为空")
+    @NotBlank(message = "鏍囬涓嶈兘涓虹┖")
     private String title;
-    @NotBlank(message = "内容不能为空")
+    @NotBlank(message = "鍗氬鍐呭涓嶈兘涓虹┖")
     private String content;
-    @NotNull(message = "权限不能为空")
+    @NotNull(message = "鏉冮檺涓嶈兘涓虹┖")
     private Boolean isPrivate;
-    @NotNull(message = "是否为分享不能为空")
+    @NotNull(message = "鏄惁鍒嗕韩涓嶈兘涓虹┖")
     private Boolean isShare;
-    //原博客uniqueId
+    //原锟斤拷锟斤拷uniqueId
     private String originId;
 }

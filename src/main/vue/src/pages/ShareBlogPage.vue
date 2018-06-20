@@ -6,14 +6,13 @@
     <div class="uk-width-3-4 uk-align-center uk-padding-small uk-margin-small-top uk-border-rounded"
          style="border:2px solid darkgrey">
       <div>
-        <input class="uk-input uk-width-2-3 uk-align-center" type="text" placeholder="在此输入标题" v-model="blog.title">
+        <input class="uk-input uk-width-2-3 uk-align-center" type="text" v-bind:value="'转发:'+blogDetail.title" disabled>
       </div>
       <div>
         <div id="editor-bar" style=" border: 1px solid #ccc;">
         </div>
-        <!--<div style="padding: 5px 0; color: #ccc">中间隔离带</div>-->
+        <div style="padding: 5px 0; color: #ccc" class="uk-text-small">请输入转载理由(<span class="uk-text-danger">必填</span>)</div>
         <div id="editor" style="border: 1px solid #ccc; min-height: 400px"> <!--可使用 min-height 实现编辑区域自动增加高度-->
-          <p>请输入分享理由</p>
         </div>
         <div id="origin_blog_content" class="uk-margin-small-top">
           <hr class="uk-divider-icon uk-margin-small">
@@ -86,10 +85,11 @@
         'fetchUserBlogDetailAction'
       ]),
       publishBlog: function () {
+        this.blog.title = '转发:' + this.blogDetail.title
         this.publishBlogAction(this.blog).then(uniqueId => {
           console.log(uniqueId)
           if (uniqueId) {
-            this.$router.push({path: `/blog/${uniqueId}`}) // -> /blog/123
+            this.$router.push({path: `/self/my_blog/${uniqueId}`}) // -> /blog/123
           }
         })
       }

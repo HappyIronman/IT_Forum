@@ -26,28 +26,29 @@
         </div>
       </div>
       <div class="uk-card-body uk-padding-small">
+        <p class="uk-margin-small uk-text-bold">
+          <router-link v-bind:to="'/user/'+blog.userId+'/blog/'+blog.uniqueId">
+            {{blog.title}}
+          </router-link>
+        </p>
         <div v-if="!blog.share">
-          <p class="uk-margin-small">
-            <router-link v-bind:to="'/user/'+blog.userId+'/blog/'+blog.uniqueId">
-              {{blog.title}}
-            </router-link>
-          </p>
           <div class="uk-text-small uk-text-muted">
-            <p class="uk-margin-small" v-html="blog.content"></p>
+            <p class="uk-margin-remove" v-html="blog.content"></p>
             <span v-if="blog.abstract">......</span>
           </div>
         </div>
         <div v-if="blog.share">
-          <p class="uk-margin-small uk-text-bold">转发理由</p>
           <div class="uk-text-small uk-text-muted">
-            <p class="uk-margin-small" v-html="blog.content"></p>
+            <p class="uk-margin-remove" v-html="blog.content"></p>
             <span v-if="blog.abstract">......</span>
           </div>
           <hr class="uk-divider-icon uk-margin-small">
-          <div class="uk-margin-small uk-flex">
-            <p class="uk-margin-remove-bottom"><span class="uk-text-bold">原博客:</span>
-              &nbsp;&nbsp;&nbsp;
-              {{blog.originTitle}}
+          <div class="uk-margin-remove uk-flex">
+            <p class="uk-margin-remove-bottom"><span class="uk-text-success">原博客:</span>
+              &nbsp;&nbsp;
+              <router-link v-bind:to="'/user/'+blog.originUserId+'/blog/'+blog.originBlogId">
+                {{blog.originTitle}}
+              </router-link>
             </p>
             <p class="uk-margin-remove uk-text-small  uk-text-muted uk-text-right uk-width-expand">
               发表于{{blog.originCreateTime | formatDate('yyyy-MM-dd hh:mm')}}

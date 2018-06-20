@@ -55,25 +55,31 @@ public class BlogServiceImpl implements BlogService {
         blog.setUserId(userId);
         String uniqueId = IronUtil.generateUniqueId();
         blog.setUniqueId(uniqueId);
-        blog.setTitle(title);
         blog.setCreateTime(createTime);
         blog.setContent(content);
         blog.setPrivate(isPrivate);
         blog.setShare(form.getIsShare());
-
-        blogDAO.save(blog);
-
+        //若为转载，则指定标题
+        Blog originBlog = null;
         if (form.getIsShare()) {
-            blog.setTitle("转发:" + title);
-
             String originUniqueId = form.getOriginId();
             if (StringUtils.isEmpty(originUniqueId)) {
                 throw new GlobalException(ResponseStatus.PARAM_ERROR, "uniqueId must not be null");
             }
-            Blog originBlog = blogDAO.getBaseInfoByUniqueId(originUniqueId);
+            originBlog = blogDAO.getBaseInfoByUniqueId(originUniqueId);
             if (originBlog == null) {
                 throw new GlobalException(ResponseStatus.BLOG_NOT_EXIST);
             }
+            blog.setTitle("转发:" + originBlog.getTitle());
+        } else {
+            blog.setTitle(title);
+        }
+
+        blogDAO.save(blog);
+
+        if (form.getIsShare()) {
+            //originBlog一定不为空
+            assert originBlog != null;
             Share share = new Share();
             share.setArticleId(blog.getId());
             share.setOriginId(originBlog.getId());
@@ -200,18 +206,18 @@ public class BlogServiceImpl implements BlogService {
                 blogDetailVO.setOriginUserId(originUser.getUniqueId());
                 blogDetailVO.setOriginTitle(originBlog.getTitle());
                 blogDetailVO.setOriginContent(originBlog.getContent());
+                blogDetailVO.setOriginCreateTime(originBlog.getCreateTime());
             }
         }
 
 
-        //??д??????????????
         return blogDetailVO;
     }
 
     private void assembleBlogAbsShareInfo(BlogAbsVO blogAbsVO, Blog blog) throws GlobalException {
         Share share = shareDAO.getByArticleIdAndType(blog.getId(), ArticleTypeEnum.BLOG.getId());
         if (share == null) {
-            log.error(blog.getId() + " ??????????");
+            log.error(blog.getId() + "分享信息不存在");
             throw new GlobalException(ResponseStatus.SYSTEM_ERROR);
         }
         Blog originBlog = blogDAO.getBaseInfoById(share.getOriginId());
@@ -223,7 +229,9 @@ public class BlogServiceImpl implements BlogService {
             blogAbsVO.setOriginUserId(originUser.getUniqueId());
             blogAbsVO.setOriginUsername(originUser.getUsername());
             blogAbsVO.setOriginUserId(originUser.getUniqueId());
+            blogAbsVO.setOriginBlogId(originBlog.getUniqueId());
             blogAbsVO.setOriginTitle(originBlog.getTitle());
+            blogAbsVO.setOriginCreateTime(originBlog.getCreateTime());
         }
     }
 }
